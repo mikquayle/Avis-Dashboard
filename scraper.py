@@ -5,7 +5,9 @@ import requests
 
 BUSINESS_NAME    = "Avis Car Rental - Las Vegas Airport"
 PLACE_ID         = "ChIJt7bBMFlFyoARqzUNwb3dVAE"
-API_KEY          = os.environ["GOOGLE_PLACES_API_KEY"]
+API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY", "")
+if not API_KEY:
+    raise ValueError("GOOGLE_PLACES_API_KEY secret is not set in GitHub Actions")
 DATA_FILE        = os.path.join(os.path.dirname(__file__), "data", "ratings.json")
 
 def fetch_rating():

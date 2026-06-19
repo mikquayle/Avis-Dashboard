@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avis — Rating Dashboard</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0d;
+      --surface:   #161616;
+      --border:    #272727;
+      --text:      #e8e8e8;
+      --muted:     #666;
+      --accent:    #c8102e;   /* Avis red */
+      --accent-lo: rgba(200,16,46,0.12);
+      --gold:      #f5c518;
+      --up:        #3ecf8e;
+      --down:      #f87171;
+      --radius:    10px;
+      --font:      "Inter", system-ui, sans-serif;
+    }
+
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 15px; color: #fff; letter-spacing: -0.5px;
+    }
+
+    header h1 { font-size: 16px; font-weight: 600; color: var(--text); }
+    header p  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+    .status-pill {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 5px 12px; border-radius: 99px;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--up);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; } 50% { opacity: 0.35; }
+    }
+
+    /* ── Main layout ──────────────────────────────────────── */
+    main {
+      flex: 1;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 20px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ── Stat card ────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .card-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Big rating hero ──────────────────────────────────── */
+    .hero-card {
+      grid-row: 1 / 3;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .rating-number {
+      font-size: 88px; font-weight: 800; line-height: 1;
+      background: linear-gradient(135deg, #fff 60%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stars {
+      display: flex; gap: 4px; margin: 14px 0 8px;
+      justify-content: center;
+    }
+
+    .star { font-size: 22px; }
+
+    .rating-meta {
+      font-size: 12px; color: var(--muted);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+
+    .delta {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 13px; font-weight: 600;
+      padding: 4px 10px; border-radius: 99px;
+      margin-top: 14px;
+    }
+    .delta.up   { background: rgba(62,207,142,.12); color: var(--up); }
+    .delta.down { background: rgba(248,113,113,.12); color: var(--down); }
+    .delta.flat { background: var(--border);         color: var(--muted); }
+
+    /* ── Stats row ────────────────────────────────────────── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+
+    .stat-val { font-size: 28px; font-weight: 700; margin: 6px 0 2px; }
+    .stat-sub { font-size: 12px; color: var(--muted); }
+
+    /* ── Chart card ───────────────────────────────────────── */
+    .chart-card { position: relative; }
+
+    #chart {
+      width: 100%; height: 220px;
+      display: block;
+    }
+
+    /* ── History table ────────────────────────────────────── */
+    .history-card { grid-column: 1 / -1; }
+
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left; padding: 8px 12px;
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 99px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-up   { background: rgba(62,207,142,.12); color: var(--up); }
+    .badge-down { background: rgba(248,113,113,.12); color: var(--down); }
+    .badge-flat { background: var(--border);         color: var(--muted); }
+
+    /* ── Empty / error states ─────────────────────────────── */
+    .empty {
+      text-align: center; padding: 48px 0;
+      color: var(--muted); font-size: 14px;
+    }
+    .empty strong { display: block; font-size: 16px; color: var(--text); margin-bottom: 6px; }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 20px;
+      font-size: 12px; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 760px) {
+      main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        padding: 16px;
+      }
+      .hero-card { grid-row: auto; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">A</div>
+  <div>
+    <h1>Avis Rating Dashboard</h1>
+    <p>Google rating tracker · auto-updated every 30 min</p>
+  </div>
+  <div class="status-pill">
+    <span class="status-dot"></span>
+    <span id="last-updated">Loading…</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Left: big rating hero ─────────────────────────── -->
+  <div class="card hero-card">
+    <div class="card-label">Current Rating</div>
+    <div class="rating-number" id="current-rating">—</div>
+    <div class="stars" id="stars"></div>
+    <div class="rating-meta">
+      <span id="rating-label">out of 5.0</span>
+    </div>
+    <div class="delta flat" id="delta-badge">No change data yet</div>
+  </div>
+
+  <!-- ── Right top: stat cards ─────────────────────────── -->
+  <div class="stats-row">
+    <div class="card">
+      <div class="card-label">All-time High</div>
+      <div class="stat-val" id="stat-high">—</div>
+      <div class="stat-sub">highest recorded</div>
+    </div>
+    <div class="card">
+      <div class="card-label">All-time Low</div>
+      <div class="stat-val" id="stat-low">—</div>
+      <div class="stat-sub">lowest recorded</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Data Points</div>
+      <div class="stat-val" id="stat-count">—</div>
+      <div class="stat-sub">readings saved</div>
+    </div>
+  </div>
+
+  <!-- ── Right bottom: sparkline chart ─────────────────── -->
+  <div class="card chart-card">
+    <div class="card-label">Rating History</div>
+    <canvas id="chart"></canvas>
+    <div class="empty" id="chart-empty" style="display:none">
+      <strong>No history yet</strong>
+      Run the scraper at least twice to see the trend line.
+    </div>
+  </div>
+
+  <!-- ── Full-width: recent readings table ─────────────── -->
+  <div class="card history-card">
+    <div class="card-label">Recent Readings</div>
+    <div id="table-wrap">
+      <div class="empty" id="table-empty">
+        <strong>No data yet</strong>
+        The scraper hasn't run yet. Trigger it manually in GitHub Actions or wait for the next scheduled run.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Data sourced from Google Maps · scraper.py · Avis-Dashboard
+</footer>
+
+<script>
+  // ── Load and render ratings.json ──────────────────────────────────────────
+  async function load() {
+    let data;
+    try {
+      const res = await fetch("data/ratings.json");
+      if (!res.ok) throw new Error("File not found");
+      data = await res.json();
+    } catch {
+      document.getElementById("last-updated").textContent = "data/ratings.json not found";
+      return;
+    }
+
+    const history = data.history ?? [];
+    const current = data.current_rating;
+
+    // ── Header timestamp
+    if (data.last_updated) {
+      const d = new Date(data.last_updated);
+      document.getElementById("last-updated").textContent =
+        "Updated " + d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    } else {
+      document.getElementById("last-updated").textContent = "Not yet updated";
+    }
+
+    // ── Hero rating
+    if (current !== null && current !== undefined) {
+      document.getElementById("current-rating").textContent = current.toFixed(1);
+      renderStars(current);
+    }
+
+    // ── Delta badge (compare last two readings)
+    const badge = document.getElementById("delta-badge");
+    if (history.length >= 2) {
+      const prev = history[history.length - 2].rating;
+      const diff = +(current - prev).toFixed(2);
+      if (diff > 0) {
+        badge.className = "delta up";
+        badge.textContent = `▲ +${diff} from last reading`;
+      } else if (diff < 0) {
+        badge.className = "delta down";
+        badge.textContent = `▼ ${diff} from last reading`;
+      } else {
+        badge.className = "delta flat";
+        badge.textContent = "No change from last reading";
+      }
+    }
+
+    // ── Stat cards
+    if (history.length) {
+      const ratings = history.map(h => h.rating);
+      document.getElementById("stat-high").textContent  = Math.max(...ratings).toFixed(1);
+      document.getElementById("stat-low").textContent   = Math.min(...ratings).toFixed(1);
+      document.getElementById("stat-count").textContent = ratings.length;
+    }
+
+    // ── Chart
+    if (history.length >= 2) {
+      drawChart(history);
+    } else {
+      document.getElementById("chart").style.display = "none";
+      document.getElementById("chart-empty").style.display = "block";
+    }
+
+    // ── Table (20 most recent, newest first)
+    if (history.length) {
+      renderTable(history.slice().reverse().slice(0, 20));
+    }
+  }
+
+  // ─── Stars ─────────────────────────────────────────────────────────────────
+  function renderStars(rating) {
+    const container = document.getElementById("stars");
+    container.innerHTML = "";
+    for (let i = 1; i <= 5; i++) {
+      const span = document.createElement("span");
+      span.className = "star";
+      if (rating >= i)       span.textContent = "★";
+      else if (rating >= i - 0.5) span.textContent = "⯨";
+      else                    span.textContent = "☆";
+      span.style.color = rating >= i - 0.5 ? "var(--gold)" : "var(--border)";
+      container.appendChild(span);
+    }
+  }
+
+  // ─── Canvas sparkline ──────────────────────────────────────────────────────
+  function drawChart(history) {
+    const canvas = document.getElementById("chart");
+    const dpr    = window.devicePixelRatio || 1;
+    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    const ratings = history.map(h => h.rating);
+    const pad = { top: 20, right: 20, bottom: 36, left: 44 };
+    const iW = W - pad.left - pad.right;
+    const iH = H - pad.top  - pad.bottom;
+
+    const minR = Math.max(0, Math.min(...ratings) - 0.3);
+    const maxR = Math.min(5, Math.max(...ratings) + 0.3);
+    const yScale = v => pad.top + iH - ((v - minR) / (maxR - minR)) * iH;
+    const xScale = i => pad.left + (i / (ratings.length - 1)) * iW;
+
+    // Grid lines
+    ctx.strokeStyle = "rgba(255,255,255,.05)";
+    ctx.lineWidth = 1;
+    [1, 2, 3, 4, 5].forEach(v => {
+      if (v < minR || v > maxR) return;
+      const y = yScale(v);
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+      ctx.fillStyle = "rgba(255,255,255,.25)";
+      ctx.font = "10px Inter, system-ui";
+      ctx.fillText(v.toFixed(1), pad.left - 28, y + 4);
+    });
+
+    // Gradient fill
+    const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
+    grad.addColorStop(0, "rgba(200,16,46,.35)");
+    grad.addColorStop(1, "rgba(200,16,46,0)");
+
+    ctx.beginPath();
+    ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xScale(i), yScale(v)) : ctx.lineTo(xScale(i), yScale(v)));
+    ctx.lineTo(xScale(ratings.length - 1), H - pad.bottom);
+    ctx.lineTo(xScale(0), H - pad.bottom);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = "var(--accent)";
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = "round";
+    ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xScale(i), yScale(v)) : ctx.lineTo(xScale(i), yScale(v)));
+    ctx.stroke();
+
+    // Dots (only if few points)
+    if (ratings.length <= 48) {
+      ratings.forEach((v, i) => {
+        ctx.beginPath();
+        ctx.arc(xScale(i), yScale(v), 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        ctx.strokeStyle = "var(--accent)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+    }
+
+    // X-axis labels (show up to 6 evenly spaced dates)
+    const step = Math.ceil(history.length / 6);
+    ctx.fillStyle = "rgba(255,255,255,.3)";
+    ctx.font = "10px Inter, system-ui";
+    ctx.textAlign = "center";
+    history.forEach((h, i) => {
+      if (i % step !== 0 && i !== history.length - 1) return;
+      const d = new Date(h.timestamp);
+      const label = d.toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+      ctx.fillText(label, xScale(i), H - pad.bottom + 18);
+    });
+  }
+
+  // ─── History table ─────────────────────────────────────────────────────────
+  function renderTable(entries) {
+    document.getElementById("table-empty").style.display = "none";
+    const wrap = document.getElementById("table-wrap");
+    const table = document.createElement("table");
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Rating</th>
+          <th>Change</th>
+          <th>Stars</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    `;
+    wrap.appendChild(table);
+    const tbody = table.querySelector("#tbody");
+
+    // entries are newest-first; reverse for delta calc
+    entries.forEach((entry, idx) => {
+      const prev  = entries[idx + 1];
+      const diff  = prev ? +(entry.rating - prev.rating).toFixed(2) : null;
+      const d     = new Date(entry.timestamp);
+      const label = d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+      const stars = "★".repeat(Math.round(entry.rating)) + "☆".repeat(5 - Math.round(entry.rating));
+
+      let badge = "";
+      if (diff === null)  badge = `<span class="badge badge-flat">First reading</span>`;
+      else if (diff > 0)  badge = `<span class="badge badge-up">▲ +${diff}</span>`;
+      else if (diff < 0)  badge = `<span class="badge badge-down">▼ ${diff}</span>`;
+      else                badge = `<span class="badge badge-flat">No change</span>`;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${label}</td>
+        <td style="font-weight:700">${entry.rating.toFixed(1)}</td>
+        <td>${badge}</td>
+        <td style="color:var(--gold);letter-spacing:1px">${stars}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ─── Init ──────────────────────────────────────────────────────────────────
+  load();
+  // Auto-refresh every 5 minutes so the page stays live
+  setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>

@@ -1,49 +1,36 @@
 #!/usr/bin/env python3
-import json, os, re
+import json, os
 from datetime import datetime, timezone
 import requests
-from bs4 import BeautifulSoup
 
-BUSINESS_NAME = "Avis"
-GOOGLE_MAPS_URL = os.environ.get(
-    "GOOGLE_MAPS_URL",
-    "https://www.google.com/maps/place/Avis+Car+Rental"
-)
-DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "ratings.json")
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Accept-Language": "en-US,en;q=0.9",
-}
+BUSINESS_NAME    = "Avis Car Rental - Las Vegas Airport"
+PLACE_ID         = "ChIJt7bBMFlFyoARqzUNwb3dVAE"
+API_KEY          = os.environ["GOOGLE_PLACES_API_KEY"]
+DATA_FILE        = os.path.join(os.path.dirname(__file__), "data", "ratings.json")
 
-def fetch_rating(url):
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
-    except requests.RequestException as exc:
-        print(f"[scraper] HTTP error: {exc}")
-        return None
-    soup = BeautifulSoup(resp.text, "html.parser")
-    for cls in ["Aq14fc", "MW4etd"]:
-        tag = soup.find(class_=cls)
-        if tag and tag.text.strip():
-            try: return float(tag.text.strip().replace(",", "."))
-            except ValueError: continue
-    match = re.search(r'"(\d\.\d)\s*stars?"', resp.text)
-    if match: return float(match.group(1))
-    print("[scraper] Could not parse rating.")
-    return None
+def fetch_rating():
+    url = "https://places.googleapis.com/v1/places/" + PLACE_ID
+    headers = {
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask": "rating,userRatingCount,displayName"
+    }
+    resp = requests.get(url, headers=headers, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    print(f"[scraper] API response: {data}")
+    return data.get("rating"), data.get("userRatingCount")
 
 def main():
-    rating = fetch_rating(GOOGLE_MAPS_URL)
+    rating, review_count = fetch_rating()
     if rating is None:
-        print("[scraper] No rating found — exiting.")
+        print("[scraper] No rating returned — exiting.")
         return
     now = datetime.now(timezone.utc).isoformat()
-    data = json.load(open(DATA_FILE)) if os.path.exists(DATA_FILE) else {"business_name": BUSINESS_NAME, "last_updated": "", "current_rating": None, "history": []}
-    data.update({"business_name": BUSINESS_NAME, "current_rating": rating, "last_updated": now})
-    data["history"] = (data["history"] + [{"timestamp": now, "rating": rating}])[-500:]
+    data = json.load(open(DATA_FILE)) if os.path.exists(DATA_FILE) else {"business_name": BUSINESS_NAME, "last_updated": "", "current_rating": None, "review_count": None, "history": []}
+    data.update({"business_name": BUSINESS_NAME, "current_rating": rating, "review_count": review_count, "last_updated": now})
+    data["history"] = (data["history"] + [{"timestamp": now, "rating": rating, "review_count": review_count}])[-500:]
     json.dump(data, open(DATA_FILE, "w"), indent=2)
-    print(f"[scraper] {BUSINESS_NAME}: {rating} ⭐ at {now}")
+    print(f"[scraper] Done — {rating} ⭐ ({review_count} reviews) at {now}")
 
 if __name__ == "__main__":
     main()

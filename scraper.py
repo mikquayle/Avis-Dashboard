@@ -4,7 +4,13 @@ from datetime import datetime, timezone
 import requests
 
 BUSINESS_NAME    = "Avis Car Rental - Las Vegas Airport"
-PLACE_ID         = "ChIJt7bBMFlFyoARqzUNwb3dVAE"
+LOCATIONS = [
+    {
+        "name": "Avis Car Rental - McCarran Airport",
+        "place_id": "ChIJiaIDn2DPyIARUwzDWSzAOrc"
+    },
+    # Add more locations here as needed
+]
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY", "")
 if not API_KEY:
     raise ValueError("GOOGLE_PLACES_API_KEY secret is not set in GitHub Actions")

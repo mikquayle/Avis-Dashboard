@@ -6,15 +6,11 @@ from datetime import datetime
 # Google Places API key from environment/secret
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
 
-# Avis locations to track - add your Place IDs here
+# Avis locations to track
 LOCATIONS = [
     {
-        "name": "Avis Las Vegas Airport",
-        "place_id": "ChIJa2-KsJjEyIARTJ5kR8JVkdI"
-    },
-    {
-        "name": "Avis Las Vegas Downtown",
-        "place_id": "ChIJOwg_06VPwokRYv534QaPC8g"
+        "name": "Avis Car Rental - McCarran Airport",
+        "place_id": "ChIJiaIDn2DPyIARUwzDWSzAOrc"
     },
     # Add more locations here as needed
 ]
@@ -23,21 +19,21 @@ DATA_FILE = "data/ratings.json"
 
 
 def fetch_place_details(place_id):
-    """Fetch rating and review count for a given Place ID."""
-    url = "https://maps.googleapis.com/maps/api/place/details/json"
-    params = {
-        "place_id": place_id,
-        "fields": "name,rating,user_ratings_total,formatted_address",
-        "key": API_KEY,
+    """Fetch rating and review count using Places API (New)."""
+    url = f"https://places.googleapis.com/v1/places/{place_id}"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask": "displayName,rating,userRatingCount,formattedAddress",
     }
-    response = requests.get(url, params=params)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     result = response.json()
 
-    if result.get("status") != "OK":
-        raise ValueError(f"Places API error: {result.get('status')} - {result.get('error_message', '')}")
+    if "error" in result:
+        raise ValueError(f"Places API error: {result['error'].get('message', 'Unknown error')}")
 
-    return result["result"]
+    return result
 
 
 def load_existing_data():
@@ -70,8 +66,8 @@ def main():
         details = fetch_place_details(place_id)
 
         rating = details.get("rating")
-        review_count = details.get("user_ratings_total")
-        address = details.get("formatted_address", "")
+        review_count = details.get("userRatingCount")
+        address = details.get("formattedAddress", "")
 
         # Update current snapshot
         data["locations"][place_id] = {

@@ -6,14 +6,6 @@ from datetime import datetime
 # Google Places API key from environment/secret
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
 
-# Avis locations to track - using search queries instead of hardcoded place IDs
-LOCATIONS = [
-    {
-        "name": "Avis Car Rental - Harry Reid Airport",
-        "search_query": "Avis Car Rental 7135 Gilespie St Las Vegas NV"
-    },
-    # Add more locations here as needed
-]
 
 DATA_FILE = "data/ratings.json"
 

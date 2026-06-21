@@ -6,187 +6,94 @@
   <title>Avis — Rating Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #0d0d0d;
-      --surface:   #161616;
-      --border:    #272727;
-      --text:      #e8e8e8;
-      --muted:     #666;
-      --accent:    #c8102e;
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: #272727;
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #c8102e;
       --accent-lo: rgba(200,16,46,0.12);
-      --gold:      #f5c518;
-      --up:        #3ecf8e;
-      --down:      #f87171;
-      --radius:    10px;
-      --font:      "Inter", system-ui, sans-serif;
+      --gold: #f5c518;
+      --up: #3ecf8e;
+      --down: #f87171;
+      --radius: 10px;
+      --font: "Inter", system-ui, sans-serif;
     }
-
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; flex-direction: column; }
+    header { display: flex; align-items: center; gap: 14px; padding: 22px 32px; border-bottom: 1px solid var(--border); }
+    .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff; }
+    header h1 { font-size: 16px; font-weight: 600; }
+    header p { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .status-pill { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 99px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    main { flex: 1; padding: 24px 32px; max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
-    header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 22px 32px;
-      border-bottom: 1px solid var(--border);
-    }
+    .top-row { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
 
-    .logo {
-      width: 36px; height: 36px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 15px; color: #fff; letter-spacing: -0.5px;
-    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .card-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
-    header h1 { font-size: 16px; font-weight: 600; color: var(--text); }
-    header p  { font-size: 12px; color: var(--muted); margin-top: 1px; }
-
-    .status-pill {
-      margin-left: auto;
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 5px 12px; border-radius: 99px;
-    }
-    .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--up);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity: 1; } 50% { opacity: 0.35; }
-    }
-
-    main {
-      flex: 1;
-      padding: 32px;
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      grid-template-rows: auto 1fr;
-      gap: 20px;
-      max-width: 1100px;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-    }
-
-    .card-label {
-      font-size: 11px; font-weight: 600; letter-spacing: .08em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .hero-card {
-      grid-row: 1 / 3;
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; text-align: center;
-      position: relative; overflow: hidden;
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .rating-number {
-      font-size: 88px; font-weight: 800; line-height: 1;
-      background: linear-gradient(135deg, #fff 60%, var(--accent));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .stars {
-      display: flex; gap: 4px; margin: 14px 0 8px;
-      justify-content: center;
-    }
-    .star { font-size: 22px; }
-
-    .rating-meta {
-      font-size: 12px; color: var(--muted);
-      display: flex; flex-direction: column; gap: 4px;
-    }
-
-    .delta {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 13px; font-weight: 600;
-      padding: 4px 10px; border-radius: 99px;
-      margin-top: 14px;
-    }
-    .delta.up   { background: rgba(62,207,142,.12); color: var(--up); }
+    /* Rating card */
+    .rating-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+    .rating-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%); pointer-events: none; }
+    .rating-big { font-size: 80px; font-weight: 800; line-height: 1; background: linear-gradient(135deg, #fff 60%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stars { display: flex; gap: 3px; margin: 10px 0 6px; justify-content: center; }
+    .star { font-size: 20px; }
+    .review-count-small { font-size: 12px; color: var(--muted); }
+    .last-week { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .delta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 99px; margin-top: 8px; }
+    .delta.up { background: rgba(62,207,142,.12); color: var(--up); }
     .delta.down { background: rgba(248,113,113,.12); color: var(--down); }
-    .delta.flat { background: var(--border);         color: var(--muted); }
+    .delta.flat { background: var(--border); color: var(--muted); }
 
-    .stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
-    }
+    /* Reviews today card */
+    .today-card { display: flex; flex-direction: column; justify-content: center; }
+    .today-number { font-size: 96px; font-weight: 800; line-height: 1; color: #fff; }
+    .today-label { font-size: 14px; color: var(--muted); margin-top: 4px; margin-bottom: 20px; }
+    .progress-wrap { width: 100%; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .progress-bar-bg { width: 100%; height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.6s ease; }
+    .progress-bar-fill.goal-met { background: var(--up); }
+    .goal-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 99px; }
+    .goal-badge.met { background: rgba(62,207,142,.12); color: var(--up); }
+    .goal-badge.pending { background: var(--border); color: var(--muted); }
 
-    .stat-val { font-size: 28px; font-weight: 700; margin: 6px 0 2px; }
-    .stat-sub { font-size: 12px; color: var(--muted); }
+    /* Middle row */
+    .mid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    .chart-card { position: relative; }
-    #chart { width: 100%; height: 220px; display: block; }
+    /* Employee shoutouts */
+    .shoutout-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .shoutout-item { display: flex; align-items: center; gap: 12px; }
+    .shoutout-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-lo); border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--accent); flex-shrink: 0; }
+    .shoutout-name { font-size: 14px; font-weight: 600; flex: 1; }
+    .shoutout-count { font-size: 12px; color: var(--muted); }
+    .shoutout-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .shoutout-bar { height: 100%; background: var(--accent); border-radius: 99px; }
 
-    .history-card { grid-column: 1 / -1; }
+    /* Recent ratings */
+    .reviews-list { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .review-item { padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+    .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .review-author { font-size: 13px; font-weight: 600; flex: 1; }
+    .review-stars { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
+    .review-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .review-emp { margin-top: 6px; font-size: 11px; color: var(--accent); }
 
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th {
-      text-align: left; padding: 8px 12px;
-      font-size: 11px; font-weight: 600; letter-spacing: .06em;
-      text-transform: uppercase; color: var(--muted);
-      border-bottom: 1px solid var(--border);
-    }
-    td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,.02); }
+    /* Chart */
+    #chart { width: 100%; height: 200px; display: block; }
+    .empty { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
+    .empty strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 6px; }
 
-    .badge {
-      display: inline-block; padding: 2px 8px; border-radius: 99px;
-      font-size: 11px; font-weight: 600;
-    }
-    .badge-up   { background: rgba(62,207,142,.12); color: var(--up); }
-    .badge-down { background: rgba(248,113,113,.12); color: var(--down); }
-    .badge-flat { background: var(--border);         color: var(--muted); }
+    footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
 
-    .empty {
-      text-align: center; padding: 48px 0;
-      color: var(--muted); font-size: 14px;
-    }
-    .empty strong { display: block; font-size: 16px; color: var(--text); margin-bottom: 6px; }
-
-    footer {
-      text-align: center; padding: 20px;
-      font-size: 12px; color: var(--muted);
-      border-top: 1px solid var(--border);
-    }
-
-    @media (max-width: 760px) {
-      main {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        padding: 16px;
-      }
-      .hero-card { grid-row: auto; }
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 800px) {
+      .top-row, .mid-row { grid-template-columns: 1fr; }
+      main { padding: 16px; }
     }
   </style>
 </head>
@@ -196,7 +103,7 @@
   <div class="logo">A</div>
   <div>
     <h1>Avis Rating Dashboard</h1>
-    <p>Google rating tracker · auto-updated daily</p>
+    <p>Harry Reid Airport · updated every 15 min</p>
   </div>
   <div class="status-pill">
     <span class="status-dot"></span>
@@ -205,271 +112,272 @@
 </header>
 
 <main>
-  <div class="card hero-card">
-    <div class="card-label">Current Rating</div>
-    <div class="rating-number" id="current-rating">—</div>
-    <div class="stars" id="stars"></div>
-    <div class="rating-meta">
-      <span id="review-count">out of 5.0</span>
+
+  <div class="top-row">
+
+    <!-- Current Rating -->
+    <div class="card rating-card">
+      <div class="card-label">Current Rating</div>
+      <div class="rating-big" id="current-rating">—</div>
+      <div class="stars" id="stars"></div>
+      <div class="review-count-small" id="review-count-small">— reviews</div>
+      <div class="last-week" id="last-week-label"></div>
+      <div class="delta flat" id="delta-badge">—</div>
     </div>
-    <div class="delta flat" id="delta-badge">No change data yet</div>
+
+    <!-- Reviews Today -->
+    <div class="card today-card">
+      <div class="card-label">Reviews Today <span style="font-weight:400;text-transform:none;letter-spacing:0">(8am – 3am LV time)</span></div>
+      <div class="today-number" id="reviews-today">—</div>
+      <div class="today-label">new reviews this shift</div>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="progress-label">0 of 50 goal</span>
+          <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="goal-badge pending" id="goal-badge">🎯 Goal: 50 reviews</div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="stats-row">
+  <div class="mid-row">
+
+    <!-- Employee Shoutouts -->
     <div class="card">
-      <div class="card-label">All-time High</div>
-      <div class="stat-val" id="stat-high">—</div>
-      <div class="stat-sub">highest recorded</div>
+      <div class="card-label">Employee Shoutouts</div>
+      <div id="shoutout-wrap">
+        <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names in reviews.</div>
+      </div>
     </div>
+
+    <!-- Recent Ratings -->
     <div class="card">
-      <div class="card-label">All-time Low</div>
-      <div class="stat-val" id="stat-low">—</div>
-      <div class="stat-sub">lowest recorded</div>
+      <div class="card-label">Recent Ratings</div>
+      <div id="reviews-wrap">
+        <div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-label">Data Points</div>
-      <div class="stat-val" id="stat-count">—</div>
-      <div class="stat-sub">readings saved</div>
-    </div>
+
   </div>
 
-  <div class="card chart-card">
+  <!-- Rating History Chart -->
+  <div class="card">
     <div class="card-label">Rating History</div>
     <canvas id="chart"></canvas>
     <div class="empty" id="chart-empty" style="display:none">
-      <strong>No history yet</strong>
-      Run the scraper at least twice to see the trend line.
+      <strong>No history yet</strong>Run the scraper at least twice to see the trend line.
     </div>
   </div>
 
-  <div class="card history-card">
-    <div class="card-label">Recent Readings</div>
-    <div id="table-wrap">
-      <div class="empty" id="table-empty">
-        <strong>No data yet</strong>
-        The scraper hasn't run yet.
-      </div>
-    </div>
-  </div>
 </main>
 
-<footer>
-  Data sourced from Google Maps · scraper.py · Avis-Dashboard
-</footer>
+<footer>Data sourced from Google Maps · Avis-Dashboard · auto-updated every 15 min</footer>
 
 <script>
-  async function load() {
-    let data;
-    try {
-      const res = await fetch("data/ratings.json?nocache=" + Date.now());
-      if (!res.ok) throw new Error("not found");
-      data = await res.json();
-    } catch {
-      document.getElementById("last-updated").textContent = "data/ratings.json not found";
-      return;
-    }
+const DAILY_GOAL = 50;
 
-    // Pull the first location's data (supports single or multi-location)
-    const locations = data.locations ?? {};
-    const historyByPlace = data.history ?? {};
-
-    const placeIds = Object.keys(locations);
-    if (!placeIds.length) return;
-
-    const placeId = placeIds[0];
-    const loc = locations[placeId];
-    const history = historyByPlace[placeId] ?? [];
-
-    // Header timestamp
-    if (loc.last_updated) {
-      document.getElementById("last-updated").textContent = "Updated " + loc.last_updated;
-    }
-
-    // Hero rating
-    const current = loc.rating;
-    if (current != null) {
-      document.getElementById("current-rating").textContent = current.toFixed(1);
-      renderStars(current);
-      if (loc.review_count != null) {
-        document.getElementById("review-count").textContent =
-          loc.review_count.toLocaleString() + " reviews · out of 5.0";
-      }
-    }
-
-    // Delta badge
-    const badge = document.getElementById("delta-badge");
-    if (history.length >= 2) {
-      const prev = history[history.length - 2].rating;
-      const diff = +(current - prev).toFixed(2);
-      if (diff > 0) {
-        badge.className = "delta up";
-        badge.textContent = `▲ +${diff} from last reading`;
-      } else if (diff < 0) {
-        badge.className = "delta down";
-        badge.textContent = `▼ ${diff} from last reading`;
-      } else {
-        badge.className = "delta flat";
-        badge.textContent = "No change from last reading";
-      }
-    }
-
-    // Stat cards
-    if (history.length) {
-      const ratings = history.map(h => h.rating).filter(r => r != null);
-      if (ratings.length) {
-        document.getElementById("stat-high").textContent  = Math.max(...ratings).toFixed(1);
-        document.getElementById("stat-low").textContent   = Math.min(...ratings).toFixed(1);
-        document.getElementById("stat-count").textContent = ratings.length;
-      }
-    }
-
-    // Chart
-    const chartHistory = history.filter(h => h.rating != null);
-    if (chartHistory.length >= 2) {
-      drawChart(chartHistory);
-    } else {
-      document.getElementById("chart").style.display = "none";
-      document.getElementById("chart-empty").style.display = "block";
-    }
-
-    // Table
-    if (history.length) {
-      renderTable(history.slice().reverse().slice(0, 20));
-    }
+async function load() {
+  let data;
+  try {
+    const res = await fetch("data/ratings.json?nocache=" + Date.now());
+    if (!res.ok) throw new Error("not found");
+    data = await res.json();
+  } catch(e) {
+    document.getElementById("last-updated").textContent = "Could not load data";
+    return;
   }
 
-  function renderStars(rating) {
-    const container = document.getElementById("stars");
-    container.innerHTML = "";
-    for (let i = 1; i <= 5; i++) {
-      const span = document.createElement("span");
-      span.className = "star";
-      if (rating >= i)            span.textContent = "★";
-      else if (rating >= i - 0.5) span.textContent = "⯨";
-      else                        span.textContent = "☆";
-      span.style.color = rating >= i - 0.5 ? "var(--gold)" : "var(--border)";
-      container.appendChild(span);
-    }
+  const locations = data.locations || {};
+  const historyByPlace = data.history || {};
+  const reviewsByPlace = data.reviews || {};
+  const employeesByPlace = data.employee_mentions || {};
+
+  const placeIds = Object.keys(locations);
+  if (!placeIds.length) return;
+
+  // Pick the place with a valid rating
+  const placeId = placeIds.find(id => locations[id].rating != null) || placeIds[0];
+  const loc = locations[placeId];
+  const history = historyByPlace[placeId] || [];
+  const reviews = reviewsByPlace[placeId] || [];
+  const employees = employeesByPlace[placeId] || {};
+
+  // Header
+  if (loc.last_updated) {
+    document.getElementById("last-updated").textContent = "Updated " + loc.last_updated + " LV";
   }
 
-  function drawChart(history) {
-    const canvas = document.getElementById("chart");
-    const dpr = window.devicePixelRatio || 1;
-    const W = canvas.offsetWidth, H = canvas.offsetHeight;
-    canvas.width  = W * dpr;
-    canvas.height = H * dpr;
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
+  // Current rating
+  const current = loc.rating;
+  if (current != null) {
+    document.getElementById("current-rating").textContent = current.toFixed(1);
+    renderStars(current, "stars", 20);
+    document.getElementById("review-count-small").textContent = (loc.review_count || 0).toLocaleString() + " total reviews";
+  }
 
-    const ratings = history.map(h => h.rating);
-    const pad = { top: 20, right: 20, bottom: 36, left: 44 };
-    const iW = W - pad.left - pad.right;
-    const iH = H - pad.top  - pad.bottom;
+  // Last week comparison (7th most recent history entry)
+  if (history.length >= 2) {
+    const prev = history[Math.max(0, history.length - 7)];
+    if (prev && prev.rating != null && current != null) {
+      const diff = +(current - prev.rating).toFixed(2);
+      document.getElementById("last-week-label").textContent = "Was " + prev.rating.toFixed(1) + " on " + prev.date;
+      const badge = document.getElementById("delta-badge");
+      if (diff > 0) { badge.className = "delta up"; badge.textContent = "▲ +" + diff + " vs last week"; }
+      else if (diff < 0) { badge.className = "delta down"; badge.textContent = "▼ " + diff + " vs last week"; }
+      else { badge.className = "delta flat"; badge.textContent = "No change vs last week"; }
+    }
+  } else {
+    document.getElementById("delta-badge").textContent = "Tracking started";
+  }
 
-    const minR = Math.max(0, Math.min(...ratings) - 0.3);
-    const maxR = Math.min(5, Math.max(...ratings) + 0.3);
-    const yScale = v => pad.top + iH - ((v - minR) / (maxR - minR)) * iH;
-    const xScale = i => pad.left + (i / Math.max(ratings.length - 1, 1)) * iW;
+  // Reviews today
+  const reviewsToday = loc.reviews_today || 0;
+  document.getElementById("reviews-today").textContent = reviewsToday;
+  const pct = Math.min(100, Math.round((reviewsToday / DAILY_GOAL) * 100));
+  document.getElementById("progress-label").textContent = reviewsToday + " of " + DAILY_GOAL + " goal";
+  document.getElementById("progress-pct").textContent = pct + "%";
+  const fill = document.getElementById("progress-fill");
+  fill.style.width = pct + "%";
+  const goalBadge = document.getElementById("goal-badge");
+  if (reviewsToday >= DAILY_GOAL) {
+    fill.classList.add("goal-met");
+    goalBadge.className = "goal-badge met";
+    goalBadge.textContent = "✅ Goal reached!";
+  } else {
+    goalBadge.textContent = "🎯 " + (DAILY_GOAL - reviewsToday) + " more to reach goal";
+  }
 
-    ctx.strokeStyle = "rgba(255,255,255,.05)";
-    ctx.lineWidth = 1;
-    [1,2,3,4,5].forEach(v => {
-      if (v < minR || v > maxR) return;
-      const y = yScale(v);
-      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-      ctx.fillStyle = "rgba(255,255,255,.25)";
-      ctx.font = "10px Inter, system-ui";
-      ctx.fillText(v.toFixed(1), pad.left - 28, y + 4);
+  // Employee shoutouts
+  const empEntries = Object.values(employees).sort((a, b) => b.count - a.count);
+  const shoutWrap = document.getElementById("shoutout-wrap");
+  if (empEntries.length) {
+    const maxCount = empEntries[0].count;
+    shoutWrap.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "shoutout-list";
+    empEntries.slice(0, 10).forEach(emp => {
+      const initial = emp.display_name.charAt(0).toUpperCase();
+      const barPct = Math.round((emp.count / maxCount) * 100);
+      const item = document.createElement("div");
+      item.className = "shoutout-item";
+      item.innerHTML =
+        '<div class="shoutout-avatar">' + initial + '</div>' +
+        '<div style="flex:1">' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+            '<span class="shoutout-name">' + emp.display_name + '</span>' +
+            '<span class="shoutout-count">' + emp.count + ' mention' + (emp.count !== 1 ? 's' : '') + '</span>' +
+          '</div>' +
+          '<div class="shoutout-bar-wrap"><div class="shoutout-bar" style="width:' + barPct + '%"></div></div>' +
+        '</div>';
+      list.appendChild(item);
     });
-
-    const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
-    grad.addColorStop(0, "rgba(200,16,46,.35)");
-    grad.addColorStop(1, "rgba(200,16,46,0)");
-
-    ctx.beginPath();
-    ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xScale(i), yScale(v)) : ctx.lineTo(xScale(i), yScale(v)));
-    ctx.lineTo(xScale(ratings.length - 1), H - pad.bottom);
-    ctx.lineTo(xScale(0), H - pad.bottom);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.strokeStyle = "var(--accent)";
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = "round";
-    ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xScale(i), yScale(v)) : ctx.lineTo(xScale(i), yScale(v)));
-    ctx.stroke();
-
-    if (ratings.length <= 48) {
-      ratings.forEach((v, i) => {
-        ctx.beginPath();
-        ctx.arc(xScale(i), yScale(v), 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = "#fff";
-        ctx.fill();
-        ctx.strokeStyle = "var(--accent)";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      });
-    }
-
-    const step = Math.ceil(history.length / 6);
-    ctx.fillStyle = "rgba(255,255,255,.3)";
-    ctx.font = "10px Inter, system-ui";
-    ctx.textAlign = "center";
-    history.forEach((h, i) => {
-      if (i % step !== 0 && i !== history.length - 1) return;
-      ctx.fillText(h.date, xScale(i), H - pad.bottom + 18);
-    });
+    shoutWrap.appendChild(list);
   }
 
-  function renderTable(entries) {
-    document.getElementById("table-empty").style.display = "none";
-    const wrap = document.getElementById("table-wrap");
-    const table = document.createElement("table");
-    table.innerHTML = `
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Rating</th>
-          <th>Reviews</th>
-          <th>Change</th>
-          <th>Stars</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    `;
-    wrap.appendChild(table);
-    const tbody = table.querySelector("#tbody");
+  // Recent reviews
+  const reviewsWrap = document.getElementById("reviews-wrap");
+  const recentReviews = reviews.slice().reverse().slice(0, 15);
+  if (recentReviews.length) {
+    reviewsWrap.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "reviews-list";
+    recentReviews.forEach(r => {
+      const stars = "★".repeat(r.rating) + "☆".repeat(Math.max(0, 5 - r.rating));
+      const snippet = r.text && r.text.length > 120 ? r.text.slice(0, 120) + "…" : (r.text || "No text left.");
+      const empHtml = r.employee_names && r.employee_names.length
+        ? '<div class="review-emp">👤 ' + r.employee_names.join(", ") + '</div>'
+        : "";
+      const item = document.createElement("div");
+      item.className = "review-item";
+      item.innerHTML =
+        '<div class="review-header">' +
+          '<span class="review-author">' + (r.author || "Anonymous") + '</span>' +
+          '<span class="review-stars">' + stars + '</span>' +
+        '</div>' +
+        '<div class="review-text">' + snippet + '</div>' +
+        empHtml;
+      list.appendChild(item);
+    });
+    reviewsWrap.appendChild(list);
+  }
 
-    entries.forEach((entry, idx) => {
-      const prev = entries[idx + 1];
-      const diff = prev && entry.rating != null && prev.rating != null
-        ? +(entry.rating - prev.rating).toFixed(2) : null;
-      const stars = entry.rating != null
-        ? "★".repeat(Math.round(entry.rating)) + "☆".repeat(5 - Math.round(entry.rating))
-        : "—";
+  // Chart
+  const chartHistory = history.filter(h => h.rating != null);
+  if (chartHistory.length >= 2) {
+    drawChart(chartHistory);
+  } else {
+    document.getElementById("chart").style.display = "none";
+    document.getElementById("chart-empty").style.display = "block";
+  }
+}
 
-      let badge = "";
-      if (diff === null)  badge = `<span class="badge badge-flat">First reading</span>`;
-      else if (diff > 0)  badge = `<span class="badge badge-up">▲ +${diff}</span>`;
-      else if (diff < 0)  badge = `<span class="badge badge-down">▼ ${diff}</span>`;
-      else                badge = `<span class="badge badge-flat">No change</span>`;
+function renderStars(rating, containerId, size) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  for (let i = 1; i <= 5; i++) {
+    const span = document.createElement("span");
+    span.className = "star";
+    span.style.fontSize = (size || 20) + "px";
+    span.textContent = rating >= i ? "★" : (rating >= i - 0.5 ? "⯨" : "☆");
+    span.style.color = rating >= i - 0.5 ? "var(--gold)" : "var(--border)";
+    container.appendChild(span);
+  }
+}
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${entry.date}</td>
-        <td style="font-weight:700">${entry.rating != null ? entry.rating.toFixed(1) : "—"}</td>
-        <td>${entry.review_count != null ? entry.review_count.toLocaleString() : "—"}</td>
-        <td>${badge}</td>
-        <td style="color:var(--gold);letter-spacing:1px">${stars}</td>
-      `;
-      tbody.appendChild(tr);
+function drawChart(history) {
+  const canvas = document.getElementById("chart");
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+  const ratings = history.map(h => h.rating);
+  const pad = { top: 20, right: 20, bottom: 36, left: 44 };
+  const iW = W - pad.left - pad.right;
+  const iH = H - pad.top - pad.bottom;
+  const minR = Math.max(0, Math.min(...ratings) - 0.3);
+  const maxR = Math.min(5, Math.max(...ratings) + 0.3);
+  const yS = v => pad.top + iH - ((v - minR) / (maxR - minR)) * iH;
+  const xS = i => pad.left + (i / Math.max(ratings.length - 1, 1)) * iW;
+  ctx.strokeStyle = "rgba(255,255,255,.05)"; ctx.lineWidth = 1;
+  [1,2,3,4,5].forEach(v => {
+    if (v < minR || v > maxR) return;
+    const y = yS(v);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.font = "10px Inter,system-ui";
+    ctx.fillText(v.toFixed(1), pad.left - 28, y + 4);
+  });
+  const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
+  grad.addColorStop(0, "rgba(200,16,46,.35)"); grad.addColorStop(1, "rgba(200,16,46,0)");
+  ctx.beginPath();
+  ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v)));
+  ctx.lineTo(xS(ratings.length - 1), H - pad.bottom);
+  ctx.lineTo(xS(0), H - pad.bottom);
+  ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+  ctx.beginPath(); ctx.strokeStyle = "var(--accent)"; ctx.lineWidth = 2.5; ctx.lineJoin = "round";
+  ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v)));
+  ctx.stroke();
+  if (ratings.length <= 60) {
+    ratings.forEach((v, i) => {
+      ctx.beginPath(); ctx.arc(xS(i), yS(v), 3, 0, Math.PI * 2);
+      ctx.fillStyle = "#fff"; ctx.fill();
+      ctx.strokeStyle = "var(--accent)"; ctx.lineWidth = 1.5; ctx.stroke();
     });
   }
+  const step = Math.ceil(history.length / 6);
+  ctx.fillStyle = "rgba(255,255,255,.3)"; ctx.font = "10px Inter,system-ui"; ctx.textAlign = "center";
+  history.forEach((h, i) => {
+    if (i % step !== 0 && i !== history.length - 1) return;
+    ctx.fillText(h.date, xS(i), H - pad.bottom + 18);
+  });
+}
 
-  load();
-  setInterval(load, 5 * 60 * 1000);
+load();
+setInterval(load, 5 * 60 * 1000);
 </script>
 </body>
 </html>

@@ -1,1 +1,20 @@
-{"locations": {}, "history": {}}
+{
+  "locations": {
+    "ChIJiaIDn2DPyIARUwzDWSzAOrc": {
+      "name": "Avis Car Rental - McCarran Airport",
+      "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
+      "rating": null,
+      "review_count": null,
+      "last_updated": "2026-06-21"
+    }
+  },
+  "history": {
+    "ChIJiaIDn2DPyIARUwzDWSzAOrc": [
+      {
+        "date": "2026-06-21",
+        "rating": null,
+        "review_count": null
+      }
+    ]
+  }
+}

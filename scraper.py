@@ -6,32 +6,34 @@ from datetime import datetime
 # Google Places API key from environment/secret
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
 
-# Avis locations to track
+# Avis locations to track - using search queries instead of hardcoded place IDs
 LOCATIONS = [
     {
-        "name": "Avis Car Rental - McCarran Airport",
-        "place_id": "ChIJiaIDn2DPyIARUwzDWSzAOrc"
+        "name": "Avis Car Rental - Harry Reid Airport",
+        "search_query": "Avis Car Rental 7135 Gilespie St Las Vegas NV"
     },
     # Add more locations here as needed
 ]
 
 DATA_FILE = "data/ratings.json"
 
-def fetch_place_details(place_id):
-    """Fetch rating and review count using Places API (New)."""
-    url = f"https://places.googleapis.com/v1/places/{place_id}"
+def find_place_id(search_query):
+    """Find place ID using text search."""
+    url = "https://places.googleapis.com/v1/places:searchText"
     headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": API_KEY,
-        "X-Goog-FieldMask": "displayName,rating,userRatingCount,formattedAddress",
+        "X-Goog-FieldMask": "places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress",
     }
-    response = requests.get(url, headers=headers)
+    body = {"textQuery": search_query}
+    response = requests.post(url, headers=headers, json=body)
     response.raise_for_status()
     result = response.json()
-    print(f"  API response: {result}")  # DEBUG - see what Google returns
-    if "error" in result:
-        raise ValueError(f"Places API error: {result['error'].get('message', 'Unknown error')}")
-    return result
+    print(f"  Search response: {result}")
+    places = result.get("places", [])
+    if not places:
+        raise ValueError(f"No places found for query: {search_query}")
+    return places[0]
 
 def load_existing_data():
     """Load existing ratings data if it exists."""
@@ -54,14 +56,18 @@ def main():
     today = datetime.utcnow().strftime("%Y-%m-%d")
 
     for location in LOCATIONS:
-        place_id = location["place_id"]
         name = location["name"]
-        print(f"Fetching: {name} ({place_id})")
+        search_query = location["search_query"]
+        print(f"Searching: {name}")
 
-        details = fetch_place_details(place_id)
-        rating = details.get("rating")
-        review_count = details.get("userRatingCount")
-        address = details.get("formattedAddress", "")
+        place = find_place_id(search_query)
+        place_id = place.get("id")
+        rating = place.get("rating")
+        review_count = place.get("userRatingCount")
+        address = place.get("formattedAddress", "")
+
+        print(f"  Found place ID: {place_id}")
+        print(f"  → {rating} ⭐ ({review_count} reviews)")
 
         # Update current snapshot
         data["locations"][place_id] = {
@@ -76,7 +82,6 @@ def main():
         if place_id not in data["history"]:
             data["history"][place_id] = []
 
-        # Avoid duplicate entries for same day
         existing_dates = [h["date"] for h in data["history"][place_id]]
         if today not in existing_dates:
             data["history"][place_id].append({
@@ -84,8 +89,6 @@ def main():
                 "rating": rating,
                 "review_count": review_count,
             })
-
-        print(f"  → {rating} ⭐ ({review_count} reviews)")
 
     save_data(data)
     print(f"\n✅ Data saved to {DATA_FILE}")

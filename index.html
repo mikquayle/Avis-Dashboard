@@ -322,7 +322,7 @@ function renderStars(rating, containerId, size) {
     const span = document.createElement("span");
     span.className = "star";
     span.style.fontSize = (size || 20) + "px";
-    span.textContent = rating >= i ? "★" : (rating >= i - 0.5 ? "⯨" : "☆");
+    if (rating >= i) { span.textContent = "★"; } else if (rating >= i - 0.5) { span.textContent = "★"; span.style.opacity = "0.5"; } else { span.textContent = "☆"; }
     span.style.color = rating >= i - 0.5 ? "var(--gold)" : "var(--border)";
     container.appendChild(span);
   }

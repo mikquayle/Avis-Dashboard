@@ -1,20 +1,39 @@
-{
-  "locations": {
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
-      "name": "Avis Car Rental - Harry Reid Airport",
-      "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
-      "rating": 3.9,
-      "review_count": 9207,
-      "last_updated": "2026-06-21"
-    }
-  },
-  "history": {
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
-      {
-        "date": "2026-06-21",
-        "rating": 3.9,
-        "review_count": 9207
-      }
-    ]
-  }
-}
+name: Scrape Google Rating
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run scraper
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scraper.py
+
+      - name: Commit updated ratings
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ratings.json
+          git diff --cached --quiet || git commit -m "Update ratings $(date -u '+%Y-%m-%d %H:%M')"
+          git push

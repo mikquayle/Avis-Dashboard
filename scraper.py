@@ -3,14 +3,18 @@ import json
 import requests
 from datetime import datetime
 
-# Google Places API key from environment/secret
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
 
+LOCATIONS = [
+    {
+        "name": "Avis Car Rental - Harry Reid Airport",
+        "search_query": "Avis Car Rental 7135 Gilespie St Las Vegas NV"
+    },
+]
 
 DATA_FILE = "data/ratings.json"
 
 def find_place_id(search_query):
-    """Find place ID using text search."""
     url = "https://places.googleapis.com/v1/places:searchText"
     headers = {
         "Content-Type": "application/json",
@@ -28,14 +32,12 @@ def find_place_id(search_query):
     return places[0]
 
 def load_existing_data():
-    """Load existing ratings data if it exists."""
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r") as f:
             return json.load(f)
     return {"locations": {}, "history": {}}
 
 def save_data(data):
-    """Save updated ratings data."""
     os.makedirs("data", exist_ok=True)
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
@@ -61,7 +63,6 @@ def main():
         print(f"  Found place ID: {place_id}")
         print(f"  → {rating} ⭐ ({review_count} reviews)")
 
-        # Update current snapshot
         data["locations"][place_id] = {
             "name": name,
             "address": address,
@@ -70,20 +71,4 @@ def main():
             "last_updated": today,
         }
 
-        # Append to history
         if place_id not in data["history"]:
-            data["history"][place_id] = []
-
-        existing_dates = [h["date"] for h in data["history"][place_id]]
-        if today not in existing_dates:
-            data["history"][place_id].append({
-                "date": today,
-                "rating": rating,
-                "review_count": review_count,
-            })
-
-    save_data(data)
-    print(f"\n✅ Data saved to {DATA_FILE}")
-
-if __name__ == "__main__":
-    main()

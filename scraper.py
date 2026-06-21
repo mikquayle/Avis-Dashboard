@@ -17,7 +17,6 @@ LOCATIONS = [
 
 DATA_FILE = "data/ratings.json"
 
-
 def fetch_place_details(place_id):
     """Fetch rating and review count using Places API (New)."""
     url = f"https://places.googleapis.com/v1/places/{place_id}"
@@ -29,12 +28,10 @@ def fetch_place_details(place_id):
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     result = response.json()
-
+    print(f"  API response: {result}")  # DEBUG - see what Google returns
     if "error" in result:
         raise ValueError(f"Places API error: {result['error'].get('message', 'Unknown error')}")
-
     return result
-
 
 def load_existing_data():
     """Load existing ratings data if it exists."""
@@ -43,13 +40,11 @@ def load_existing_data():
             return json.load(f)
     return {"locations": {}, "history": {}}
 
-
 def save_data(data):
     """Save updated ratings data."""
     os.makedirs("data", exist_ok=True)
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
-
 
 def main():
     if not API_KEY:
@@ -61,10 +56,9 @@ def main():
     for location in LOCATIONS:
         place_id = location["place_id"]
         name = location["name"]
-
         print(f"Fetching: {name} ({place_id})")
-        details = fetch_place_details(place_id)
 
+        details = fetch_place_details(place_id)
         rating = details.get("rating")
         review_count = details.get("userRatingCount")
         address = details.get("formattedAddress", "")
@@ -95,7 +89,6 @@ def main():
 
     save_data(data)
     print(f"\n✅ Data saved to {DATA_FILE}")
-
 
 if __name__ == "__main__":
     main()

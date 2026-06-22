@@ -26,14 +26,7 @@ def find_place(search_query):
         "X-Goog-Api-Key": API_KEY,
         "X-Goog-FieldMask": "places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.reviews",
     }
-    body = {
-        "textQuery": search_query,
-        "rankPreference": "RELEVANCE",
-        "languageCode": "en",
-    }
-    # First fetch: newest reviews
-    body_newest = dict(body)
-    body_newest["rankPreference"] = "RELEVANCE"
+    body = {"textQuery": search_query, "languageCode": "en"}
 
     response = requests.post(url, headers=headers, json=body)
     response.raise_for_status()
@@ -46,19 +39,12 @@ def find_place(search_query):
     place_id = place.get("id")
     reviews_relevant = place.get("reviews", [])
 
-    # Second fetch same place by ID to get newest reviews
-    url2 = "https://places.googleapis.com/v1/places/" + place_id
-    headers2 = {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": API_KEY,
-        "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,formattedAddress,reviews",
-        "X-Goog-FieldMask": "reviews",
-    }
-    params2 = {"languageCode": "en", "reviewsSort": "newest"}
-    response2 = requests.get(url2, headers={
-        "X-Goog-Api-Key": API_KEY,
-        "X-Goog-FieldMask": "reviews",
-    }, params=params2)
+    # Second call to get newest reviews for the same place
+    response2 = requests.get(
+        "https://places.googleapis.com/v1/places/" + place_id,
+        headers={"X-Goog-Api-Key": API_KEY, "X-Goog-FieldMask": "reviews"},
+        params={"languageCode": "en", "reviewsSort": "newest"}
+    )
 
     reviews_newest = []
     if response2.ok:
@@ -227,5 +213,55 @@ def main():
             star_rating = review.get("rating", 0)
 
             if review_id in existing_review_ids:
-                # Only re-extract if text exists but names were never found
-                # and we haven't already
+                idx = existing_review_ids[review_id]
+                existing = data["reviews"][place_id][idx]
+                # Only retry extraction if employee_names key is missing entirely (never attempted)
+                if "employee_names" not in existing and text and len(text.strip()) > 10:
+                    print("Extracting names for: " + author)
+                    names = extract_employee_names(text)
+                    existing["employee_names"] = names if names else []
+                    if names:
+                        print("Employees mentioned: " + str(names))
+                        for emp_name in names:
+                            key = emp_name.lower()
+                            if key not in data["employee_mentions"][place_id]:
+                                data["employee_mentions"][place_id][key] = {
+                                    "display_name": emp_name,
+                                    "count": 0,
+                                    "last_mentioned": ""
+                                }
+                            data["employee_mentions"][place_id][key]["count"] += 1
+                            data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
+                continue
+
+            print("New review from: " + author)
+            names = extract_employee_names(text)
+            if names:
+                print("Employees mentioned: " + str(names))
+                for emp_name in names:
+                    key = emp_name.lower()
+                    if key not in data["employee_mentions"][place_id]:
+                        data["employee_mentions"][place_id][key] = {
+                            "display_name": emp_name,
+                            "count": 0,
+                            "last_mentioned": ""
+                        }
+                    data["employee_mentions"][place_id][key]["count"] += 1
+                    data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
+
+            data["reviews"][place_id].append({
+                "id": review_id,
+                "author": author,
+                "rating": star_rating,
+                "text": text,
+                "date": today_date,
+                "employee_names": names if names else [],
+            })
+
+        data["reviews"][place_id] = data["reviews"][place_id][-100:]
+
+    save_data(data)
+    print("Data saved to " + DATA_FILE)
+
+if __name__ == "__main__":
+    main()

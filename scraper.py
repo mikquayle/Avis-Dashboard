@@ -19,51 +19,18 @@ LAS_VEGAS_OFFSET = timedelta(hours=-7)
 def get_lv_time():
     return datetime.now(timezone.utc) + LAS_VEGAS_OFFSET
 
-def fetch_reviews(place_id, sort):
-    """Fetch reviews for a place with a given sort order."""
+def fetch_place(place_id):
     url = "https://places.googleapis.com/v1/places/" + place_id
     headers = {
         "X-Goog-Api-Key": API_KEY,
         "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,formattedAddress,reviews",
-        "X-Goog-LanguageCode": "en",
-        "reviewsSort": sort,
     }
     response = requests.get(url, headers=headers)
-    if not response.ok:
-        print("Warning: " + sort + " fetch returned " + str(response.status_code) + " - " + response.text[:200])
-        return None
-    return response.json()
-
-def fetch_place(place_id):
-    """Fetch place with newest + relevant reviews merged."""
-    newest_data = fetch_reviews(place_id, "newest")
-    relevant_data = fetch_reviews(place_id, "mostRelevant")
-
-    # Use whichever succeeded for place metadata
-    base = newest_data or relevant_data
-    if not base:
-        raise ValueError("Both review fetches failed for place_id: " + place_id)
-
-    reviews_newest = (newest_data or {}).get("reviews", [])
-    reviews_relevant = (relevant_data or {}).get("reviews", [])
-
-    print("Newest reviews fetched: " + str(len(reviews_newest)))
-    print("Relevant reviews fetched: " + str(len(reviews_relevant)))
-
-    # Merge, newest first, deduplicated
-    seen = set()
-    merged = []
-    for r in reviews_newest + reviews_relevant:
-        author = r.get("authorAttribution", {}).get("displayName", "")
-        t = r.get("publishTime", "")
-        key = author + "_" + t
-        if key not in seen:
-            seen.add(key)
-            merged.append(r)
-
-    base["reviews"] = merged
-    print("Total unique reviews after merge: " + str(len(merged)))
-    return base
+    response.raise_for_status()
+    data = response.json()
+    reviews = data.get("reviews", [])
+    print("Reviews fetched: " + str(len(reviews)))
+    return data
 
 def extract_employee_names(review_text):
     if not ANTHROPIC_KEY:
@@ -112,7 +79,7 @@ def load_existing_data():
         "reviews": {},
         "daily_baselines": {},
         "employee_mentions": {},
-        "seen_review_ids": {}
+        "processed_review_ids": {}
     }
 
 def save_data(data):
@@ -139,9 +106,13 @@ def main():
 
     data = load_existing_data()
 
-    for key in ["reviews", "daily_baselines", "employee_mentions", "seen_review_ids"]:
-        if key not in data:
-            data[key] = {}
+    for k in ["reviews", "daily_baselines", "employee_mentions", "processed_review_ids"]:
+        if k not in data:
+            data[k] = {}
+
+    # migrate old key name
+    if "seen_review_ids" in data and "processed_review_ids" not in data:
+        data["processed_review_ids"] = data.pop("seen_review_ids")
 
     for location in LOCATIONS:
         name = location["name"]
@@ -159,7 +130,7 @@ def main():
         # Daily baseline
         baseline_key = place_id + "_" + today_key
         if baseline_key not in data["daily_baselines"]:
-            if lv_hour >= 8 or lv_hour < 3:
+            if lv_hour >= 6 or lv_hour < 3:
                 data["daily_baselines"][baseline_key] = review_count
                 print("Set daily baseline: " + str(review_count))
 
@@ -167,12 +138,43 @@ def main():
         reviews_today = max(0, review_count - baseline)
         print("Reviews gained today: " + str(reviews_today))
 
+        # Morning = 6am-4pm LV, Night = 4pm-midnight LV
+        morning_baseline_key = place_id + "_morning_" + today_key
+        afternoon_baseline_key = place_id + "_night_" + today_key
+
+        if lv_hour >= 6 and lv_hour < 16:
+            if morning_baseline_key not in data["daily_baselines"]:
+                data["daily_baselines"][morning_baseline_key] = review_count
+                print("Set morning baseline: " + str(review_count))
+
+        if lv_hour >= 16:
+            if afternoon_baseline_key not in data["daily_baselines"]:
+                data["daily_baselines"][afternoon_baseline_key] = review_count
+                print("Set night baseline: " + str(review_count))
+
+        morning_baseline = data["daily_baselines"].get(morning_baseline_key, review_count)
+        night_baseline = data["daily_baselines"].get(afternoon_baseline_key, review_count)
+
+        if lv_hour >= 6 and lv_hour < 16:
+            reviews_morning = max(0, review_count - morning_baseline)
+            reviews_night = 0
+        elif lv_hour >= 16:
+            reviews_morning = max(0, night_baseline - morning_baseline)
+            reviews_night = max(0, review_count - night_baseline)
+        else:
+            reviews_morning = 0
+            reviews_night = 0
+
+        print("Morning reviews: " + str(reviews_morning) + " | Night reviews: " + str(reviews_night))
+
         data["locations"][place_id] = {
             "name": name,
             "address": address,
             "rating": rating,
             "review_count": review_count,
             "reviews_today": reviews_today,
+            "reviews_morning": reviews_morning,
+            "reviews_night": reviews_night,
             "last_updated": now_str,
             "today_key": today_key,
         }
@@ -197,12 +199,13 @@ def main():
             data["reviews"][place_id] = []
         if place_id not in data["employee_mentions"]:
             data["employee_mentions"][place_id] = {}
-        if place_id not in data["seen_review_ids"]:
-            data["seen_review_ids"][place_id] = []
+        if place_id not in data["processed_review_ids"]:
+            data["processed_review_ids"][place_id] = {}
 
-        # seen_review_ids = every review we have EVER processed
-        # ensures employee mentions are never double counted
-        seen_ids = set(data["seen_review_ids"][place_id])
+        # processed_review_ids maps review_id -> publish_time
+        # We use publishTime to detect genuinely new reviews
+        processed = data["processed_review_ids"][place_id]
+
         fresh_reviews = []
 
         for review in raw_reviews:
@@ -216,17 +219,17 @@ def main():
                 text = str(text_field)
             star_rating = review.get("rating", 0)
 
-            if review_id in seen_ids:
-                # Already counted — reuse stored names for display
+            if review_id in processed:
+                # Already counted — reuse stored names
                 existing = next((r for r in data["reviews"][place_id] if r.get("id") == review_id), None)
                 names = existing.get("employee_names", []) if existing else []
-                print("Already seen: " + author)
+                print("Already processed: " + author)
             else:
-                # New review — extract names and add to shoutouts
-                print("New review from: " + author)
+                # New — extract names and add to shoutouts
+                print("New review: " + author + " (" + publish_time[:10] + ")")
                 names = extract_employee_names(text)
                 if names:
-                    print("Employees mentioned: " + str(names))
+                    print("  Employees: " + str(names))
                     for emp_name in names:
                         emp_key = emp_name.lower()
                         if emp_key not in data["employee_mentions"][place_id]:
@@ -237,23 +240,28 @@ def main():
                             }
                         data["employee_mentions"][place_id][emp_key]["count"] += 1
                         data["employee_mentions"][place_id][emp_key]["last_mentioned"] = today_date
-                seen_ids.add(review_id)
+                processed[review_id] = publish_time
 
             fresh_reviews.append({
                 "id": review_id,
                 "author": author,
                 "rating": star_rating,
                 "text": text,
+                "publish_time": publish_time,
                 "date": today_date,
                 "employee_names": names if names else [],
             })
 
-        # Persist seen IDs and put freshest reviews first
-        data["seen_review_ids"][place_id] = list(seen_ids)
+        # Sort fresh reviews newest first by publish_time
+        fresh_reviews.sort(key=lambda r: r.get("publish_time", ""), reverse=True)
+
+        # Merge with older stored reviews not in this batch
         fresh_ids = {r["id"] for r in fresh_reviews}
         older = [r for r in data["reviews"][place_id] if r["id"] not in fresh_ids]
         data["reviews"][place_id] = fresh_reviews + older
         data["reviews"][place_id] = data["reviews"][place_id][:100]
+
+        data["processed_review_ids"][place_id] = processed
 
     save_data(data)
     print("Data saved to " + DATA_FILE)

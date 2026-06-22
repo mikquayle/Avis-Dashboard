@@ -26,14 +26,57 @@ def find_place(search_query):
         "X-Goog-Api-Key": API_KEY,
         "X-Goog-FieldMask": "places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.reviews",
     }
-    body = {"textQuery": search_query}
+    body = {
+        "textQuery": search_query,
+        "rankPreference": "RELEVANCE",
+        "languageCode": "en",
+    }
+    # First fetch: newest reviews
+    body_newest = dict(body)
+    body_newest["rankPreference"] = "RELEVANCE"
+
     response = requests.post(url, headers=headers, json=body)
     response.raise_for_status()
     result = response.json()
     places = result.get("places", [])
     if not places:
         raise ValueError("No places found for query: " + search_query)
-    return places[0]
+
+    place = places[0]
+    place_id = place.get("id")
+    reviews_relevant = place.get("reviews", [])
+
+    # Second fetch same place by ID to get newest reviews
+    url2 = "https://places.googleapis.com/v1/places/" + place_id
+    headers2 = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,formattedAddress,reviews",
+        "X-Goog-FieldMask": "reviews",
+    }
+    params2 = {"languageCode": "en", "reviewsSort": "newest"}
+    response2 = requests.get(url2, headers={
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask": "reviews",
+    }, params=params2)
+
+    reviews_newest = []
+    if response2.ok:
+        reviews_newest = response2.json().get("reviews", [])
+
+    # Merge both sets, deduplicate by author+time
+    seen = set()
+    merged_reviews = []
+    for r in reviews_relevant + reviews_newest:
+        author = r.get("authorAttribution", {}).get("displayName", "")
+        t = r.get("publishTime", "")
+        key = author + "_" + t
+        if key not in seen:
+            seen.add(key)
+            merged_reviews.append(r)
+
+    place["reviews"] = merged_reviews
+    return place
 
 def extract_employee_names(review_text):
     if not ANTHROPIC_KEY:
@@ -128,6 +171,7 @@ def main():
         raw_reviews = place.get("reviews", [])
 
         print("Rating: " + str(rating) + " (" + str(review_count) + " reviews)")
+        print("Reviews fetched from API: " + str(len(raw_reviews)))
 
         baseline_key = place_id + "_" + today_key
         if baseline_key not in data["daily_baselines"]:
@@ -183,55 +227,5 @@ def main():
             star_rating = review.get("rating", 0)
 
             if review_id in existing_review_ids:
-                # Re-extract names if employee_names is empty
-                idx = existing_review_ids[review_id]
-                existing = data["reviews"][place_id][idx]
-                if not existing.get("employee_names"):
-                    print("Re-extracting names for: " + author)
-                    names = extract_employee_names(text)
-                    existing["employee_names"] = names
-                    if names:
-                        print("Employees mentioned: " + str(names))
-                        for emp_name in names:
-                            key = emp_name.lower()
-                            if key not in data["employee_mentions"][place_id]:
-                                data["employee_mentions"][place_id][key] = {
-                                    "display_name": emp_name,
-                                    "count": 0,
-                                    "last_mentioned": ""
-                                }
-                            data["employee_mentions"][place_id][key]["count"] += 1
-                            data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
-                continue
-
-            print("New review from: " + author)
-            names = extract_employee_names(text)
-            if names:
-                print("Employees mentioned: " + str(names))
-                for emp_name in names:
-                    key = emp_name.lower()
-                    if key not in data["employee_mentions"][place_id]:
-                        data["employee_mentions"][place_id][key] = {
-                            "display_name": emp_name,
-                            "count": 0,
-                            "last_mentioned": ""
-                        }
-                    data["employee_mentions"][place_id][key]["count"] += 1
-                    data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
-
-            data["reviews"][place_id].append({
-                "id": review_id,
-                "author": author,
-                "rating": star_rating,
-                "text": text,
-                "date": today_date,
-                "employee_names": names,
-            })
-
-        data["reviews"][place_id] = data["reviews"][place_id][-100:]
-
-    save_data(data)
-    print("Data saved to " + DATA_FILE)
-
-if __name__ == "__main__":
-    main()
+                # Only re-extract if text exists but names were never found
+                # and we haven't already

@@ -6,7 +6,7 @@
       "rating": 3.9,
       "review_count": 9273,
       "reviews_today": 0,
-      "last_updated": "2026-06-22 07:52",
+      "last_updated": "2026-06-22 08:00",
       "today_key": "2026-06-22"
     }
   },
@@ -78,7 +78,8 @@
     ]
   },
   "daily_baselines": {
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-21": 9210
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-21": 9210,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-22": 9273
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {

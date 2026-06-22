@@ -14,7 +14,6 @@ LOCATIONS = [
 ]
 
 DATA_FILE = "data/ratings.json"
-
 LAS_VEGAS_OFFSET = timedelta(hours=-7)
 
 def get_lv_time():
@@ -170,7 +169,7 @@ def main():
         if place_id not in data["employee_mentions"]:
             data["employee_mentions"][place_id] = {}
 
-        existing_review_ids = set(r.get("id") for r in data["reviews"][place_id])
+        existing_review_ids = {r.get("id"): i for i, r in enumerate(data["reviews"][place_id])}
 
         for review in raw_reviews:
             author = review.get("authorAttribution", {}).get("displayName", "Anonymous")
@@ -184,10 +183,28 @@ def main():
             star_rating = review.get("rating", 0)
 
             if review_id in existing_review_ids:
+                # Re-extract names if employee_names is empty
+                idx = existing_review_ids[review_id]
+                existing = data["reviews"][place_id][idx]
+                if not existing.get("employee_names"):
+                    print("Re-extracting names for: " + author)
+                    names = extract_employee_names(text)
+                    existing["employee_names"] = names
+                    if names:
+                        print("Employees mentioned: " + str(names))
+                        for emp_name in names:
+                            key = emp_name.lower()
+                            if key not in data["employee_mentions"][place_id]:
+                                data["employee_mentions"][place_id][key] = {
+                                    "display_name": emp_name,
+                                    "count": 0,
+                                    "last_mentioned": ""
+                                }
+                            data["employee_mentions"][place_id][key]["count"] += 1
+                            data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
                 continue
 
             print("New review from: " + author)
-
             names = extract_employee_names(text)
             if names:
                 print("Employees mentioned: " + str(names))

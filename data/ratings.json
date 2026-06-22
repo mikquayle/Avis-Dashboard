@@ -8,7 +8,7 @@
       "reviews_today": 43,
       "reviews_morning": 7,
       "reviews_night": 0,
-      "last_updated": "2026-06-22 15:45",
+      "last_updated": "2026-06-22 16:00",
       "today_key": "2026-06-22"
     }
   },
@@ -87,7 +87,8 @@
   "daily_baselines": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-21": 9210,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-22": 9273,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-06-22": 9309
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-06-22": 9309,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-06-22": 9316
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {

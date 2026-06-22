@@ -7,17 +7,9 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d0d0d;
-      --surface: #161616;
-      --border: #272727;
-      --text: #e8e8e8;
-      --muted: #666;
-      --accent: #c8102e;
-      --accent-lo: rgba(200,16,46,0.12);
-      --gold: #f5c518;
-      --up: #3ecf8e;
-      --down: #f87171;
-      --radius: 10px;
+      --bg: #0d0d0d; --surface: #161616; --border: #272727; --text: #e8e8e8;
+      --muted: #666; --accent: #c8102e; --accent-lo: rgba(200,16,46,0.12);
+      --gold: #f5c518; --up: #3ecf8e; --down: #f87171; --radius: 10px;
       --font: "Inter", system-ui, sans-serif;
     }
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -28,147 +20,193 @@
     header p { font-size: 12px; color: var(--muted); margin-top: 1px; }
     .status-pill { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 99px; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); animation: pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.35} }
+    main { flex:1; padding: 24px 32px; max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
-    main { flex: 1; padding: 24px 32px; max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-
-    .top-row { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
-
+    /* Cards */
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
     .card-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
+    /* Top row */
+    .top-row { display: grid; grid-template-columns: 220px 1fr auto; gap: 20px; align-items: stretch; }
+
+    /* Rating card */
     .rating-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
-    .rating-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%); pointer-events: none; }
-    .rating-big { font-size: 80px; font-weight: 800; line-height: 1; background: linear-gradient(135deg, #fff 60%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .stars { display: flex; gap: 3px; margin: 10px 0 6px; justify-content: center; }
-    .star { font-size: 20px; }
-    .review-count-small { font-size: 12px; color: var(--muted); }
-    .last-week { font-size: 12px; color: var(--muted); margin-top: 6px; }
-    .delta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 99px; margin-top: 8px; }
-    .delta.up { background: rgba(62,207,142,.12); color: var(--up); }
-    .delta.down { background: rgba(248,113,113,.12); color: var(--down); }
-    .delta.flat { background: var(--border); color: var(--muted); }
+    .rating-card::before { content:""; position:absolute; inset:0; background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%); pointer-events:none; }
+    .rating-big { font-size: 72px; font-weight: 800; line-height: 1; background: linear-gradient(135deg,#fff 60%,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .stars { display:flex; gap:3px; margin: 8px 0 4px; justify-content:center; }
+    .star { font-size:18px; }
+    .review-count-small { font-size:12px; color:var(--muted); }
+    .delta { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:3px 8px; border-radius:99px; margin-top:8px; }
+    .delta.up { background:rgba(62,207,142,.12); color:var(--up); }
+    .delta.down { background:rgba(248,113,113,.12); color:var(--down); }
+    .delta.flat { background:var(--border); color:var(--muted); }
 
-    .today-card { display: flex; flex-direction: column; justify-content: center; }
-    .today-number { font-size: 96px; font-weight: 800; line-height: 1; color: #fff; }
-    .today-label { font-size: 14px; color: var(--muted); margin-top: 4px; margin-bottom: 20px; }
-    .progress-wrap { width: 100%; }
-    .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-    .progress-bar-bg { width: 100%; height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.6s ease; }
-    .progress-bar-fill.goal-met { background: var(--up); }
-    .goal-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 99px; }
-    .goal-badge.met { background: rgba(62,207,142,.12); color: var(--up); }
-    .goal-badge.pending { background: var(--border); color: var(--muted); }
+    /* Shift cards */
+    .shifts-col { display: flex; flex-direction: column; gap: 14px; }
+    .shift-card { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .shift-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+    .shift-number { font-size: 52px; font-weight: 800; line-height: 1; color: #fff; }
+    .shift-label { font-size: 13px; color: var(--muted); }
+    .shift-time { font-size: 11px; color: var(--muted); margin-left: auto; }
+    .progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:6px; }
+    .progress-bar-bg { width:100%; height:8px; background:var(--border); border-radius:99px; overflow:hidden; }
+    .progress-bar-fill { height:100%; background:var(--accent); border-radius:99px; transition:width 0.6s ease; }
+    .progress-bar-fill.goal-met { background:var(--up); }
+    .shift-badge { display:inline-flex; align-items:center; gap:5px; margin-top:8px; font-size:12px; font-weight:600; padding:3px 10px; border-radius:99px; }
+    .shift-badge.met { background:rgba(62,207,142,.12); color:var(--up); }
+    .shift-badge.pending { background:var(--border); color:var(--muted); }
 
+    /* Circle total */
+    .circle-card { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 160px; gap: 10px; }
+    .circle-wrap { position: relative; width: 120px; height: 120px; }
+    .circle-wrap svg { transform: rotate(-90deg); }
+    .circle-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+    .circle-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+    .circle-morning { stroke: #f5c518; }
+    .circle-night { stroke: var(--accent); }
+    .circle-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .circle-total { font-size: 28px; font-weight: 800; color: #fff; line-height: 1; }
+    .circle-sublabel { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .circle-legend { display: flex; flex-direction: column; gap: 5px; }
+    .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Mid row */
     .mid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    /* Shoutout bar chart */
-    .shoutout-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-    .shoutout-week-label { font-size: 11px; color: var(--muted); }
-    .shoutout-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-    .shoutout-row { display: flex; align-items: center; gap: 10px; }
-    .shoutout-name-col { width: 80px; font-size: 13px; font-weight: 600; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
-    .shoutout-bar-track { flex: 1; height: 22px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
-    .shoutout-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.6s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; min-width: 28px; }
-    .shoutout-bar-count { font-size: 11px; font-weight: 700; color: #fff; }
-    .shoutout-fire { font-size: 14px; margin-left: 6px; flex-shrink: 0; }
-    .merge-btn { font-size: 11px; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; cursor: pointer; transition: all 0.2s; }
-    .merge-btn:hover { border-color: var(--accent); color: var(--accent); }
+    /* Shoutouts */
+    .shoutout-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+    .shoutout-week-label { font-size:11px; color:var(--muted); }
+    .shoutout-bars { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+    .shoutout-row { display:flex; align-items:center; gap:10px; }
+    .shoutout-name-col { width:72px; font-size:13px; font-weight:600; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
+    .shoutout-bar-track { flex:1; height:22px; background:var(--border); border-radius:4px; overflow:hidden; }
+    .shoutout-bar-fill { height:100%; background:var(--accent); border-radius:4px; transition:width 0.6s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; min-width:28px; }
+    .shoutout-bar-count { font-size:11px; font-weight:700; color:#fff; }
+    .shoutout-fire { font-size:14px; margin-left:4px; flex-shrink:0; width:18px; }
+    .merge-btn { font-size:11px; color:var(--muted); background:none; border:1px solid var(--border); border-radius:6px; padding:3px 8px; cursor:pointer; transition:all 0.2s; }
+    .merge-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* Reviews */
+    .reviews-list { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+    .review-item { padding:12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
+    .review-header { display:flex; align-items:center; gap:10px; margin-bottom:5px; }
+    .review-author { font-size:13px; font-weight:600; flex:1; }
+    .review-stars { color:var(--gold); font-size:12px; }
+    .review-text { font-size:12px; color:var(--muted); line-height:1.5; }
+    .review-emp { margin-top:5px; font-size:11px; color:var(--accent); }
+
+    /* Chart */
+    #chart { width:100%; height:200px; display:block; }
+    .empty { text-align:center; padding:40px 0; color:var(--muted); font-size:14px; }
+    .empty strong { display:block; font-size:15px; color:var(--text); margin-bottom:6px; }
 
     /* Merge modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; width: 420px; max-width: 90vw; }
-    .modal h2 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .modal p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .modal-names { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .name-chip { padding: 5px 12px; border-radius: 99px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--text); transition: all 0.15s; }
-    .name-chip.selected { border-color: var(--accent); background: var(--accent-lo); color: var(--accent); }
-    .modal-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 10px 14px; font-size: 14px; margin-bottom: 16px; outline: none; }
-    .modal-input:focus { border-color: var(--accent); }
-    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-    .btn { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
-    .btn-cancel { background: var(--border); color: var(--muted); }
-    .btn-save { background: var(--accent); color: #fff; }
-    .btn:hover { opacity: 0.85; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; width:420px; max-width:90vw; }
+    .modal h2 { font-size:16px; font-weight:700; margin-bottom:6px; }
+    .modal p { font-size:13px; color:var(--muted); margin-bottom:20px; }
+    .modal-names { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .name-chip { padding:5px 12px; border-radius:99px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:var(--bg); color:var(--text); transition:all 0.15s; }
+    .name-chip.selected { border-color:var(--accent); background:var(--accent-lo); color:var(--accent); }
+    .modal-input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:10px 14px; font-size:14px; margin-bottom:16px; outline:none; }
+    .modal-input:focus { border-color:var(--accent); }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .btn { padding:8px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; border:none; }
+    .btn-cancel { background:var(--border); color:var(--muted); }
+    .btn-save { background:var(--accent); color:#fff; }
 
-    /* Weekly history */
-    .weekly-history { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
-    .weekly-history-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .weekly-rows { display: flex; flex-direction: column; gap: 6px; }
-    .weekly-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-    .weekly-week { color: var(--muted); width: 90px; flex-shrink: 0; }
-    .weekly-name { font-weight: 600; flex: 1; }
-    .weekly-count { color: var(--muted); }
-
-    /* Recent reviews */
-    .reviews-list { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
-    .review-item { padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
-    .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-    .review-author { font-size: 13px; font-weight: 600; flex: 1; }
-    .review-stars { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
-    .review-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
-    .review-emp { margin-top: 6px; font-size: 11px; color: var(--accent); }
-
-    #chart { width: 100%; height: 200px; display: block; }
-    .empty { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
-    .empty strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 6px; }
-
-    footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
-
-    @media (max-width: 800px) {
-      .top-row, .mid-row { grid-template-columns: 1fr; }
-      main { padding: 16px; }
-    }
+    footer { text-align:center; padding:20px; font-size:12px; color:var(--muted); border-top:1px solid var(--border); }
+    @media(max-width:900px){.top-row{grid-template-columns:1fr 1fr}.circle-card{display:none}.mid-row{grid-template-columns:1fr}main{padding:16px}}
   </style>
 </head>
 <body>
-
 <header>
   <div class="logo">A</div>
-  <div>
-    <h1>Avis Rating Dashboard</h1>
-    <p>Harry Reid Airport · updated every 30 min</p>
-  </div>
-  <div class="status-pill">
-    <span class="status-dot"></span>
-    <span id="last-updated">Loading…</span>
-  </div>
+  <div><h1>Avis Rating Dashboard</h1><p>Harry Reid Airport · updated every 30 min</p></div>
+  <div class="status-pill"><span class="status-dot"></span><span id="last-updated">Loading…</span></div>
 </header>
 
 <main>
-
   <div class="top-row">
+
+    <!-- Rating -->
     <div class="card rating-card">
       <div class="card-label">Current Rating</div>
       <div class="rating-big" id="current-rating">—</div>
       <div class="stars" id="stars"></div>
       <div class="review-count-small" id="review-count-small">— reviews</div>
-      <div class="last-week" id="last-week-label"></div>
       <div class="delta flat" id="delta-badge">—</div>
     </div>
 
-    <div class="card today-card">
-      <div class="card-label">Reviews Today <span style="font-weight:400;text-transform:none;letter-spacing:0">(8am – 3am LV time)</span></div>
-      <div class="today-number" id="reviews-today">—</div>
-      <div class="today-label">new reviews this shift</div>
-      <div class="progress-wrap">
+    <!-- Morning + Night shifts -->
+    <div class="card shifts-col" style="padding:20px 24px;gap:16px">
+
+      <div class="shift-card">
+        <div class="shift-header">
+          <div class="shift-number" id="morning-count">—</div>
+          <div>
+            <div class="shift-label">☀️ Morning shift</div>
+            <div class="shift-time">6 am – 4 pm LV</div>
+          </div>
+        </div>
         <div class="progress-meta">
-          <span id="progress-label">0 of 50 goal</span>
-          <span id="progress-pct">0%</span>
+          <span id="morning-progress-label">0 of 30 goal</span>
+          <span id="morning-pct">0%</span>
         </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="morning-fill" style="width:0%"></div></div>
+        <div class="shift-badge pending" id="morning-badge">🎯 30 reviews goal</div>
+      </div>
+
+      <div style="border-top:1px solid var(--border)"></div>
+
+      <div class="shift-card">
+        <div class="shift-header">
+          <div class="shift-number" id="night-count">—</div>
+          <div>
+            <div class="shift-label">🌙 Night shift</div>
+            <div class="shift-time">4 pm – midnight LV</div>
+          </div>
         </div>
-        <div class="goal-badge pending" id="goal-badge">🎯 Goal: 50 reviews</div>
+        <div class="progress-meta">
+          <span id="night-progress-label">0 of 30 goal</span>
+          <span id="night-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="night-fill" style="width:0%"></div></div>
+        <div class="shift-badge pending" id="night-badge">🎯 30 reviews goal</div>
+      </div>
+
+    </div>
+
+    <!-- Circle total -->
+    <div class="card circle-card">
+      <div class="card-label" style="text-align:center">Daily Total</div>
+      <div class="circle-wrap">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle class="circle-bg" cx="60" cy="60" r="50"/>
+          <circle class="circle-fill circle-morning" cx="60" cy="60" r="50" id="circle-morning"
+            stroke-dasharray="314" stroke-dashoffset="314"/>
+          <circle class="circle-fill circle-night" cx="60" cy="60" r="50" id="circle-night"
+            stroke-dasharray="314" stroke-dashoffset="314"/>
+        </svg>
+        <div class="circle-center">
+          <div class="circle-total" id="circle-total">0</div>
+          <div class="circle-sublabel">of 60</div>
+        </div>
+      </div>
+      <div class="circle-legend">
+        <div class="legend-row"><div class="legend-dot" style="background:#f5c518"></div>Morning</div>
+        <div class="legend-row"><div class="legend-dot" style="background:var(--accent)"></div>Night</div>
       </div>
     </div>
+
   </div>
 
   <div class="mid-row">
 
-    <!-- Employee Shoutouts -->
+    <!-- Shoutouts -->
     <div class="card">
       <div class="shoutout-header">
         <div class="card-label" style="margin-bottom:0">Employee Shoutouts</div>
@@ -177,31 +215,22 @@
           <button class="merge-btn" onclick="openMergeModal()">Merge names</button>
         </div>
       </div>
-      <div id="shoutout-wrap">
-        <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names in reviews.</div>
-      </div>
-      <div class="weekly-history" id="weekly-history-wrap" style="display:none">
-        <div class="weekly-history-label">Previous weeks</div>
-        <div class="weekly-rows" id="weekly-rows"></div>
-      </div>
+      <div id="shoutout-wrap"><div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div></div>
     </div>
 
-    <!-- Recent Ratings -->
+    <!-- Recent reviews -->
     <div class="card">
       <div class="card-label">Recent Ratings</div>
-      <div id="reviews-wrap">
-        <div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div>
-      </div>
+      <div id="reviews-wrap"><div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div></div>
     </div>
 
   </div>
 
+  <!-- Chart -->
   <div class="card">
     <div class="card-label">Rating History</div>
     <canvas id="chart"></canvas>
-    <div class="empty" id="chart-empty" style="display:none">
-      <strong>No history yet</strong>Run the scraper at least twice to see the trend line.
-    </div>
+    <div class="empty" id="chart-empty" style="display:none"><strong>No history yet</strong>Run the scraper at least twice to see the trend line.</div>
   </div>
 
 </main>
@@ -212,7 +241,7 @@
 <div class="modal-overlay" id="merge-modal">
   <div class="modal">
     <h2>Merge employee names</h2>
-    <p>Select two or more names that refer to the same person, then enter the canonical display name.</p>
+    <p>Select two or more names that refer to the same person, then enter the display name.</p>
     <div class="modal-names" id="modal-name-chips"></div>
     <input class="modal-input" id="merge-canonical" placeholder="Display name (e.g. Shirley G.)" />
     <div class="modal-actions">
@@ -223,417 +252,347 @@
 </div>
 
 <script>
-const DAILY_GOAL = 50;
 const STORAGE_KEY = "avis_shoutout_merges";
-const WEEKLY_KEY = "avis_weekly_history";
 
-// Load saved merges from localStorage
-function loadMerges() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; }
-}
-function saveMerges(m) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(m));
-}
+function loadMerges(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
+function saveMerges(m){localStorage.setItem(STORAGE_KEY,JSON.stringify(m))}
 
-// Weekly history stored locally: { "2026-W24": { "shirley": { display_name, count } } }
-function loadWeeklyHistory() {
-  try { return JSON.parse(localStorage.getItem(WEEKLY_KEY) || "{}"); } catch(e) { return {}; }
-}
-function saveWeeklyHistory(h) {
-  localStorage.setItem(WEEKLY_KEY, JSON.stringify(h));
+function getWeekLabel(){
+  const d=new Date();
+  const jan1=new Date(d.getFullYear(),0,1);
+  const week=Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
+  return "Week "+week;
 }
 
-function getWeekKey(dateStr) {
-  const d = dateStr ? new Date(dateStr) : new Date();
-  const jan1 = new Date(d.getFullYear(), 0, 1);
-  const week = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
-  return d.getFullYear() + "-W" + String(week).padStart(2, "0");
-}
-
-function getCurrentWeekKey() { return getWeekKey(); }
-
-// Apply merges to employee mentions object
-function applyMerges(employees, merges) {
-  // merges: { "alias_key": "canonical_key", ... }
-  const merged = {};
-  for (const [key, emp] of Object.entries(employees)) {
-    const canonical = merges[key] || key;
-    if (!merged[canonical]) {
-      merged[canonical] = { display_name: emp.display_name, count: 0, last_mentioned: emp.last_mentioned };
-    }
-    merged[canonical].count += emp.count;
-    if (emp.last_mentioned > merged[canonical].last_mentioned) {
-      merged[canonical].last_mentioned = emp.last_mentioned;
-    }
+function applyMerges(employees,merges){
+  const merged={};
+  for(const[key,emp]of Object.entries(employees)){
+    const canonical=merges[key]||key;
+    if(!merged[canonical]){merged[canonical]={display_name:emp.display_name,count:0,last_mentioned:emp.last_mentioned}}
+    merged[canonical].count+=emp.count;
+    if(emp.last_mentioned>merged[canonical].last_mentioned)merged[canonical].last_mentioned=emp.last_mentioned;
   }
-  // Apply display name overrides from merges where value is a key with a saved display_name
-  for (const [alias, canonical] of Object.entries(merges)) {
-    if (merged[canonical] && employees[canonical]) {
-      // keep canonical's display name unless overridden
+  // Apply display name overrides
+  for(const[alias,canonical]of Object.entries(merges)){
+    if(alias.startsWith("__display__")&&merged[canonical]){
+      merged[canonical].display_name=employees[canonical]?.display_name||canonical;
     }
   }
   return merged;
 }
 
-// Count mentions per employee in current week's reviews
-function countWeeklyMentions(reviews, merges) {
-  const weekKey = getCurrentWeekKey();
-  const counts = {};
-  for (const review of reviews) {
-    const reviewWeek = getWeekKey(review.date);
-    if (reviewWeek !== weekKey) continue;
-    for (const name of (review.employee_names || [])) {
-      const key = name.toLowerCase();
-      const canonical = merges[key] || key;
-      counts[canonical] = (counts[canonical] || 0) + 1;
-    }
-  }
-  return counts;
-}
+let globalEmployees={};
+let globalReviews=[];
 
-// Count daily mentions for fire badge
-function countDailyMentions(reviews, merges) {
-  const today = new Date().toISOString().slice(0, 10);
-  const counts = {};
-  for (const review of reviews) {
-    if (review.date !== today) continue;
-    for (const name of (review.employee_names || [])) {
-      const key = name.toLowerCase();
-      const canonical = merges[key] || key;
-      counts[canonical] = (counts[canonical] || 0) + 1;
-    }
-  }
-  return counts;
-}
-
-let globalEmployees = {};
-let globalMerges = {};
-let globalReviews = [];
-
-async function load() {
+async function load(){
   let data;
-  try {
-    const res = await fetch("data/ratings.json?nocache=" + Date.now());
-    if (!res.ok) throw new Error("not found");
-    data = await res.json();
-  } catch(e) {
-    document.getElementById("last-updated").textContent = "Could not load data";
+  try{
+    const res=await fetch("data/ratings.json?nocache="+Date.now());
+    if(!res.ok)throw new Error("not found");
+    data=await res.json();
+  }catch(e){
+    document.getElementById("last-updated").textContent="Could not load data";
     return;
   }
 
-  const locations = data.locations || {};
-  const historyByPlace = data.history || {};
-  const reviewsByPlace = data.reviews || {};
-  const employeesByPlace = data.employee_mentions || {};
+  const locations=data.locations||{};
+  const historyByPlace=data.history||{};
+  const reviewsByPlace=data.reviews||{};
+  const employeesByPlace=data.employee_mentions||{};
 
-  const placeIds = Object.keys(locations);
-  if (!placeIds.length) return;
+  const placeIds=Object.keys(locations);
+  if(!placeIds.length)return;
 
-  const placeId = placeIds.find(id => locations[id].rating != null) || placeIds[0];
-  const loc = locations[placeId];
-  const history = historyByPlace[placeId] || [];
-  const reviews = reviewsByPlace[placeId] || [];
-  const employees = employeesByPlace[placeId] || {};
+  const placeId=placeIds.find(id=>locations[id].rating!=null)||placeIds[0];
+  const loc=locations[placeId];
+  const history=historyByPlace[placeId]||[];
+  const reviews=reviewsByPlace[placeId]||[];
+  const employees=employeesByPlace[placeId]||{};
 
-  globalEmployees = employees;
-  globalReviews = reviews;
-  globalMerges = loadMerges();
+  globalEmployees=employees;
+  globalReviews=reviews;
 
-  // Header
-  if (loc.last_updated) {
-    document.getElementById("last-updated").textContent = "Updated " + loc.last_updated + " LV";
-  }
+  if(loc.last_updated)document.getElementById("last-updated").textContent="Updated "+loc.last_updated+" LV";
 
-  // Current rating
-  const current = loc.rating;
-  if (current != null) {
-    document.getElementById("current-rating").textContent = current.toFixed(1);
-    renderStars(current, "stars", 20);
-    document.getElementById("review-count-small").textContent = (loc.review_count || 0).toLocaleString() + " total reviews";
+  // Rating
+  const current=loc.rating;
+  if(current!=null){
+    document.getElementById("current-rating").textContent=current.toFixed(1);
+    renderStars(current,"stars",18);
+    document.getElementById("review-count-small").textContent=(loc.review_count||0).toLocaleString()+" total reviews";
   }
 
   // Delta
-  if (history.length >= 2) {
-    const prev = history[Math.max(0, history.length - 7)];
-    if (prev && prev.rating != null && current != null) {
-      const diff = +(current - prev.rating).toFixed(2);
-      document.getElementById("last-week-label").textContent = "Was " + prev.rating.toFixed(1) + " on " + prev.date;
-      const badge = document.getElementById("delta-badge");
-      if (diff > 0) { badge.className = "delta up"; badge.textContent = "▲ +" + diff + " vs last week"; }
-      else if (diff < 0) { badge.className = "delta down"; badge.textContent = "▼ " + diff + " vs last week"; }
-      else { badge.className = "delta flat"; badge.textContent = "No change vs last week"; }
+  if(history.length>=2){
+    const prev=history[Math.max(0,history.length-7)];
+    if(prev&&prev.rating!=null&&current!=null){
+      const diff=+(current-prev.rating).toFixed(2);
+      const badge=document.getElementById("delta-badge");
+      if(diff>0){badge.className="delta up";badge.textContent="▲ +"+diff+" vs last week";}
+      else if(diff<0){badge.className="delta down";badge.textContent="▼ "+diff+" vs last week";}
+      else{badge.className="delta flat";badge.textContent="No change vs last week";}
     }
-  } else {
-    document.getElementById("delta-badge").textContent = "Tracking started";
+  }else{
+    document.getElementById("delta-badge").textContent="Tracking started";
   }
 
-  // Reviews today
-  const reviewsToday = loc.reviews_today || 0;
-  document.getElementById("reviews-today").textContent = reviewsToday;
-  const pct = Math.min(100, Math.round((reviewsToday / DAILY_GOAL) * 100));
-  document.getElementById("progress-label").textContent = reviewsToday + " of " + DAILY_GOAL + " goal";
-  document.getElementById("progress-pct").textContent = pct + "%";
-  const fill = document.getElementById("progress-fill");
-  fill.style.width = pct + "%";
-  const goalBadge = document.getElementById("goal-badge");
-  if (reviewsToday >= DAILY_GOAL) {
-    fill.classList.add("goal-met");
-    goalBadge.className = "goal-badge met";
-    goalBadge.textContent = "✅ Goal reached!";
-  } else {
-    goalBadge.textContent = "🎯 " + (DAILY_GOAL - reviewsToday) + " more to reach goal";
-  }
+  // Shifts
+  const morning=loc.reviews_morning||0;
+  const night=loc.reviews_night||0;
+  const MORNING_GOAL=30;
+
+  // If morning didn't hit goal, remainder rolls into night goal
+  const morningShortfall=Math.max(0,MORNING_GOAL-morning);
+  const nightGoal=MORNING_GOAL+morningShortfall;
+
+  // Morning
+  document.getElementById("morning-count").textContent=morning;
+  const mPct=Math.min(100,Math.round((morning/MORNING_GOAL)*100));
+  document.getElementById("morning-progress-label").textContent=morning+" of "+MORNING_GOAL+" goal";
+  document.getElementById("morning-pct").textContent=mPct+"%";
+  const mFill=document.getElementById("morning-fill");
+  mFill.style.width=mPct+"%";
+  const mBadge=document.getElementById("morning-badge");
+  if(morning>=MORNING_GOAL){mFill.classList.add("goal-met");mBadge.className="shift-badge met";mBadge.textContent="✅ Morning goal reached!";}
+  else{mBadge.textContent="🎯 "+(MORNING_GOAL-morning)+" more to reach morning goal";}
+
+  // Night (with rollover)
+  document.getElementById("night-count").textContent=night;
+  const nPct=Math.min(100,Math.round((night/nightGoal)*100));
+  document.getElementById("night-progress-label").textContent=night+" of "+nightGoal+" goal"+(morningShortfall>0?" (incl. +"+morningShortfall+" rollover)":"");
+  document.getElementById("night-pct").textContent=nPct+"%";
+  const nFill=document.getElementById("night-fill");
+  nFill.style.width=nPct+"%";
+  const nBadge=document.getElementById("night-badge");
+  if(night>=nightGoal){nFill.classList.add("goal-met");nBadge.className="shift-badge met";nBadge.textContent="✅ Night goal reached!";}
+  else{nBadge.textContent="🎯 "+(nightGoal-night)+" more to reach night goal";}
+
+  // Circle
+  const total=morning+night;
+  const TOTAL_GOAL=60;
+  document.getElementById("circle-total").textContent=total;
+  const circumference=314;
+  const mOffset=circumference-(morning/TOTAL_GOAL)*circumference;
+  const nOffset=circumference-(night/TOTAL_GOAL)*circumference;
+  // Morning arc starts at 0, night starts where morning ends
+  const morningFrac=Math.min(1,morning/TOTAL_GOAL);
+  const nightFrac=Math.min(1,night/TOTAL_GOAL);
+  const cm=document.getElementById("circle-morning");
+  const cn=document.getElementById("circle-night");
+  cm.style.strokeDashoffset=circumference*(1-morningFrac);
+  // Night arc offset: rotate to start after morning
+  cn.style.strokeDasharray=(nightFrac*circumference)+" "+circumference;
+  cn.style.strokeDashoffset=-(morningFrac*circumference);
+  cn.style.transform="rotate(0deg)";
 
   // Shoutouts
-  renderShoutouts();
+  const merges=loadMerges();
+  document.getElementById("week-label").textContent=getWeekLabel();
+  const mergedEmp=applyMerges(employees,merges);
+  const entries=Object.entries(mergedEmp).sort((a,b)=>b[1].count-a[1].count);
+  const shoutWrap=document.getElementById("shoutout-wrap");
+  if(entries.length){
+    const maxCount=Math.max(...entries.map(e=>e[1].count),1);
+    shoutWrap.innerHTML="";
+    const bars=document.createElement("div");
+    bars.className="shoutout-bars";
+    entries.slice(0,10).forEach(([key,emp])=>{
+      const barPct=Math.max(8,Math.round((emp.count/maxCount)*100));
+      const row=document.createElement("div");
+      row.className="shoutout-row";
+      row.innerHTML=
+        '<div class="shoutout-name-col" title="'+emp.display_name+'">'+emp.display_name+'</div>'+
+        '<div class="shoutout-bar-track"><div class="shoutout-bar-fill" style="width:'+barPct+'%">'+
+        '<span class="shoutout-bar-count">'+emp.count+'</span></div></div>'+
+        '<div class="shoutout-fire">'+(emp.count>=5?"🔥":"")+'</div>';
+      bars.appendChild(row);
+    });
+    shoutWrap.appendChild(bars);
+  }
 
-  // Recent reviews
-  const reviewsWrap = document.getElementById("reviews-wrap");
-  const recentReviews = reviews.slice().reverse().slice(0, 15);
-  if (recentReviews.length) {
-    reviewsWrap.innerHTML = "";
-    const list = document.createElement("div");
-    list.className = "reviews-list";
-    recentReviews.forEach(r => {
-      const stars = "★".repeat(r.rating) + "☆".repeat(Math.max(0, 5 - r.rating));
-      const snippet = r.text && r.text.length > 140 ? r.text.slice(0, 140) + "…" : (r.text || "No text left.");
-      const empHtml = r.employee_names && r.employee_names.length
-        ? '<div class="review-emp">👤 ' + r.employee_names.join(", ") + '</div>' : "";
-      const item = document.createElement("div");
-      item.className = "review-item";
-      item.innerHTML =
-        '<div class="review-header">' +
-          '<span class="review-author">' + (r.author || "Anonymous") + '</span>' +
-          '<span class="review-stars">' + stars + '</span>' +
-        '</div>' +
-        '<div class="review-text">' + snippet + '</div>' + empHtml;
+  // Reviews
+  const reviewsWrap=document.getElementById("reviews-wrap");
+  const recentReviews=reviews.slice(0,15);
+  if(recentReviews.length){
+    reviewsWrap.innerHTML="";
+    const list=document.createElement("div");
+    list.className="reviews-list";
+    recentReviews.forEach(r=>{
+      const stars="★".repeat(r.rating)+"☆".repeat(Math.max(0,5-r.rating));
+      const snippet=r.text&&r.text.length>140?r.text.slice(0,140)+"…":(r.text||"No text.");
+      const empHtml=r.employee_names&&r.employee_names.length?'<div class="review-emp">👤 '+r.employee_names.join(", ")+'</div>':"";
+      const item=document.createElement("div");
+      item.className="review-item";
+      item.innerHTML=
+        '<div class="review-header"><span class="review-author">'+(r.author||"Anonymous")+'</span>'+
+        '<span class="review-stars">'+stars+'</span></div>'+
+        '<div class="review-text">'+snippet+'</div>'+empHtml;
       list.appendChild(item);
     });
     reviewsWrap.appendChild(list);
   }
 
-  // Chart
-  const chartHistory = history.filter(h => h.rating != null);
-  if (chartHistory.length >= 2) {
+  // Chart with 4.0 goal line by July 1
+  const chartHistory=history.filter(h=>h.rating!=null);
+  if(chartHistory.length>=2){
     drawChart(chartHistory);
-  } else {
-    document.getElementById("chart").style.display = "none";
-    document.getElementById("chart-empty").style.display = "block";
-  }
-
-  // Save weekly snapshot
-  snapshotWeeklyData(employees, globalMerges);
-}
-
-function renderShoutouts() {
-  const merges = globalMerges;
-  const employees = globalEmployees;
-  const reviews = globalReviews;
-
-  // Weekly counts from reviews
-  const weeklyCounts = countWeeklyMentions(reviews, merges);
-  const dailyCounts = countDailyMentions(reviews, merges);
-
-  // Merge the stored employee data
-  const mergedEmployees = applyMerges(employees, merges);
-
-  // Use weekly counts if available, else fall back to all-time
-  const displayData = {};
-  for (const [key, emp] of Object.entries(mergedEmployees)) {
-    displayData[key] = {
-      display_name: emp.display_name,
-      count: weeklyCounts[key] !== undefined ? weeklyCounts[key] : emp.count,
-      alltime: emp.count,
-      daily: dailyCounts[key] || 0,
-    };
-  }
-
-  const weekKey = getCurrentWeekKey();
-  const weekNum = weekKey.split("-W")[1];
-  document.getElementById("week-label").textContent = "Week " + weekNum;
-
-  const shoutWrap = document.getElementById("shoutout-wrap");
-  const entries = Object.entries(displayData).sort((a, b) => b[1].count - a[1].count);
-
-  if (!entries.length) {
-    shoutWrap.innerHTML = '<div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names in reviews.</div>';
-    return;
-  }
-
-  const maxCount = Math.max(...entries.map(e => e[1].count), 1);
-  shoutWrap.innerHTML = "";
-  const bars = document.createElement("div");
-  bars.className = "shoutout-bars";
-
-  entries.slice(0, 10).forEach(([key, emp]) => {
-    const barPct = Math.max(8, Math.round((emp.count / maxCount) * 100));
-    const onFire = emp.daily >= 5;
-    const row = document.createElement("div");
-    row.className = "shoutout-row";
-    row.innerHTML =
-      '<div class="shoutout-name-col" title="' + emp.display_name + '">' + emp.display_name + '</div>' +
-      '<div class="shoutout-bar-track">' +
-        '<div class="shoutout-bar-fill" style="width:' + barPct + '%">' +
-          '<span class="shoutout-bar-count">' + emp.count + '</span>' +
-        '</div>' +
-      '</div>' +
-      '<div class="shoutout-fire">' + (onFire ? "🔥" : "") + '</div>';
-    bars.appendChild(row);
-  });
-
-  shoutWrap.appendChild(bars);
-
-  // Weekly history panel
-  const weeklyHistory = loadWeeklyHistory();
-  const pastWeeks = Object.entries(weeklyHistory)
-    .filter(([wk]) => wk !== weekKey)
-    .sort((a, b) => b[0].localeCompare(a[0]))
-    .slice(0, 4);
-
-  const historyWrap = document.getElementById("weekly-history-wrap");
-  const historyRows = document.getElementById("weekly-rows");
-  if (pastWeeks.length) {
-    historyWrap.style.display = "block";
-    historyRows.innerHTML = "";
-    pastWeeks.forEach(([wk, data]) => {
-      const top = Object.entries(data).sort((a, b) => b[1].count - a[1].count).slice(0, 3);
-      const row = document.createElement("div");
-      row.className = "weekly-row";
-      row.innerHTML =
-        '<span class="weekly-week">' + wk + '</span>' +
-        '<span class="weekly-name">' + top.map(([, e]) => e.display_name + " (" + e.count + ")").join(", ") + '</span>';
-      historyRows.appendChild(row);
-    });
-  } else {
-    historyWrap.style.display = "none";
+  }else{
+    document.getElementById("chart").style.display="none";
+    document.getElementById("chart-empty").style.display="block";
   }
 }
 
-function snapshotWeeklyData(employees, merges) {
-  const weekKey = getCurrentWeekKey();
-  const weeklyCounts = countWeeklyMentions(globalReviews, merges);
-  const mergedEmp = applyMerges(employees, merges);
-  const weeklyHistory = loadWeeklyHistory();
-
-  const snapshot = {};
-  for (const [key, emp] of Object.entries(mergedEmp)) {
-    if (weeklyCounts[key] > 0) {
-      snapshot[key] = { display_name: emp.display_name, count: weeklyCounts[key] };
-    }
-  }
-  if (Object.keys(snapshot).length) {
-    weeklyHistory[weekKey] = snapshot;
-    saveWeeklyHistory(weeklyHistory);
-  }
-}
-
-// Merge modal
-function openMergeModal() {
-  const merges = loadMerges();
-  const mergedEmployees = applyMerges(globalEmployees, merges);
-  const chips = document.getElementById("modal-name-chips");
-  chips.innerHTML = "";
-  Object.entries(mergedEmployees).forEach(([key, emp]) => {
-    const chip = document.createElement("div");
-    chip.className = "name-chip";
-    chip.textContent = emp.display_name + " (" + emp.count + ")";
-    chip.dataset.key = key;
-    chip.onclick = () => chip.classList.toggle("selected");
-    chips.appendChild(chip);
-  });
-  document.getElementById("merge-canonical").value = "";
-  document.getElementById("merge-modal").classList.add("open");
-}
-
-function closeMergeModal() {
-  document.getElementById("merge-modal").classList.remove("open");
-}
-
-function saveMerge() {
-  const selected = [...document.querySelectorAll(".name-chip.selected")];
-  const canonical = document.getElementById("merge-canonical").value.trim();
-  if (selected.length < 2 || !canonical) {
-    alert("Select at least 2 names and enter a display name.");
-    return;
-  }
-  const merges = loadMerges();
-  const canonicalKey = canonical.toLowerCase().replace(/\s+/g, "_");
-  // Map all selected keys to canonical key
-  selected.forEach(chip => {
-    merges[chip.dataset.key] = canonicalKey;
-  });
-  // Store display name override
-  merges["__display__" + canonicalKey] = canonical;
-  saveMerges(merges);
-  closeMergeModal();
-  renderShoutouts();
-}
-
-function renderStars(rating, containerId, size) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-  for (let i = 1; i <= 5; i++) {
-    const span = document.createElement("span");
-    span.className = "star";
-    span.style.fontSize = (size || 20) + "px";
-    if (rating >= i) { span.textContent = "★"; }
-    else if (rating >= i - 0.5) { span.textContent = "★"; span.style.opacity = "0.5"; }
-    else { span.textContent = "☆"; }
-    span.style.color = rating >= i - 0.5 ? "var(--gold)" : "var(--border)";
+function renderStars(rating,containerId,size){
+  const container=document.getElementById(containerId);
+  container.innerHTML="";
+  for(let i=1;i<=5;i++){
+    const span=document.createElement("span");
+    span.className="star";
+    span.style.fontSize=(size||18)+"px";
+    if(rating>=i){span.textContent="★";}
+    else if(rating>=i-0.5){span.textContent="★";span.style.opacity="0.5";}
+    else{span.textContent="☆";}
+    span.style.color=rating>=i-0.5?"var(--gold)":"var(--border)";
     container.appendChild(span);
   }
 }
 
-function drawChart(history) {
-  const canvas = document.getElementById("chart");
-  const dpr = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth, H = canvas.offsetHeight;
-  canvas.width = W * dpr; canvas.height = H * dpr;
-  const ctx = canvas.getContext("2d");
-  ctx.scale(dpr, dpr);
-  const ratings = history.map(h => h.rating);
-  const pad = { top: 20, right: 20, bottom: 36, left: 44 };
-  const iW = W - pad.left - pad.right;
-  const iH = H - pad.top - pad.bottom;
-  const minR = Math.max(0, Math.min(...ratings) - 0.3);
-  const maxR = Math.min(5, Math.max(...ratings) + 0.3);
-  const yS = v => pad.top + iH - ((v - minR) / (maxR - minR)) * iH;
-  const xS = i => pad.left + (i / Math.max(ratings.length - 1, 1)) * iW;
-  ctx.strokeStyle = "rgba(255,255,255,.05)"; ctx.lineWidth = 1;
-  [1,2,3,4,5].forEach(v => {
-    if (v < minR || v > maxR) return;
-    const y = yS(v);
-    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.font = "10px Inter,system-ui";
-    ctx.fillText(v.toFixed(1), pad.left - 28, y + 4);
+function drawChart(history){
+  const canvas=document.getElementById("chart");
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext("2d");
+  ctx.scale(dpr,dpr);
+
+  const ratings=history.map(h=>h.rating);
+  const dates=history.map(h=>h.date);
+  const pad={top:24,right:20,bottom:40,left:44};
+  const iW=W-pad.left-pad.right;
+  const iH=H-pad.top-pad.bottom;
+
+  // Include goal point in scale
+  const GOAL_RATING=4.0;
+  const GOAL_DATE="2026-07-01";
+  const allRatings=[...ratings,GOAL_RATING];
+  const minR=Math.max(0,Math.min(...allRatings)-0.3);
+  const maxR=Math.min(5,Math.max(...allRatings)+0.3);
+
+  // Date range including goal date
+  const allDates=[...dates];
+  if(!allDates.includes(GOAL_DATE))allDates.push(GOAL_DATE);
+  allDates.sort();
+
+  const dateToX=d=>{
+    const idx=allDates.indexOf(d);
+    return pad.left+(idx/Math.max(allDates.length-1,1))*iW;
+  };
+  const yS=v=>pad.top+iH-((v-minR)/(maxR-minR))*iH;
+
+  // Grid lines
+  ctx.strokeStyle="rgba(255,255,255,.05)";ctx.lineWidth=1;
+  [1,2,3,4,5].forEach(v=>{
+    if(v<minR||v>maxR)return;
+    const y=yS(v);
+    ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.25)";ctx.font="10px Inter,system-ui";ctx.textAlign="right";
+    ctx.fillText(v.toFixed(1),pad.left-6,y+4);
   });
-  const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
-  grad.addColorStop(0, "rgba(200,16,46,.35)"); grad.addColorStop(1, "rgba(200,16,46,0)");
+
+  // 4.0 goal line
+  const goalY=yS(GOAL_RATING);
+  ctx.setLineDash([5,5]);
+  ctx.strokeStyle="rgba(62,207,142,0.5)";ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.left,goalY);ctx.lineTo(W-pad.right,goalY);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="rgba(62,207,142,0.7)";ctx.font="10px Inter,system-ui";ctx.textAlign="left";
+  ctx.fillText("4.0 goal (Jul 1)",pad.left+4,goalY-5);
+
+  // Trend line from current rating to 4.0 on July 1
+  if(dates.length>0){
+    const lastDate=dates[dates.length-1];
+    const lastRating=ratings[ratings.length-1];
+    const x1=dateToX(lastDate);
+    const y1=yS(lastRating);
+    const x2=dateToX(GOAL_DATE);
+    const y2=yS(GOAL_RATING);
+    ctx.setLineDash([4,4]);
+    ctx.strokeStyle="rgba(62,207,142,0.35)";ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    ctx.setLineDash([]);
+    // Goal dot
+    ctx.beginPath();ctx.arc(x2,y2,4,0,Math.PI*2);
+    ctx.fillStyle="var(--up)";ctx.fill();
+  }
+
+  // Fill under rating line
+  const grad=ctx.createLinearGradient(0,pad.top,0,H-pad.bottom);
+  grad.addColorStop(0,"rgba(200,16,46,.35)");grad.addColorStop(1,"rgba(200,16,46,0)");
   ctx.beginPath();
-  ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v)));
-  ctx.lineTo(xS(ratings.length - 1), H - pad.bottom);
-  ctx.lineTo(xS(0), H - pad.bottom);
-  ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
-  ctx.beginPath(); ctx.strokeStyle = "var(--accent)"; ctx.lineWidth = 2.5; ctx.lineJoin = "round";
-  ratings.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v)));
+  history.forEach((h,i)=>i===0?ctx.moveTo(dateToX(h.date),yS(h.rating)):ctx.lineTo(dateToX(h.date),yS(h.rating)));
+  ctx.lineTo(dateToX(dates[dates.length-1]),H-pad.bottom);
+  ctx.lineTo(dateToX(dates[0]),H-pad.bottom);
+  ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+
+  // Rating line
+  ctx.beginPath();ctx.strokeStyle="var(--accent)";ctx.lineWidth=2.5;ctx.lineJoin="round";
+  history.forEach((h,i)=>i===0?ctx.moveTo(dateToX(h.date),yS(h.rating)):ctx.lineTo(dateToX(h.date),yS(h.rating)));
   ctx.stroke();
-  if (ratings.length <= 60) {
-    ratings.forEach((v, i) => {
-      ctx.beginPath(); ctx.arc(xS(i), yS(v), 3, 0, Math.PI * 2);
-      ctx.fillStyle = "#fff"; ctx.fill();
-      ctx.strokeStyle = "var(--accent)"; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Dots
+  if(ratings.length<=60){
+    history.forEach(h=>{
+      ctx.beginPath();ctx.arc(dateToX(h.date),yS(h.rating),3,0,Math.PI*2);
+      ctx.fillStyle="#fff";ctx.fill();
+      ctx.strokeStyle="var(--accent)";ctx.lineWidth=1.5;ctx.stroke();
     });
   }
-  const step = Math.ceil(history.length / 6);
-  ctx.fillStyle = "rgba(255,255,255,.3)"; ctx.font = "10px Inter,system-ui"; ctx.textAlign = "center";
-  history.forEach((h, i) => {
-    if (i % step !== 0 && i !== history.length - 1) return;
-    ctx.fillText(h.date, xS(i), H - pad.bottom + 18);
+
+  // X axis labels
+  const step=Math.ceil(dates.length/6);
+  ctx.fillStyle="rgba(255,255,255,.3)";ctx.font="10px Inter,system-ui";ctx.textAlign="center";
+  dates.forEach((d,i)=>{
+    if(i%step!==0&&i!==dates.length-1)return;
+    ctx.fillText(d,dateToX(d),H-pad.bottom+16);
   });
+  // Always show Jul 1
+  ctx.fillStyle="rgba(62,207,142,0.6)";
+  ctx.fillText("Jul 1",dateToX(GOAL_DATE),H-pad.bottom+16);
+}
+
+// Merge modal
+function openMergeModal(){
+  const merges=loadMerges();
+  const mergedEmp=applyMerges(globalEmployees,merges);
+  const chips=document.getElementById("modal-name-chips");
+  chips.innerHTML="";
+  Object.entries(mergedEmp).forEach(([key,emp])=>{
+    const chip=document.createElement("div");
+    chip.className="name-chip";
+    chip.textContent=emp.display_name+" ("+emp.count+")";
+    chip.dataset.key=key;
+    chip.onclick=()=>chip.classList.toggle("selected");
+    chips.appendChild(chip);
+  });
+  document.getElementById("merge-canonical").value="";
+  document.getElementById("merge-modal").classList.add("open");
+}
+function closeMergeModal(){document.getElementById("merge-modal").classList.remove("open");}
+function saveMerge(){
+  const selected=[...document.querySelectorAll(".name-chip.selected")];
+  const canonical=document.getElementById("merge-canonical").value.trim();
+  if(selected.length<2||!canonical){alert("Select at least 2 names and enter a display name.");return;}
+  const merges=loadMerges();
+  const canonicalKey=canonical.toLowerCase().replace(/\s+/g,"_");
+  selected.forEach(chip=>{merges[chip.dataset.key]=canonicalKey;});
+  merges["__display__"+canonicalKey]=canonical;
+  saveMerges(merges);
+  closeMergeModal();
+  load();
 }
 
 load();
-setInterval(load, 5 * 60 * 1000);
+setInterval(load,5*60*1000);
 </script>
 </body>
 </html>

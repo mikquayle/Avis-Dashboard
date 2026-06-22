@@ -9,7 +9,7 @@ ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY")
 LOCATIONS = [
     {
         "name": "Avis Car Rental - Harry Reid Airport",
-        "search_query": "Avis Car Rental 7135 Gilespie St Las Vegas NV"
+        "place_id": "ChIJL7BqEp3FyIARP_QZDyQ5HJI"
     },
 ]
 
@@ -19,50 +19,46 @@ LAS_VEGAS_OFFSET = timedelta(hours=-7)
 def get_lv_time():
     return datetime.now(timezone.utc) + LAS_VEGAS_OFFSET
 
-def find_place(search_query):
-    url = "https://places.googleapis.com/v1/places:searchText"
+def fetch_place(place_id):
+    """Fetch place details including newest reviews directly by place ID."""
+    url = "https://places.googleapis.com/v1/places/" + place_id
     headers = {
-        "Content-Type": "application/json",
         "X-Goog-Api-Key": API_KEY,
-        "X-Goog-FieldMask": "places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.reviews",
+        "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,formattedAddress,reviews",
     }
-    body = {"textQuery": search_query, "languageCode": "en"}
-
-    response = requests.post(url, headers=headers, json=body)
+    # Fetch newest reviews
+    response = requests.get(url, headers=headers, params={
+        "languageCode": "en",
+        "reviewsSort": "newest"
+    })
     response.raise_for_status()
-    result = response.json()
-    places = result.get("places", [])
-    if not places:
-        raise ValueError("No places found for query: " + search_query)
+    data = response.json()
+    print("Newest reviews fetched: " + str(len(data.get("reviews", []))))
 
-    place = places[0]
-    place_id = place.get("id")
-    reviews_relevant = place.get("reviews", [])
-
-    # Second call to get newest reviews for the same place
-    response2 = requests.get(
-        "https://places.googleapis.com/v1/places/" + place_id,
-        headers={"X-Goog-Api-Key": API_KEY, "X-Goog-FieldMask": "reviews"},
-        params={"languageCode": "en", "reviewsSort": "newest"}
-    )
-
-    reviews_newest = []
+    # Also fetch relevant reviews and merge
+    response2 = requests.get(url, headers=headers, params={
+        "languageCode": "en",
+        "reviewsSort": "mostRelevant"
+    })
+    reviews_relevant = []
     if response2.ok:
-        reviews_newest = response2.json().get("reviews", [])
+        reviews_relevant = response2.json().get("reviews", [])
+        print("Relevant reviews fetched: " + str(len(reviews_relevant)))
 
-    # Merge both sets, deduplicate by author+time
+    # Merge, newest first, deduplicated
     seen = set()
-    merged_reviews = []
-    for r in reviews_relevant + reviews_newest:
+    merged = []
+    for r in data.get("reviews", []) + reviews_relevant:
         author = r.get("authorAttribution", {}).get("displayName", "")
         t = r.get("publishTime", "")
         key = author + "_" + t
         if key not in seen:
             seen.add(key)
-            merged_reviews.append(r)
+            merged.append(r)
 
-    place["reviews"] = merged_reviews
-    return place
+    data["reviews"] = merged
+    print("Total unique reviews after merge: " + str(len(merged)))
+    return data
 
 def extract_employee_names(review_text):
     if not ANTHROPIC_KEY:
@@ -110,7 +106,8 @@ def load_existing_data():
         "history": {},
         "reviews": {},
         "daily_baselines": {},
-        "employee_mentions": {}
+        "employee_mentions": {},
+        "seen_review_ids": {}
     }
 
 def save_data(data):
@@ -137,28 +134,24 @@ def main():
 
     data = load_existing_data()
 
-    if "reviews" not in data:
-        data["reviews"] = {}
-    if "daily_baselines" not in data:
-        data["daily_baselines"] = {}
-    if "employee_mentions" not in data:
-        data["employee_mentions"] = {}
+    for key in ["reviews", "daily_baselines", "employee_mentions", "seen_review_ids"]:
+        if key not in data:
+            data[key] = {}
 
     for location in LOCATIONS:
         name = location["name"]
-        search_query = location["search_query"]
-        print("Searching: " + name)
+        place_id = location["place_id"]
+        print("Fetching: " + name)
 
-        place = find_place(search_query)
-        place_id = place.get("id")
+        place = fetch_place(place_id)
         rating = place.get("rating")
         review_count = place.get("userRatingCount")
         address = place.get("formattedAddress", "")
         raw_reviews = place.get("reviews", [])
 
         print("Rating: " + str(rating) + " (" + str(review_count) + " reviews)")
-        print("Reviews fetched from API: " + str(len(raw_reviews)))
 
+        # Daily baseline for reviews-today counter
         baseline_key = place_id + "_" + today_key
         if baseline_key not in data["daily_baselines"]:
             if lv_hour >= 8 or lv_hour < 3:
@@ -179,6 +172,7 @@ def main():
             "today_key": today_key,
         }
 
+        # History
         if place_id not in data["history"]:
             data["history"][place_id] = []
         existing_dates = [h["date"] for h in data["history"][place_id]]
@@ -198,8 +192,16 @@ def main():
             data["reviews"][place_id] = []
         if place_id not in data["employee_mentions"]:
             data["employee_mentions"][place_id] = {}
+        if place_id not in data["seen_review_ids"]:
+            data["seen_review_ids"][place_id] = []
 
-        existing_review_ids = {r.get("id"): i for i, r in enumerate(data["reviews"][place_id])}
+        # seen_review_ids tracks every review we have EVER processed
+        # so we never double-count employee mentions
+        seen_ids = set(data["seen_review_ids"][place_id])
+
+        # Replace the displayed reviews list with freshest from this scrape
+        # but only ADD to employee mentions for reviews we haven't seen before
+        fresh_reviews = []
 
         for review in raw_reviews:
             author = review.get("authorAttribution", {}).get("displayName", "Anonymous")
@@ -212,44 +214,32 @@ def main():
                 text = str(text_field)
             star_rating = review.get("rating", 0)
 
-            if review_id in existing_review_ids:
-                idx = existing_review_ids[review_id]
-                existing = data["reviews"][place_id][idx]
-                # Only retry extraction if employee_names key is missing entirely (never attempted)
-                if "employee_names" not in existing and text and len(text.strip()) > 10:
-                    print("Extracting names for: " + author)
-                    names = extract_employee_names(text)
-                    existing["employee_names"] = names if names else []
-                    if names:
-                        print("Employees mentioned: " + str(names))
-                        for emp_name in names:
-                            key = emp_name.lower()
-                            if key not in data["employee_mentions"][place_id]:
-                                data["employee_mentions"][place_id][key] = {
-                                    "display_name": emp_name,
-                                    "count": 0,
-                                    "last_mentioned": ""
-                                }
-                            data["employee_mentions"][place_id][key]["count"] += 1
-                            data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
-                continue
+            # Extract names for display regardless
+            if review_id in seen_ids:
+                # Already counted — find existing names for display only
+                existing = next((r for r in data["reviews"][place_id] if r.get("id") == review_id), None)
+                names = existing.get("employee_names", []) if existing else []
+                print("Already seen: " + author)
+            else:
+                # Brand new review — extract names and count shoutouts
+                print("New review from: " + author)
+                names = extract_employee_names(text)
+                if names:
+                    print("Employees mentioned: " + str(names))
+                    for emp_name in names:
+                        key = emp_name.lower()
+                        if key not in data["employee_mentions"][place_id]:
+                            data["employee_mentions"][place_id][key] = {
+                                "display_name": emp_name,
+                                "count": 0,
+                                "last_mentioned": ""
+                            }
+                        data["employee_mentions"][place_id][key]["count"] += 1
+                        data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
+                # Mark as seen so we never double-count
+                seen_ids.add(review_id)
 
-            print("New review from: " + author)
-            names = extract_employee_names(text)
-            if names:
-                print("Employees mentioned: " + str(names))
-                for emp_name in names:
-                    key = emp_name.lower()
-                    if key not in data["employee_mentions"][place_id]:
-                        data["employee_mentions"][place_id][key] = {
-                            "display_name": emp_name,
-                            "count": 0,
-                            "last_mentioned": ""
-                        }
-                    data["employee_mentions"][place_id][key]["count"] += 1
-                    data["employee_mentions"][place_id][key]["last_mentioned"] = today_date
-
-            data["reviews"][place_id].append({
+            fresh_reviews.append({
                 "id": review_id,
                 "author": author,
                 "rating": star_rating,
@@ -258,7 +248,14 @@ def main():
                 "employee_names": names if names else [],
             })
 
-        data["reviews"][place_id] = data["reviews"][place_id][-100:]
+        # Update seen list and replace displayed reviews with freshest batch
+        data["seen_review_ids"][place_id] = list(seen_ids)
+
+        # Keep the fresh reviews on top, append any older stored ones not in this batch
+        fresh_ids = {r["id"] for r in fresh_reviews}
+        older = [r for r in data["reviews"][place_id] if r["id"] not in fresh_ids]
+        data["reviews"][place_id] = fresh_reviews + older
+        data["reviews"][place_id] = data["reviews"][place_id][:100]
 
     save_data(data)
     print("Data saved to " + DATA_FILE)

@@ -37,7 +37,6 @@
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
     .card-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
-    /* Rating card */
     .rating-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
     .rating-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%); pointer-events: none; }
     .rating-big { font-size: 80px; font-weight: 800; line-height: 1; background: linear-gradient(135deg, #fff 60%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -50,7 +49,6 @@
     .delta.down { background: rgba(248,113,113,.12); color: var(--down); }
     .delta.flat { background: var(--border); color: var(--muted); }
 
-    /* Reviews today card */
     .today-card { display: flex; flex-direction: column; justify-content: center; }
     .today-number { font-size: 96px; font-weight: 800; line-height: 1; color: #fff; }
     .today-label { font-size: 14px; color: var(--muted); margin-top: 4px; margin-bottom: 20px; }
@@ -63,19 +61,48 @@
     .goal-badge.met { background: rgba(62,207,142,.12); color: var(--up); }
     .goal-badge.pending { background: var(--border); color: var(--muted); }
 
-    /* Middle row */
     .mid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    /* Employee shoutouts */
-    .shoutout-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-    .shoutout-item { display: flex; align-items: center; gap: 12px; }
-    .shoutout-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-lo); border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--accent); flex-shrink: 0; }
-    .shoutout-name { font-size: 14px; font-weight: 600; flex: 1; }
-    .shoutout-count { font-size: 12px; color: var(--muted); }
-    .shoutout-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .shoutout-bar { height: 100%; background: var(--accent); border-radius: 99px; }
+    /* Shoutout bar chart */
+    .shoutout-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .shoutout-week-label { font-size: 11px; color: var(--muted); }
+    .shoutout-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .shoutout-row { display: flex; align-items: center; gap: 10px; }
+    .shoutout-name-col { width: 80px; font-size: 13px; font-weight: 600; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+    .shoutout-bar-track { flex: 1; height: 22px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+    .shoutout-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.6s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; min-width: 28px; }
+    .shoutout-bar-count { font-size: 11px; font-weight: 700; color: #fff; }
+    .shoutout-fire { font-size: 14px; margin-left: 6px; flex-shrink: 0; }
+    .merge-btn { font-size: 11px; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; cursor: pointer; transition: all 0.2s; }
+    .merge-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Recent ratings */
+    /* Merge modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; width: 420px; max-width: 90vw; }
+    .modal h2 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .modal p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .modal-names { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .name-chip { padding: 5px 12px; border-radius: 99px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--text); transition: all 0.15s; }
+    .name-chip.selected { border-color: var(--accent); background: var(--accent-lo); color: var(--accent); }
+    .modal-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 10px 14px; font-size: 14px; margin-bottom: 16px; outline: none; }
+    .modal-input:focus { border-color: var(--accent); }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+    .btn-cancel { background: var(--border); color: var(--muted); }
+    .btn-save { background: var(--accent); color: #fff; }
+    .btn:hover { opacity: 0.85; }
+
+    /* Weekly history */
+    .weekly-history { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .weekly-history-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .weekly-rows { display: flex; flex-direction: column; gap: 6px; }
+    .weekly-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+    .weekly-week { color: var(--muted); width: 90px; flex-shrink: 0; }
+    .weekly-name { font-weight: 600; flex: 1; }
+    .weekly-count { color: var(--muted); }
+
+    /* Recent reviews */
     .reviews-list { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
     .review-item { padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
     .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
@@ -84,7 +111,6 @@
     .review-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
     .review-emp { margin-top: 6px; font-size: 11px; color: var(--accent); }
 
-    /* Chart */
     #chart { width: 100%; height: 200px; display: block; }
     .empty { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
     .empty strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 6px; }
@@ -103,7 +129,7 @@
   <div class="logo">A</div>
   <div>
     <h1>Avis Rating Dashboard</h1>
-    <p>Harry Reid Airport · updated every 15 min</p>
+    <p>Harry Reid Airport · updated every 30 min</p>
   </div>
   <div class="status-pill">
     <span class="status-dot"></span>
@@ -114,8 +140,6 @@
 <main>
 
   <div class="top-row">
-
-    <!-- Current Rating -->
     <div class="card rating-card">
       <div class="card-label">Current Rating</div>
       <div class="rating-big" id="current-rating">—</div>
@@ -125,7 +149,6 @@
       <div class="delta flat" id="delta-badge">—</div>
     </div>
 
-    <!-- Reviews Today -->
     <div class="card today-card">
       <div class="card-label">Reviews Today <span style="font-weight:400;text-transform:none;letter-spacing:0">(8am – 3am LV time)</span></div>
       <div class="today-number" id="reviews-today">—</div>
@@ -141,16 +164,25 @@
         <div class="goal-badge pending" id="goal-badge">🎯 Goal: 50 reviews</div>
       </div>
     </div>
-
   </div>
 
   <div class="mid-row">
 
     <!-- Employee Shoutouts -->
     <div class="card">
-      <div class="card-label">Employee Shoutouts</div>
+      <div class="shoutout-header">
+        <div class="card-label" style="margin-bottom:0">Employee Shoutouts</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="shoutout-week-label" id="week-label"></span>
+          <button class="merge-btn" onclick="openMergeModal()">Merge names</button>
+        </div>
+      </div>
       <div id="shoutout-wrap">
         <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names in reviews.</div>
+      </div>
+      <div class="weekly-history" id="weekly-history-wrap" style="display:none">
+        <div class="weekly-history-label">Previous weeks</div>
+        <div class="weekly-rows" id="weekly-rows"></div>
       </div>
     </div>
 
@@ -164,7 +196,6 @@
 
   </div>
 
-  <!-- Rating History Chart -->
   <div class="card">
     <div class="card-label">Rating History</div>
     <canvas id="chart"></canvas>
@@ -175,10 +206,109 @@
 
 </main>
 
-<footer>Data sourced from Google Maps · Avis-Dashboard · auto-updated every 15 min</footer>
+<footer>Data sourced from Google Maps · Avis-Dashboard · auto-updated every 30 min</footer>
+
+<!-- Merge Modal -->
+<div class="modal-overlay" id="merge-modal">
+  <div class="modal">
+    <h2>Merge employee names</h2>
+    <p>Select two or more names that refer to the same person, then enter the canonical display name.</p>
+    <div class="modal-names" id="modal-name-chips"></div>
+    <input class="modal-input" id="merge-canonical" placeholder="Display name (e.g. Shirley G.)" />
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeMergeModal()">Cancel</button>
+      <button class="btn btn-save" onclick="saveMerge()">Merge</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const DAILY_GOAL = 50;
+const STORAGE_KEY = "avis_shoutout_merges";
+const WEEKLY_KEY = "avis_weekly_history";
+
+// Load saved merges from localStorage
+function loadMerges() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; }
+}
+function saveMerges(m) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(m));
+}
+
+// Weekly history stored locally: { "2026-W24": { "shirley": { display_name, count } } }
+function loadWeeklyHistory() {
+  try { return JSON.parse(localStorage.getItem(WEEKLY_KEY) || "{}"); } catch(e) { return {}; }
+}
+function saveWeeklyHistory(h) {
+  localStorage.setItem(WEEKLY_KEY, JSON.stringify(h));
+}
+
+function getWeekKey(dateStr) {
+  const d = dateStr ? new Date(dateStr) : new Date();
+  const jan1 = new Date(d.getFullYear(), 0, 1);
+  const week = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return d.getFullYear() + "-W" + String(week).padStart(2, "0");
+}
+
+function getCurrentWeekKey() { return getWeekKey(); }
+
+// Apply merges to employee mentions object
+function applyMerges(employees, merges) {
+  // merges: { "alias_key": "canonical_key", ... }
+  const merged = {};
+  for (const [key, emp] of Object.entries(employees)) {
+    const canonical = merges[key] || key;
+    if (!merged[canonical]) {
+      merged[canonical] = { display_name: emp.display_name, count: 0, last_mentioned: emp.last_mentioned };
+    }
+    merged[canonical].count += emp.count;
+    if (emp.last_mentioned > merged[canonical].last_mentioned) {
+      merged[canonical].last_mentioned = emp.last_mentioned;
+    }
+  }
+  // Apply display name overrides from merges where value is a key with a saved display_name
+  for (const [alias, canonical] of Object.entries(merges)) {
+    if (merged[canonical] && employees[canonical]) {
+      // keep canonical's display name unless overridden
+    }
+  }
+  return merged;
+}
+
+// Count mentions per employee in current week's reviews
+function countWeeklyMentions(reviews, merges) {
+  const weekKey = getCurrentWeekKey();
+  const counts = {};
+  for (const review of reviews) {
+    const reviewWeek = getWeekKey(review.date);
+    if (reviewWeek !== weekKey) continue;
+    for (const name of (review.employee_names || [])) {
+      const key = name.toLowerCase();
+      const canonical = merges[key] || key;
+      counts[canonical] = (counts[canonical] || 0) + 1;
+    }
+  }
+  return counts;
+}
+
+// Count daily mentions for fire badge
+function countDailyMentions(reviews, merges) {
+  const today = new Date().toISOString().slice(0, 10);
+  const counts = {};
+  for (const review of reviews) {
+    if (review.date !== today) continue;
+    for (const name of (review.employee_names || [])) {
+      const key = name.toLowerCase();
+      const canonical = merges[key] || key;
+      counts[canonical] = (counts[canonical] || 0) + 1;
+    }
+  }
+  return counts;
+}
+
+let globalEmployees = {};
+let globalMerges = {};
+let globalReviews = [];
 
 async function load() {
   let data;
@@ -199,12 +329,15 @@ async function load() {
   const placeIds = Object.keys(locations);
   if (!placeIds.length) return;
 
-  // Pick the place with a valid rating
   const placeId = placeIds.find(id => locations[id].rating != null) || placeIds[0];
   const loc = locations[placeId];
   const history = historyByPlace[placeId] || [];
   const reviews = reviewsByPlace[placeId] || [];
   const employees = employeesByPlace[placeId] || {};
+
+  globalEmployees = employees;
+  globalReviews = reviews;
+  globalMerges = loadMerges();
 
   // Header
   if (loc.last_updated) {
@@ -219,7 +352,7 @@ async function load() {
     document.getElementById("review-count-small").textContent = (loc.review_count || 0).toLocaleString() + " total reviews";
   }
 
-  // Last week comparison (7th most recent history entry)
+  // Delta
   if (history.length >= 2) {
     const prev = history[Math.max(0, history.length - 7)];
     if (prev && prev.rating != null && current != null) {
@@ -251,32 +384,8 @@ async function load() {
     goalBadge.textContent = "🎯 " + (DAILY_GOAL - reviewsToday) + " more to reach goal";
   }
 
-  // Employee shoutouts
-  const empEntries = Object.values(employees).sort((a, b) => b.count - a.count);
-  const shoutWrap = document.getElementById("shoutout-wrap");
-  if (empEntries.length) {
-    const maxCount = empEntries[0].count;
-    shoutWrap.innerHTML = "";
-    const list = document.createElement("div");
-    list.className = "shoutout-list";
-    empEntries.slice(0, 10).forEach(emp => {
-      const initial = emp.display_name.charAt(0).toUpperCase();
-      const barPct = Math.round((emp.count / maxCount) * 100);
-      const item = document.createElement("div");
-      item.className = "shoutout-item";
-      item.innerHTML =
-        '<div class="shoutout-avatar">' + initial + '</div>' +
-        '<div style="flex:1">' +
-          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
-            '<span class="shoutout-name">' + emp.display_name + '</span>' +
-            '<span class="shoutout-count">' + emp.count + ' mention' + (emp.count !== 1 ? 's' : '') + '</span>' +
-          '</div>' +
-          '<div class="shoutout-bar-wrap"><div class="shoutout-bar" style="width:' + barPct + '%"></div></div>' +
-        '</div>';
-      list.appendChild(item);
-    });
-    shoutWrap.appendChild(list);
-  }
+  // Shoutouts
+  renderShoutouts();
 
   // Recent reviews
   const reviewsWrap = document.getElementById("reviews-wrap");
@@ -287,10 +396,9 @@ async function load() {
     list.className = "reviews-list";
     recentReviews.forEach(r => {
       const stars = "★".repeat(r.rating) + "☆".repeat(Math.max(0, 5 - r.rating));
-      const snippet = r.text && r.text.length > 120 ? r.text.slice(0, 120) + "…" : (r.text || "No text left.");
+      const snippet = r.text && r.text.length > 140 ? r.text.slice(0, 140) + "…" : (r.text || "No text left.");
       const empHtml = r.employee_names && r.employee_names.length
-        ? '<div class="review-emp">👤 ' + r.employee_names.join(", ") + '</div>'
-        : "";
+        ? '<div class="review-emp">👤 ' + r.employee_names.join(", ") + '</div>' : "";
       const item = document.createElement("div");
       item.className = "review-item";
       item.innerHTML =
@@ -298,8 +406,7 @@ async function load() {
           '<span class="review-author">' + (r.author || "Anonymous") + '</span>' +
           '<span class="review-stars">' + stars + '</span>' +
         '</div>' +
-        '<div class="review-text">' + snippet + '</div>' +
-        empHtml;
+        '<div class="review-text">' + snippet + '</div>' + empHtml;
       list.appendChild(item);
     });
     reviewsWrap.appendChild(list);
@@ -313,6 +420,153 @@ async function load() {
     document.getElementById("chart").style.display = "none";
     document.getElementById("chart-empty").style.display = "block";
   }
+
+  // Save weekly snapshot
+  snapshotWeeklyData(employees, globalMerges);
+}
+
+function renderShoutouts() {
+  const merges = globalMerges;
+  const employees = globalEmployees;
+  const reviews = globalReviews;
+
+  // Weekly counts from reviews
+  const weeklyCounts = countWeeklyMentions(reviews, merges);
+  const dailyCounts = countDailyMentions(reviews, merges);
+
+  // Merge the stored employee data
+  const mergedEmployees = applyMerges(employees, merges);
+
+  // Use weekly counts if available, else fall back to all-time
+  const displayData = {};
+  for (const [key, emp] of Object.entries(mergedEmployees)) {
+    displayData[key] = {
+      display_name: emp.display_name,
+      count: weeklyCounts[key] !== undefined ? weeklyCounts[key] : emp.count,
+      alltime: emp.count,
+      daily: dailyCounts[key] || 0,
+    };
+  }
+
+  const weekKey = getCurrentWeekKey();
+  const weekNum = weekKey.split("-W")[1];
+  document.getElementById("week-label").textContent = "Week " + weekNum;
+
+  const shoutWrap = document.getElementById("shoutout-wrap");
+  const entries = Object.entries(displayData).sort((a, b) => b[1].count - a[1].count);
+
+  if (!entries.length) {
+    shoutWrap.innerHTML = '<div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names in reviews.</div>';
+    return;
+  }
+
+  const maxCount = Math.max(...entries.map(e => e[1].count), 1);
+  shoutWrap.innerHTML = "";
+  const bars = document.createElement("div");
+  bars.className = "shoutout-bars";
+
+  entries.slice(0, 10).forEach(([key, emp]) => {
+    const barPct = Math.max(8, Math.round((emp.count / maxCount) * 100));
+    const onFire = emp.daily >= 5;
+    const row = document.createElement("div");
+    row.className = "shoutout-row";
+    row.innerHTML =
+      '<div class="shoutout-name-col" title="' + emp.display_name + '">' + emp.display_name + '</div>' +
+      '<div class="shoutout-bar-track">' +
+        '<div class="shoutout-bar-fill" style="width:' + barPct + '%">' +
+          '<span class="shoutout-bar-count">' + emp.count + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="shoutout-fire">' + (onFire ? "🔥" : "") + '</div>';
+    bars.appendChild(row);
+  });
+
+  shoutWrap.appendChild(bars);
+
+  // Weekly history panel
+  const weeklyHistory = loadWeeklyHistory();
+  const pastWeeks = Object.entries(weeklyHistory)
+    .filter(([wk]) => wk !== weekKey)
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .slice(0, 4);
+
+  const historyWrap = document.getElementById("weekly-history-wrap");
+  const historyRows = document.getElementById("weekly-rows");
+  if (pastWeeks.length) {
+    historyWrap.style.display = "block";
+    historyRows.innerHTML = "";
+    pastWeeks.forEach(([wk, data]) => {
+      const top = Object.entries(data).sort((a, b) => b[1].count - a[1].count).slice(0, 3);
+      const row = document.createElement("div");
+      row.className = "weekly-row";
+      row.innerHTML =
+        '<span class="weekly-week">' + wk + '</span>' +
+        '<span class="weekly-name">' + top.map(([, e]) => e.display_name + " (" + e.count + ")").join(", ") + '</span>';
+      historyRows.appendChild(row);
+    });
+  } else {
+    historyWrap.style.display = "none";
+  }
+}
+
+function snapshotWeeklyData(employees, merges) {
+  const weekKey = getCurrentWeekKey();
+  const weeklyCounts = countWeeklyMentions(globalReviews, merges);
+  const mergedEmp = applyMerges(employees, merges);
+  const weeklyHistory = loadWeeklyHistory();
+
+  const snapshot = {};
+  for (const [key, emp] of Object.entries(mergedEmp)) {
+    if (weeklyCounts[key] > 0) {
+      snapshot[key] = { display_name: emp.display_name, count: weeklyCounts[key] };
+    }
+  }
+  if (Object.keys(snapshot).length) {
+    weeklyHistory[weekKey] = snapshot;
+    saveWeeklyHistory(weeklyHistory);
+  }
+}
+
+// Merge modal
+function openMergeModal() {
+  const merges = loadMerges();
+  const mergedEmployees = applyMerges(globalEmployees, merges);
+  const chips = document.getElementById("modal-name-chips");
+  chips.innerHTML = "";
+  Object.entries(mergedEmployees).forEach(([key, emp]) => {
+    const chip = document.createElement("div");
+    chip.className = "name-chip";
+    chip.textContent = emp.display_name + " (" + emp.count + ")";
+    chip.dataset.key = key;
+    chip.onclick = () => chip.classList.toggle("selected");
+    chips.appendChild(chip);
+  });
+  document.getElementById("merge-canonical").value = "";
+  document.getElementById("merge-modal").classList.add("open");
+}
+
+function closeMergeModal() {
+  document.getElementById("merge-modal").classList.remove("open");
+}
+
+function saveMerge() {
+  const selected = [...document.querySelectorAll(".name-chip.selected")];
+  const canonical = document.getElementById("merge-canonical").value.trim();
+  if (selected.length < 2 || !canonical) {
+    alert("Select at least 2 names and enter a display name.");
+    return;
+  }
+  const merges = loadMerges();
+  const canonicalKey = canonical.toLowerCase().replace(/\s+/g, "_");
+  // Map all selected keys to canonical key
+  selected.forEach(chip => {
+    merges[chip.dataset.key] = canonicalKey;
+  });
+  // Store display name override
+  merges["__display__" + canonicalKey] = canonical;
+  saveMerges(merges);
+  closeMergeModal();
+  renderShoutouts();
 }
 
 function renderStars(rating, containerId, size) {
@@ -322,7 +576,9 @@ function renderStars(rating, containerId, size) {
     const span = document.createElement("span");
     span.className = "star";
     span.style.fontSize = (size || 20) + "px";
-    if (rating >= i) { span.textContent = "★"; } else if (rating >= i - 0.5) { span.textContent = "★"; span.style.opacity = "0.5"; } else { span.textContent = "☆"; }
+    if (rating >= i) { span.textContent = "★"; }
+    else if (rating >= i - 0.5) { span.textContent = "★"; span.style.opacity = "0.5"; }
+    else { span.textContent = "☆"; }
     span.style.color = rating >= i - 0.5 ? "var(--gold)" : "var(--border)";
     container.appendChild(span);
   }

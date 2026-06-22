@@ -6,7 +6,7 @@
       "rating": 3.9,
       "review_count": 9282,
       "reviews_today": 72,
-      "last_updated": "2026-06-21 23:45",
+      "last_updated": "2026-06-22 00:00",
       "today_key": "2026-06-21"
     }
   },
@@ -14,6 +14,11 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
       {
         "date": "2026-06-21",
+        "rating": 3.9,
+        "review_count": 9282
+      },
+      {
+        "date": "2026-06-22",
         "rating": 3.9,
         "review_count": 9282
       }

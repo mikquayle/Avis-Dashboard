@@ -1,24 +1,49 @@
-import json, os
-
-DATA_FILE = "data/ratings.json"
-PLACE_ID = "ChIJL7BqEp3FyIARP_QZDyQ5HJI"
-TODAY = "2026-06-22"
-REVIEWS_TODAY = 56  # manually confirmed
-CURRENT_TOTAL = 9317  # from the Actions log
-
-with open(DATA_FILE, "r") as f:
-    data = json.load(f)
-
-correct_baseline = CURRENT_TOTAL - REVIEWS_TODAY  # = 9261
-
-# Fix all baseline keys for today
-for key in list(data.get("daily_baselines", {}).keys()):
-    if PLACE_ID in key and TODAY in key:
-        old = data["daily_baselines"][key]
-        data["daily_baselines"][key] = correct_baseline
-        print("Fixed " + key + ": " + str(old) + " -> " + str(correct_baseline))
-
-with open(DATA_FILE, "w") as f:
-    json.dump(data, f, indent=2)
-
-print("Done. Run scraper again to see updated counts.")
+{
+  "locations": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
+      "name": "Avis Car Rental - Harry Reid Airport",
+      "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
+      "rating": 3.9,
+      "review_count": 9317,
+      "reviews_today": 56,
+      "reviews_morning": 56,
+      "reviews_night": 0,
+      "last_updated": "2026-06-22 17:45",
+      "today_key": "2026-06-22"
+    }
+  },
+  "history": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
+      {
+        "date": "2026-06-21",
+        "rating": 3.9,
+        "review_count": 9261
+      },
+      {
+        "date": "2026-06-22",
+        "rating": 3.9,
+        "review_count": 9317
+      }
+    ]
+  },
+  "reviews": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": []
+  },
+  "daily_baselines": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-22": 9261,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-06-22": 9261,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-06-22": 9261
+  },
+  "employee_mentions": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
+      "shirley": { "display_name": "Shirley", "count": 2, "last_mentioned": "2026-06-22" },
+      "portia": { "display_name": "Portia", "count": 1, "last_mentioned": "2026-06-22" },
+      "john": { "display_name": "John", "count": 1, "last_mentioned": "2026-06-22" },
+      "miles": { "display_name": "Miles", "count": 1, "last_mentioned": "2026-06-22" },
+      "cece": { "display_name": "Cece", "count": 1, "last_mentioned": "2026-06-22" }
+    }
+  },
+  "counted_review_ids": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": []
+  }
+}

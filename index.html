@@ -16,16 +16,32 @@
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
     body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; flex-direction: column; }
 
-    header { display: flex; align-items: center; gap: 14px; padding: 20px 32px; border-bottom: 1px solid var(--border); }
-    .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff; flex-shrink: 0; }
-    .header-titles { display: flex; flex-direction: column; gap: 1px; }
-    .header-greeting { font-size: 12px; color: var(--up); font-weight: 600; }
-    header h1 { font-size: 16px; font-weight: 600; }
-    header p { font-size: 12px; color: var(--muted); }
-    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-    .export-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #1a6b3a; border: 1px solid #2a8a4e; padding: 5px 14px; border-radius: 99px; cursor: pointer; }
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; flex-shrink: 0; }
+    .header-titles h1 { font-size: 15px; font-weight: 600; }
+    .header-titles p { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    .header-greeting {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, var(--up));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: -0.3px;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+    .export-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #1a6b3a; border: 1px solid #2a8a4e; padding: 5px 14px; border-radius: 99px; cursor: pointer; white-space: nowrap; }
     .export-btn:hover { background: #218a49; }
-    .status-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 99px; }
+    .status-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 99px; white-space: nowrap; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.35} }
 
@@ -34,56 +50,57 @@
     .card-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
     /* Row 1 */
-    .row1 { display: grid; grid-template-columns: 200px 1fr 170px; gap: 16px; align-items: stretch; }
+    .row1 { display: grid; grid-template-columns: 190px 1fr 160px; gap: 16px; align-items: stretch; }
 
-    /* Rating card — light red background */
+    /* Rating card */
     .rating-card {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; position: relative; overflow: hidden; gap: 4px;
-      background: linear-gradient(160deg, #2a0a0f 0%, #1a0608 50%, #161616 100%);
-      border-color: rgba(200,16,46,0.3);
+      background: linear-gradient(160deg, #2a0a0f 0%, #1e0608 50%, #161616 100%);
+      border-color: rgba(200,16,46,0.35);
     }
-    .rating-card::before { content:""; position:absolute; inset:0; background: radial-gradient(ellipse at 50% 20%, rgba(200,16,46,0.2) 0%, transparent 65%); pointer-events:none; }
-    .rating-big { font-size: 68px; font-weight: 900; line-height: 1; background: linear-gradient(135deg,#fff 60%,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .rating-card::before { content:""; position:absolute; inset:0; background: radial-gradient(ellipse at 50% 15%, rgba(200,16,46,0.25) 0%, transparent 65%); pointer-events:none; }
+    .rating-big { font-size: 68px; font-weight: 900; line-height: 1; background: linear-gradient(135deg,#fff 55%,#ff8080); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .stars { display:flex; gap:3px; justify-content:center; }
-    .star { font-size:16px; }
+    .star { font-size:15px; }
     .review-count-small { font-size:11px; color:var(--muted); }
-    .rating-stats { display:flex; flex-direction:column; gap:5px; margin-top:6px; width:100%; padding:0 4px; }
-    .stat-row { display:flex; align-items:center; justify-content:space-between; font-size:11px; padding:5px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:6px; }
-    .stat-label { color:var(--muted); }
-    .stat-val { font-weight:700; }
-    .stat-val.up { color:var(--up); }
-    .stat-val.down { color:var(--down); }
-    .stat-val.flat { color:var(--muted); }
+    .rating-delta { margin-top: 8px; width: 100%; }
+    .delta-pill { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:99px; }
+    .delta-pill.up { background:rgba(62,207,142,.15); color:var(--up); }
+    .delta-pill.down { background:rgba(248,113,113,.15); color:var(--down); }
 
     /* Shifts */
     .shifts-col { display:flex; flex-direction:column; padding:0; overflow:hidden; }
-    .shift-half { flex:1; padding:18px 22px; }
+    .shift-half { flex:1; padding:16px 22px; }
     .shift-half:first-child { border-bottom:1px solid var(--border); }
     .shift-top { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
-    .shift-number { font-size:56px; font-weight:900; line-height:1; color:#fff; }
+    .shift-number { font-size:52px; font-weight:900; line-height:1; color:#fff; }
     .shift-info { display:flex; flex-direction:column; gap:2px; }
     .shift-name { font-size:18px; font-weight:800; color:var(--text); }
     .shift-time { font-size:11px; color:var(--muted); }
-    .shift-goal-note { font-size:10px; color:var(--accent); margin-top:1px; font-style:italic; }
-    .progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:5px; }
-    .progress-bar-bg { width:100%; height:8px; background:var(--border); border-radius:99px; overflow:hidden; }
-    .progress-bar-fill { height:100%; background:var(--accent); border-radius:99px; transition:width 0.6s ease; }
+    .progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:6px; }
+    .progress-bar-wrap { position: relative; width:100%; }
+    .progress-bar-bg { width:100%; height:10px; background:var(--border); border-radius:99px; overflow:visible; position: relative; }
+    .progress-bar-fill { height:100%; background:var(--accent); border-radius:99px; transition:width 0.6s ease; position: relative; }
     .progress-bar-fill.goal-met { background:var(--up); }
-    .shift-badge { display:inline-flex; align-items:center; gap:5px; margin-top:7px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:99px; }
+    /* Tick markers on the bar */
+    .bar-ticks { position: absolute; top: 0; left: 0; width: 100%; height: 10px; pointer-events: none; }
+    .bar-tick { position: absolute; top: -4px; width: 2px; height: 18px; background: var(--bg); border-radius: 1px; transform: translateX(-50%); }
+    .bar-tick-label { position: absolute; top: 18px; font-size: 9px; color: var(--muted); transform: translateX(-50%); white-space: nowrap; }
+    .shift-badge { display:inline-flex; align-items:center; gap:5px; margin-top:8px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:99px; }
     .shift-badge.met { background:rgba(62,207,142,.12); color:var(--up); }
     .shift-badge.pending { background:var(--border); color:var(--muted); }
 
     /* Circle */
-    .circle-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
-    .circle-wrap { position:relative; width:110px; height:110px; }
+    .circle-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+    .circle-wrap { position:relative; width:108px; height:108px; }
     .circle-wrap svg { transform:rotate(-90deg); }
     .circle-bg { fill:none; stroke:var(--border); stroke-width:9; }
     .circle-fill { fill:none; stroke-width:9; stroke-linecap:round; transition:all 0.8s ease; }
     .circle-morning { stroke:#f5c518; }
     .circle-night { stroke:var(--accent); }
     .circle-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-    .circle-total { font-size:26px; font-weight:900; color:#fff; line-height:1; }
+    .circle-total { font-size:24px; font-weight:900; color:#fff; line-height:1; }
     .circle-sublabel { font-size:9px; color:var(--muted); margin-top:2px; }
     .circle-legend { display:flex; flex-direction:column; gap:4px; width:100%; }
     .legend-row { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
@@ -96,13 +113,11 @@
     .stat-card .big.red { color:var(--accent); }
     .stat-card .big.green { color:var(--up); }
     .stat-card .big.gold { color:var(--gold); }
-    .stat-card .sub { font-size:12px; color:var(--muted); line-height:1.4; }
+    .stat-card .sub { font-size:12px; color:var(--muted); line-height:1.5; }
     .stat-card .sub span { color:var(--text); font-weight:600; }
 
     /* Mid row */
     .mid-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-
-    /* Shoutout table */
     .shoutout-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
     .shoutout-table { width:100%; border-collapse:collapse; }
     .shoutout-table th { font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-align:left; padding:0 8px 8px; border-bottom:1px solid var(--border); }
@@ -112,14 +127,11 @@
     .shoutout-table tr:hover td { background:rgba(255,255,255,0.02); }
     .emp-rank { font-size:11px; color:var(--muted); width:20px; }
     .emp-name { font-weight:700; }
-    .emp-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:600; padding:2px 7px; border-radius:99px; background:var(--accent-lo); color:var(--accent); }
     .emp-count { font-size:18px; font-weight:800; color:var(--text); text-align:right; }
-    .emp-fire { font-size:16px; }
     .emp-last { font-size:11px; color:var(--muted); }
     .merge-btn { font-size:11px; color:var(--muted); background:none; border:1px solid var(--border); border-radius:6px; padding:3px 8px; cursor:pointer; }
     .merge-btn:hover { border-color:var(--accent); color:var(--accent); }
 
-    /* Reviews */
     .reviews-list { display:flex; flex-direction:column; gap:9px; margin-top:4px; }
     .review-item { padding:11px 12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
     .review-header { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -132,7 +144,6 @@
     .empty { text-align:center; padding:36px 0; color:var(--muted); font-size:13px; }
     .empty strong { display:block; font-size:14px; color:var(--text); margin-bottom:5px; }
 
-    /* Modal */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; align-items:center; justify-content:center; }
     .modal-overlay.open { display:flex; }
     .modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; width:400px; max-width:90vw; }
@@ -149,19 +160,21 @@
     .btn-save { background:var(--accent); color:#fff; }
 
     footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); }
-    @media(max-width:960px){ .row1{grid-template-columns:1fr 1fr} .circle-card{display:none} .mid-row{grid-template-columns:1fr} main{padding:16px} }
+    @media(max-width:960px){ .row1{grid-template-columns:1fr 1fr} .circle-card{display:none} .mid-row{grid-template-columns:1fr} main{padding:16px} header{grid-template-columns:auto auto} .header-greeting{display:none} }
     @media(max-width:600px){ .row1{grid-template-columns:1fr} .stats-strip{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">A</div>
-  <div class="header-titles">
-    <div class="header-greeting" id="greeting"></div>
-    <h1>Avis Rating Dashboard</h1>
-    <p>Harry Reid Airport · updated every 30 min</p>
+  <div class="header-left">
+    <div class="logo">A</div>
+    <div class="header-titles">
+      <h1>Avis Rating Dashboard</h1>
+      <p>Harry Reid Airport · updated every 15 min</p>
+    </div>
   </div>
+  <div class="header-greeting" id="greeting"></div>
   <div class="header-right">
     <button class="export-btn" onclick="exportExcel()">📊 Export Excel</button>
     <div class="status-pill"><span class="status-dot"></span><span id="last-updated">Loading…</span></div>
@@ -169,16 +182,14 @@
 </header>
 
 <main>
-
-  <!-- Row 1 -->
   <div class="row1">
     <div class="card rating-card">
       <div class="card-label">Current Rating</div>
       <div class="rating-big" id="current-rating">—</div>
       <div class="stars" id="stars"></div>
       <div class="review-count-small" id="review-count-small">— reviews</div>
-      <div class="rating-stats">
-        <div class="stat-row"><span class="stat-label">vs last week</span><span class="stat-val flat" id="week-delta">—</span></div>
+      <div class="rating-delta" id="rating-delta-wrap" style="display:none">
+        <div class="delta-pill" id="delta-pill"></div>
       </div>
     </div>
 
@@ -189,11 +200,15 @@
           <div class="shift-info">
             <div class="shift-name">☀️ Morning</div>
             <div class="shift-time">6 am – 4 pm LV time</div>
-            <div class="shift-goal-note" id="morning-goal-note"></div>
           </div>
         </div>
         <div class="progress-meta"><span id="morning-progress-label">—</span><span id="morning-pct">0%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" id="morning-fill" style="width:0%"></div></div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="morning-fill" style="width:0%"></div>
+          </div>
+          <div class="bar-ticks" id="morning-ticks"></div>
+        </div>
         <div class="shift-badge pending" id="morning-badge">—</div>
       </div>
       <div class="shift-half">
@@ -202,11 +217,15 @@
           <div class="shift-info">
             <div class="shift-name">🌙 Night</div>
             <div class="shift-time">4 pm – midnight LV</div>
-            <div class="shift-goal-note" id="night-goal-note"></div>
           </div>
         </div>
         <div class="progress-meta"><span id="night-progress-label">—</span><span id="night-pct">0%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" id="night-fill" style="width:0%"></div></div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="night-fill" style="width:0%"></div>
+          </div>
+          <div class="bar-ticks" id="night-ticks"></div>
+        </div>
         <div class="shift-badge pending" id="night-badge">—</div>
       </div>
     </div>
@@ -231,7 +250,6 @@
     </div>
   </div>
 
-  <!-- Stats strip -->
   <div class="stats-strip">
     <div class="card stat-card">
       <div class="card-label">5★ Reviews Needed for 4.0</div>
@@ -239,13 +257,12 @@
       <div class="sub" id="five-star-sub">calculating…</div>
     </div>
     <div class="card stat-card">
-      <div class="card-label">Daily Goal (based on July 1 target)</div>
+      <div class="card-label">Daily Goal (July 1 Target)</div>
       <div class="big gold" id="daily-goal-big">—</div>
-      <div class="sub" id="daily-goal-sub">5★ reviews needed per day</div>
+      <div class="sub" id="daily-goal-sub">—</div>
     </div>
   </div>
 
-  <!-- Mid row -->
   <div class="mid-row">
     <div class="card">
       <div class="shoutout-header">
@@ -255,28 +272,22 @@
           <button class="merge-btn" onclick="openMergeModal()">Merge names</button>
         </div>
       </div>
-      <div id="shoutout-wrap">
-        <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div>
-      </div>
+      <div id="shoutout-wrap"><div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div></div>
     </div>
     <div class="card">
       <div class="card-label">Recent Ratings</div>
-      <div id="reviews-wrap">
-        <div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div>
-      </div>
+      <div id="reviews-wrap"><div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div></div>
     </div>
   </div>
 
-  <!-- Chart -->
   <div class="card">
     <div class="card-label">Rating History</div>
     <canvas id="chart"></canvas>
     <div class="empty" id="chart-empty" style="display:none"><strong>No history yet</strong>Run the scraper at least twice.</div>
   </div>
-
 </main>
 
-<footer>Data sourced from Google Maps · Avis-Dashboard · auto-updated every 30 min</footer>
+<footer>Data sourced from Google Maps · Avis-Dashboard · auto-updated every 15 min</footer>
 
 <div class="modal-overlay" id="merge-modal">
   <div class="modal">
@@ -298,33 +309,35 @@ const GOAL_DATE = "2026-07-01";
 function loadMerges(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
 function saveMerges(m){localStorage.setItem(STORAGE_KEY,JSON.stringify(m))}
 
-// Greeting based on LV time
+function getLVHour(){
+  return (new Date().getUTCHours()-7+24)%24;
+}
+
 function setGreeting(){
-  // Approximate LV time from UTC
-  const lvHour = (new Date().getUTCHours() - 7 + 24) % 24;
-  const el = document.getElementById("greeting");
-  if(lvHour >= 6 && lvHour < 12) el.textContent = "Good Morning!! ☀️";
-  else if(lvHour >= 12 && lvHour < 16) el.textContent = "Good Afternoon! 👋";
-  else if(lvHour >= 16) el.textContent = "Good Evening! 🌙";
-  else el.textContent = "";
+  const h=getLVHour();
+  const el=document.getElementById("greeting");
+  if(h>=6&&h<12) el.textContent="Good Morning!! ☀️";
+  else if(h>=12&&h<16) el.textContent="Good Afternoon! 👋";
+  else if(h>=16) el.textContent="Good Evening! 🌙";
+  else el.textContent="";
 }
 
 function daysUntilGoal(){
-  const today = new Date(); today.setHours(0,0,0,0);
-  return Math.max(1, Math.ceil((new Date(GOAL_DATE) - today) / 86400000));
+  const today=new Date(); today.setHours(0,0,0,0);
+  return Math.max(1,Math.ceil((new Date(GOAL_DATE)-today)/86400000));
 }
 
-function calcFiveStarNeeded(rating, total){
+function calcFiveStarNeeded(rating,total){
   if(!rating||!total||rating>=4.0) return 0;
-  return Math.ceil((4.0*total - rating*total)/(5-4.0));
+  return Math.ceil((4.0*total-rating*total)/(5-4.0));
 }
 
 function getWeekLabel(){
-  const d=new Date(), jan1=new Date(d.getFullYear(),0,1);
+  const d=new Date(),jan1=new Date(d.getFullYear(),0,1);
   return "Week "+Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
 }
 
-function applyMerges(employees, merges){
+function applyMerges(employees,merges){
   const merged={};
   for(const[key,emp]of Object.entries(employees)){
     const canonical=merges[key]||key;
@@ -337,13 +350,35 @@ function applyMerges(employees, merges){
 
 function getShift(publishTime){
   if(!publishTime) return "Unknown";
-  const lvHour=(new Date(publishTime).getUTCHours()-7+24)%24;
-  if(lvHour>=6&&lvHour<16) return "Morning (6am–4pm)";
-  if(lvHour>=16) return "Night (4pm–midnight)";
+  const h=(new Date(publishTime).getUTCHours()-7+24)%24;
+  if(h>=6&&h<16) return "Morning (6am–4pm)";
+  if(h>=16) return "Night (4pm–midnight)";
   return "Off-shift";
 }
 
-let globalData=null, globalReviews=[], globalEmployees={};
+function renderBarWithTicks(fillId,ticksId,value,goal,shortfall){
+  const fill=document.getElementById(fillId);
+  const ticksEl=document.getElementById(ticksId);
+  const pct=Math.min(100,Math.round((value/Math.max(goal,1))*100));
+  fill.style.width=pct+"%";
+  if(value>=goal) fill.classList.add("goal-met"); else fill.classList.remove("goal-met");
+
+  // Draw tick marks at 25%, 50%, 75%, 100% of goal
+  ticksEl.innerHTML="";
+  [25,50,75,100].forEach(p=>{
+    const tick=document.createElement("div");
+    tick.className="bar-tick";
+    tick.style.left=p+"%";
+    const label=document.createElement("div");
+    label.className="bar-tick-label";
+    label.style.left=p+"%";
+    label.textContent=Math.round(goal*(p/100));
+    ticksEl.appendChild(tick);
+    ticksEl.appendChild(label);
+  });
+}
+
+let globalData=null,globalReviews=[],globalEmployees={};
 
 async function load(){
   let data;
@@ -371,30 +406,36 @@ async function load(){
 
   if(loc.last_updated) document.getElementById("last-updated").textContent="Updated "+loc.last_updated+" LV";
 
-  const current=loc.rating, totalReviews=loc.review_count||0;
+  const current=loc.rating,totalReviews=loc.review_count||0;
 
-  // Rating card
   if(current!=null){
     document.getElementById("current-rating").textContent=current.toFixed(1);
-    renderStars(current,"stars",16);
+    renderStars(current,"stars",15);
     document.getElementById("review-count-small").textContent=totalReviews.toLocaleString()+" total reviews";
   }
 
-  // Week delta
+  // Week delta — only show if there's actual change
+  const deltaWrap=document.getElementById("rating-delta-wrap");
+  const deltaPill=document.getElementById("delta-pill");
   if(history.length>=2){
     const prev7=history[Math.max(0,history.length-7)];
     if(prev7?.rating!=null&&current!=null){
       const diff=+(current-prev7.rating).toFixed(2);
-      const wd=document.getElementById("week-delta");
-      if(diff>0){wd.className="stat-val up";wd.textContent="▲ +"+diff;}
-      else if(diff<0){wd.className="stat-val down";wd.textContent="▼ "+diff;}
-      else{wd.className="stat-val flat";wd.textContent="No change";}
+      if(diff>0){
+        deltaWrap.style.display="block";
+        deltaPill.className="delta-pill up";
+        deltaPill.textContent="▲ +"+diff+" vs last week";
+      } else if(diff<0){
+        deltaWrap.style.display="block";
+        deltaPill.className="delta-pill down";
+        deltaPill.textContent="▼ "+diff+" vs last week";
+      } else {
+        deltaWrap.style.display="none"; // no change = hide it
+      }
     }
-  } else {
-    document.getElementById("week-delta").textContent="Tracking started";
   }
 
-  // 5-star needed + dynamic goal
+  // 5-star + dynamic goal
   const fiveNeeded=calcFiveStarNeeded(current,totalReviews);
   const daysLeft=daysUntilGoal();
   const dailyGoal=fiveNeeded>0?Math.ceil(fiveNeeded/daysLeft):60;
@@ -407,54 +448,46 @@ async function load(){
     fiveSub.textContent="Already at or above 4.0!";
   } else {
     fiveEl.textContent=fiveNeeded.toLocaleString(); fiveEl.className="big red";
-    fiveSub.innerHTML='to move from <span>'+current.toFixed(1)+'</span> → <span>4.0</span> with '+totalReviews.toLocaleString()+' reviews';
+    fiveSub.innerHTML='to move from <span>'+current.toFixed(1)+'</span> → <span>4.0</span> with '+totalReviews.toLocaleString()+' total reviews';
   }
 
-  const dgEl=document.getElementById("daily-goal-big");
-  const dgSub=document.getElementById("daily-goal-sub");
-  dgEl.textContent=dailyGoal;
-  dgSub.innerHTML='<span>'+daysLeft+'</span> days left until Jul 1 · <span>'+shiftGoal+'</span> per shift';
+  document.getElementById("daily-goal-big").textContent=dailyGoal;
+  document.getElementById("daily-goal-sub").innerHTML='<span>'+daysLeft+'</span> days left · <span>'+shiftGoal+'</span> per shift';
 
   // Shifts
-  const morning=loc.reviews_morning||0, night=loc.reviews_night||0;
+  const morning=loc.reviews_morning||0,night=loc.reviews_night||0;
   const morningShortfall=Math.max(0,shiftGoal-morning);
   const nightGoal=shiftGoal+morningShortfall;
 
-  document.getElementById("morning-goal-note").textContent="Goal: "+shiftGoal+" ("+dailyGoal+"/day ÷ 2)";
-  document.getElementById("night-goal-note").textContent=morningShortfall>0?"Includes +"+morningShortfall+" rollover":"";
   document.getElementById("morning-count").textContent=morning;
-  const mPct=Math.min(100,Math.round((morning/Math.max(shiftGoal,1))*100));
-  document.getElementById("morning-progress-label").textContent=morning+" of "+shiftGoal;
-  document.getElementById("morning-pct").textContent=mPct+"%";
-  const mFill=document.getElementById("morning-fill"); mFill.style.width=mPct+"%";
+  document.getElementById("morning-progress-label").textContent=morning+" of "+shiftGoal+" goal";
+  document.getElementById("morning-pct").textContent=Math.min(100,Math.round((morning/Math.max(shiftGoal,1))*100))+"%";
+  renderBarWithTicks("morning-fill","morning-ticks",morning,shiftGoal,0);
   const mBadge=document.getElementById("morning-badge");
-  if(morning>=shiftGoal){mFill.classList.add("goal-met");mBadge.className="shift-badge met";mBadge.textContent="✅ Morning goal reached!";}
-  else{mBadge.className="shift-badge pending";mBadge.textContent="🎯 "+(shiftGoal-morning)+" more for morning goal";}
+  if(morning>=shiftGoal){mBadge.className="shift-badge met";mBadge.textContent="✅ Morning goal reached!";}
+  else{mBadge.className="shift-badge pending";mBadge.textContent="🎯 "+(shiftGoal-morning)+" more to reach goal";}
 
   document.getElementById("night-count").textContent=night;
-  const nPct=Math.min(100,Math.round((night/Math.max(nightGoal,1))*100));
-  document.getElementById("night-progress-label").textContent=night+" of "+nightGoal+(morningShortfall>0?" (+"+morningShortfall+")":"");
-  document.getElementById("night-pct").textContent=nPct+"%";
-  const nFill=document.getElementById("night-fill"); nFill.style.width=nPct+"%";
+  document.getElementById("night-progress-label").textContent=night+" of "+nightGoal+" goal"+(morningShortfall>0?" (+"+morningShortfall+" rollover)":"");
+  document.getElementById("night-pct").textContent=Math.min(100,Math.round((night/Math.max(nightGoal,1))*100))+"%";
+  renderBarWithTicks("night-fill","night-ticks",night,nightGoal,morningShortfall);
   const nBadge=document.getElementById("night-badge");
-  if(night>=nightGoal){nFill.classList.add("goal-met");nBadge.className="shift-badge met";nBadge.textContent="✅ Night goal reached!";}
-  else{nBadge.className="shift-badge pending";nBadge.textContent="🎯 "+(nightGoal-night)+" more for night goal";}
+  if(night>=nightGoal){nBadge.className="shift-badge met";nBadge.textContent="✅ Night goal reached!";}
+  else{nBadge.className="shift-badge pending";nBadge.textContent="🎯 "+(nightGoal-night)+" more to reach goal";}
 
   // Circle
-  const total=morning+night;
-  const C=289;
+  const total=morning+night,C=289;
   document.getElementById("circle-total").textContent=total;
   document.getElementById("circle-goal-label").textContent="of "+dailyGoal;
   const mFrac=Math.min(1,morning/Math.max(dailyGoal,1));
   const nFrac=Math.min(1,night/Math.max(dailyGoal,1));
-  const cm=document.getElementById("circle-morning");
-  const cn=document.getElementById("circle-night");
+  const cm=document.getElementById("circle-morning"),cn=document.getElementById("circle-night");
   cm.setAttribute("stroke-dasharray",(mFrac*C)+" "+C);
   cm.setAttribute("stroke-dashoffset","0");
   cn.setAttribute("stroke-dasharray",(nFrac*C)+" "+C);
   cn.setAttribute("stroke-dashoffset",-(mFrac*C));
 
-  // Shoutouts — table layout
+  // Shoutouts
   const merges=loadMerges();
   document.getElementById("week-label").textContent=getWeekLabel();
   const mergedEmp=applyMerges(employees,merges);
@@ -468,10 +501,9 @@ async function load(){
     const tbody=document.createElement("tbody");
     entries.slice(0,10).forEach(([key,emp],i)=>{
       const tr=document.createElement("tr");
-      const onFire=emp.count>=5;
       tr.innerHTML=
         '<td class="emp-rank">'+(i+1)+'</td>'+
-        '<td><span class="emp-name">'+emp.display_name+'</span>'+(onFire?' <span class="emp-fire">🔥</span>':'')+'</td>'+
+        '<td><span class="emp-name">'+emp.display_name+'</span>'+(emp.count>=5?' 🔥':'')+'</td>'+
         '<td class="emp-last">'+(emp.last_mentioned||"—")+'</td>'+
         '<td class="emp-count">'+emp.count+'</td>';
       tbody.appendChild(tr);
@@ -482,18 +514,16 @@ async function load(){
     shoutWrap.innerHTML='<div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div>';
   }
 
-  // Reviews — always show whatever is in the data (scraper puts newest first)
+  // Reviews
   const reviewsWrap=document.getElementById("reviews-wrap");
   if(reviews.length){
     reviewsWrap.innerHTML="";
-    const list=document.createElement("div");
-    list.className="reviews-list";
+    const list=document.createElement("div"); list.className="reviews-list";
     reviews.slice(0,15).forEach(r=>{
       const starsStr="★".repeat(r.rating)+"☆".repeat(Math.max(0,5-r.rating));
       const snippet=r.text&&r.text.length>140?r.text.slice(0,140)+"…":(r.text||"No text.");
-      const empHtml=r.employee_names&&r.employee_names.length?'<div class="review-emp">👤 '+r.employee_names.join(", ")+'</div>':"";
-      const item=document.createElement("div");
-      item.className="review-item";
+      const empHtml=r.employee_names?.length?'<div class="review-emp">👤 '+r.employee_names.join(", ")+'</div>':"";
+      const item=document.createElement("div"); item.className="review-item";
       item.innerHTML=
         '<div class="review-header"><span class="review-author">'+(r.author||"Anonymous")+'</span>'+
         '<span class="review-stars">'+starsStr+'</span></div>'+
@@ -529,11 +559,11 @@ function drawChart(history){
   const W=canvas.offsetWidth,H=canvas.offsetHeight;
   canvas.width=W*dpr; canvas.height=H*dpr;
   const ctx=canvas.getContext("2d"); ctx.scale(dpr,dpr);
-  const ratings=history.map(h=>h.rating), dates=history.map(h=>h.date);
+  const ratings=history.map(h=>h.rating),dates=history.map(h=>h.date);
   const pad={top:28,right:24,bottom:42,left:44};
-  const iW=W-pad.left-pad.right, iH=H-pad.top-pad.bottom;
+  const iW=W-pad.left-pad.right,iH=H-pad.top-pad.bottom;
   const allDates=[...dates]; if(!allDates.includes(GOAL_DATE)) allDates.push(GOAL_DATE); allDates.sort();
-  const minR=Math.max(0,Math.min(...ratings,4.0)-0.3), maxR=Math.min(5,Math.max(...ratings,4.0)+0.3);
+  const minR=Math.max(0,Math.min(...ratings,4.0)-0.3),maxR=Math.min(5,Math.max(...ratings,4.0)+0.3);
   const dX=d=>pad.left+(allDates.indexOf(d)/Math.max(allDates.length-1,1))*iW;
   const yS=v=>pad.top+iH-((v-minR)/(maxR-minR))*iH;
   [1,2,3,4,5].forEach(v=>{
@@ -546,8 +576,7 @@ function drawChart(history){
   });
   const goalY=yS(4.0);
   ctx.setLineDash([5,4]); ctx.strokeStyle="rgba(62,207,142,0.45)"; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(pad.left,goalY); ctx.lineTo(W-pad.right,goalY); ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(pad.left,goalY); ctx.lineTo(W-pad.right,goalY); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle="rgba(62,207,142,0.65)"; ctx.font="10px Inter,system-ui"; ctx.textAlign="left";
   ctx.fillText("4.0 target (Jul 1)",pad.left+4,goalY-5);
   if(dates.length>0){
@@ -569,7 +598,8 @@ function drawChart(history){
     ctx.beginPath(); ctx.arc(dX(h.date),yS(h.rating),3,0,Math.PI*2);
     ctx.fillStyle="#fff"; ctx.fill(); ctx.strokeStyle="var(--accent)"; ctx.lineWidth=1.5; ctx.stroke();
   });
-  const step=Math.ceil(dates.length/6); ctx.fillStyle="rgba(255,255,255,.3)"; ctx.font="10px Inter,system-ui"; ctx.textAlign="center";
+  const step=Math.ceil(dates.length/6);
+  ctx.fillStyle="rgba(255,255,255,.3)"; ctx.font="10px Inter,system-ui"; ctx.textAlign="center";
   dates.forEach((d,i)=>{if(i%step!==0&&i!==dates.length-1)return; ctx.fillText(d,dX(d),H-pad.bottom+16);});
   ctx.fillStyle="rgba(62,207,142,0.6)"; ctx.fillText("Jul 1",dX(GOAL_DATE),H-pad.bottom+16);
 }
@@ -583,18 +613,16 @@ function exportExcel(){
     if(!r.employee_names?.length) return;
     const shift=getShift(r.publish_time||"");
     r.employee_names.forEach(name=>{
-      empRows.push([merges[name.toLowerCase()]||name, r.rating||"", r.text||"", r.author||"Anonymous", r.date||"", shift]);
+      empRows.push([merges[name.toLowerCase()]||name,r.rating||"",r.text||"",r.author||"Anonymous",r.date||"",shift]);
     });
   });
-  const ws1=XLSX.utils.aoa_to_sheet(empRows);
-  ws1["!cols"]=[{wch:16},{wch:12},{wch:70},{wch:22},{wch:12},{wch:22}];
+  const ws1=XLSX.utils.aoa_to_sheet(empRows); ws1["!cols"]=[{wch:16},{wch:12},{wch:70},{wch:22},{wch:12},{wch:22}];
   XLSX.utils.book_append_sheet(wb,ws1,"Employee Shoutouts");
   const reviewRows=[["Date","Reviewer","Star Rating","Shift","Employees Mentioned","Review Text"]];
   globalReviews.forEach(r=>{
     reviewRows.push([r.date||"",r.author||"Anonymous",r.rating||"",getShift(r.publish_time||""),(r.employee_names||[]).join(", "),r.text||""]);
   });
-  const ws2=XLSX.utils.aoa_to_sheet(reviewRows);
-  ws2["!cols"]=[{wch:12},{wch:22},{wch:12},{wch:22},{wch:30},{wch:80}];
+  const ws2=XLSX.utils.aoa_to_sheet(reviewRows); ws2["!cols"]=[{wch:12},{wch:22},{wch:12},{wch:22},{wch:30},{wch:80}];
   XLSX.utils.book_append_sheet(wb,ws2,"All Reviews");
   const allEmp=applyMerges(globalEmployees,merges);
   const sumRows=[["Employee","Total Mentions","Last Mentioned"]];
@@ -611,7 +639,7 @@ function exportExcel(){
 }
 
 function openMergeModal(){
-  const merges=loadMerges(), mergedEmp=applyMerges(globalEmployees,merges);
+  const merges=loadMerges(),mergedEmp=applyMerges(globalEmployees,merges);
   const chips=document.getElementById("modal-name-chips"); chips.innerHTML="";
   Object.entries(mergedEmp).forEach(([key,emp])=>{
     const chip=document.createElement("div"); chip.className="name-chip";
@@ -626,7 +654,7 @@ function saveMerge(){
   const selected=[...document.querySelectorAll(".name-chip.selected")];
   const canonical=document.getElementById("merge-canonical").value.trim();
   if(selected.length<2||!canonical){alert("Select at least 2 names and enter a display name.");return;}
-  const merges=loadMerges(), canonicalKey=canonical.toLowerCase().replace(/\s+/g,"_");
+  const merges=loadMerges(),canonicalKey=canonical.toLowerCase().replace(/\s+/g,"_");
   selected.forEach(chip=>{merges[chip.dataset.key]=canonicalKey;});
   merges["__display__"+canonicalKey]=canonical;
   saveMerges(merges); closeMergeModal(); load();

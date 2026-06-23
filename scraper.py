@@ -28,8 +28,7 @@ def fetch_place(place_id):
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     data = response.json()
-    reviews = data.get("reviews", [])
-    print("Reviews fetched: " + str(len(reviews)))
+    print("Reviews fetched: " + str(len(data.get("reviews", []))))
     return data
 
 def extract_employee_names(review_text):
@@ -79,7 +78,7 @@ def load_existing_data():
         "reviews": {},
         "daily_baselines": {},
         "employee_mentions": {},
-        "processed_review_ids": {}
+        "counted_review_ids": {}
     }
 
 def save_data(data):
@@ -88,7 +87,8 @@ def save_data(data):
         json.dump(data, f, indent=2)
 
 def get_work_day_key(lv_now):
-    if lv_now.hour < 3:
+    # Work day is 6am - midnight
+    if lv_now.hour < 6:
         day = (lv_now - timedelta(days=1)).strftime("%Y-%m-%d")
     else:
         day = lv_now.strftime("%Y-%m-%d")
@@ -106,13 +106,14 @@ def main():
 
     data = load_existing_data()
 
-    for k in ["reviews", "daily_baselines", "employee_mentions", "processed_review_ids"]:
+    # Migrate old keys
+    for k in ["reviews", "daily_baselines", "employee_mentions", "counted_review_ids"]:
         if k not in data:
             data[k] = {}
-
-    # migrate old key name
-    if "seen_review_ids" in data and "processed_review_ids" not in data:
-        data["processed_review_ids"] = data.pop("seen_review_ids")
+    if "seen_review_ids" in data:
+        del data["seen_review_ids"]
+    if "processed_review_ids" in data:
+        del data["processed_review_ids"]
 
     for location in LOCATIONS:
         name = location["name"]
@@ -127,33 +128,31 @@ def main():
 
         print("Rating: " + str(rating) + " (" + str(review_count) + " reviews)")
 
-        # Daily baseline
+        # ── Daily baselines ──────────────────────────────────────────────────
+        # Overall baseline (6am start)
         baseline_key = place_id + "_" + today_key
-        if baseline_key not in data["daily_baselines"]:
-            if lv_hour >= 6 or lv_hour < 3:
-                data["daily_baselines"][baseline_key] = review_count
-                print("Set daily baseline: " + str(review_count))
+        if baseline_key not in data["daily_baselines"] and lv_hour >= 6:
+            data["daily_baselines"][baseline_key] = review_count
+            print("Set daily baseline: " + str(review_count))
 
         baseline = data["daily_baselines"].get(baseline_key, review_count)
         reviews_today = max(0, review_count - baseline)
         print("Reviews gained today: " + str(reviews_today))
 
-        # Morning = 6am-4pm LV, Night = 4pm-midnight LV
-        morning_baseline_key = place_id + "_morning_" + today_key
-        afternoon_baseline_key = place_id + "_night_" + today_key
+        # Morning baseline (6am-4pm)
+        morning_key = place_id + "_morning_" + today_key
+        if morning_key not in data["daily_baselines"] and lv_hour >= 6:
+            data["daily_baselines"][morning_key] = review_count
+            print("Set morning baseline: " + str(review_count))
 
-        if lv_hour >= 6 and lv_hour < 16:
-            if morning_baseline_key not in data["daily_baselines"]:
-                data["daily_baselines"][morning_baseline_key] = review_count
-                print("Set morning baseline: " + str(review_count))
+        # Night baseline (4pm-midnight)
+        night_key = place_id + "_night_" + today_key
+        if night_key not in data["daily_baselines"] and lv_hour >= 16:
+            data["daily_baselines"][night_key] = review_count
+            print("Set night baseline: " + str(review_count))
 
-        if lv_hour >= 16:
-            if afternoon_baseline_key not in data["daily_baselines"]:
-                data["daily_baselines"][afternoon_baseline_key] = review_count
-                print("Set night baseline: " + str(review_count))
-
-        morning_baseline = data["daily_baselines"].get(morning_baseline_key, review_count)
-        night_baseline = data["daily_baselines"].get(afternoon_baseline_key, review_count)
+        morning_baseline = data["daily_baselines"].get(morning_key, review_count)
+        night_baseline = data["daily_baselines"].get(night_key, review_count)
 
         if lv_hour >= 6 and lv_hour < 16:
             reviews_morning = max(0, review_count - morning_baseline)
@@ -165,7 +164,7 @@ def main():
             reviews_morning = 0
             reviews_night = 0
 
-        print("Morning reviews: " + str(reviews_morning) + " | Night reviews: " + str(reviews_night))
+        print("Morning: " + str(reviews_morning) + " | Night: " + str(reviews_night))
 
         data["locations"][place_id] = {
             "name": name,
@@ -179,7 +178,7 @@ def main():
             "today_key": today_key,
         }
 
-        # History
+        # ── History ──────────────────────────────────────────────────────────
         if place_id not in data["history"]:
             data["history"][place_id] = []
         existing_dates = [h["date"] for h in data["history"][place_id]]
@@ -195,16 +194,20 @@ def main():
                     h["rating"] = rating
                     h["review_count"] = review_count
 
+        # ── Reviews + Employee mentions ───────────────────────────────────────
         if place_id not in data["reviews"]:
             data["reviews"][place_id] = []
         if place_id not in data["employee_mentions"]:
             data["employee_mentions"][place_id] = {}
-        if place_id not in data["processed_review_ids"]:
-            data["processed_review_ids"][place_id] = {}
+        if place_id not in data["counted_review_ids"]:
+            data["counted_review_ids"][place_id] = []
 
-        # processed_review_ids maps review_id -> publish_time
-        # We use publishTime to detect genuinely new reviews
-        processed = data["processed_review_ids"][place_id]
+        # counted_review_ids = reviews we have ALREADY added to employee mention counts
+        # This prevents double counting. We still DISPLAY all reviews every scrape.
+        counted_ids = set(data["counted_review_ids"][place_id])
+
+        # Build a lookup of existing stored reviews by id for name reuse
+        stored_by_id = {r["id"]: r for r in data["reviews"][place_id]}
 
         fresh_reviews = []
 
@@ -219,14 +222,13 @@ def main():
                 text = str(text_field)
             star_rating = review.get("rating", 0)
 
-            if review_id in processed:
-                # Already counted — reuse stored names
-                existing = next((r for r in data["reviews"][place_id] if r.get("id") == review_id), None)
-                names = existing.get("employee_names", []) if existing else []
-                print("Already processed: " + author)
+            if review_id in counted_ids:
+                # Already counted for shoutouts — reuse stored employee names
+                names = stored_by_id.get(review_id, {}).get("employee_names", [])
+                print("Display only (already counted): " + author)
             else:
-                # New — extract names and add to shoutouts
-                print("New review: " + author + " (" + publish_time[:10] + ")")
+                # Brand new — extract names and add to shoutout counts
+                print("New review: " + author)
                 names = extract_employee_names(text)
                 if names:
                     print("  Employees: " + str(names))
@@ -240,7 +242,7 @@ def main():
                             }
                         data["employee_mentions"][place_id][emp_key]["count"] += 1
                         data["employee_mentions"][place_id][emp_key]["last_mentioned"] = today_date
-                processed[review_id] = publish_time
+                counted_ids.add(review_id)
 
             fresh_reviews.append({
                 "id": review_id,
@@ -252,16 +254,18 @@ def main():
                 "employee_names": names if names else [],
             })
 
-        # Sort fresh reviews newest first by publish_time
+        # Sort newest first by publish_time
         fresh_reviews.sort(key=lambda r: r.get("publish_time", ""), reverse=True)
 
-        # Merge with older stored reviews not in this batch
+        # Always replace the top of the reviews list with the fresh batch
+        # Keep any older stored reviews that weren't in this scrape below them
         fresh_ids = {r["id"] for r in fresh_reviews}
         older = [r for r in data["reviews"][place_id] if r["id"] not in fresh_ids]
         data["reviews"][place_id] = fresh_reviews + older
         data["reviews"][place_id] = data["reviews"][place_id][:100]
 
-        data["processed_review_ids"][place_id] = processed
+        # Save updated counted ids
+        data["counted_review_ids"][place_id] = list(counted_ids)
 
     save_data(data)
     print("Data saved to " + DATA_FILE)

@@ -15,46 +15,57 @@
     }
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
     body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; flex-direction: column; }
-    header { display: flex; align-items: center; gap: 14px; padding: 22px 32px; border-bottom: 1px solid var(--border); }
-    .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff; }
+
+    header { display: flex; align-items: center; gap: 14px; padding: 20px 32px; border-bottom: 1px solid var(--border); }
+    .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff; flex-shrink: 0; }
+    .header-titles { display: flex; flex-direction: column; gap: 1px; }
+    .header-greeting { font-size: 12px; color: var(--up); font-weight: 600; }
     header h1 { font-size: 16px; font-weight: 600; }
-    header p { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    header p { font-size: 12px; color: var(--muted); }
     .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .export-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #1a6b3a; border: 1px solid #2a8a4e; padding: 5px 14px; border-radius: 99px; cursor: pointer; }
+    .export-btn:hover { background: #218a49; }
     .status-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 99px; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); animation: pulse 2s ease-in-out infinite; }
-    .export-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #1a6b3a; border: 1px solid #2a8a4e; padding: 5px 14px; border-radius: 99px; cursor: pointer; transition: background 0.2s; }
-    .export-btn:hover { background: #218a49; }
     @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.35} }
+
     main { flex:1; padding: 24px 32px; max-width: 1300px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
     .card-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
     /* Row 1 */
     .row1 { display: grid; grid-template-columns: 200px 1fr 170px; gap: 16px; align-items: stretch; }
-    .rating-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; gap: 4px; }
-    .rating-card::before { content:""; position:absolute; inset:0; background: radial-gradient(ellipse at 50% 0%, var(--accent-lo) 0%, transparent 70%); pointer-events:none; }
-    .rating-big { font-size: 68px; font-weight: 900; line-height: 1; background: linear-gradient(135deg,#fff 60%,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* Rating card — light red background */
+    .rating-card {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden; gap: 4px;
+      background: linear-gradient(160deg, #2a0a0f 0%, #1a0608 50%, #161616 100%);
+      border-color: rgba(200,16,46,0.3);
+    }
+    .rating-card::before { content:""; position:absolute; inset:0; background: radial-gradient(ellipse at 50% 20%, rgba(200,16,46,0.2) 0%, transparent 65%); pointer-events:none; }
+    .rating-big { font-size: 68px; font-weight: 900; line-height: 1; background: linear-gradient(135deg,#fff 60%,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .stars { display:flex; gap:3px; justify-content:center; }
     .star { font-size:16px; }
     .review-count-small { font-size:11px; color:var(--muted); }
-    .rating-stats { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; width: 100%; padding: 0 4px; }
-    .stat-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; padding: 5px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; }
-    .stat-label { color: var(--muted); }
-    .stat-val { font-weight: 700; }
-    .stat-val.up { color: var(--up); }
-    .stat-val.down { color: var(--down); }
-    .stat-val.flat { color: var(--muted); }
+    .rating-stats { display:flex; flex-direction:column; gap:5px; margin-top:6px; width:100%; padding:0 4px; }
+    .stat-row { display:flex; align-items:center; justify-content:space-between; font-size:11px; padding:5px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:6px; }
+    .stat-label { color:var(--muted); }
+    .stat-val { font-weight:700; }
+    .stat-val.up { color:var(--up); }
+    .stat-val.down { color:var(--down); }
+    .stat-val.flat { color:var(--muted); }
 
     /* Shifts */
-    .shifts-col { display: flex; flex-direction: column; gap: 0; padding: 0; overflow: hidden; }
-    .shift-half { flex: 1; padding: 18px 22px; }
-    .shift-half:first-child { border-bottom: 1px solid var(--border); }
-    .shift-top { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
-    .shift-number { font-size: 56px; font-weight: 900; line-height: 1; color: #fff; }
-    .shift-info { display: flex; flex-direction: column; gap: 2px; }
-    .shift-name { font-size: 18px; font-weight: 800; color: var(--text); }
-    .shift-time { font-size: 11px; color: var(--muted); }
-    .shift-goal-note { font-size: 10px; color: var(--accent); margin-top: 1px; font-style: italic; }
+    .shifts-col { display:flex; flex-direction:column; padding:0; overflow:hidden; }
+    .shift-half { flex:1; padding:18px 22px; }
+    .shift-half:first-child { border-bottom:1px solid var(--border); }
+    .shift-top { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
+    .shift-number { font-size:56px; font-weight:900; line-height:1; color:#fff; }
+    .shift-info { display:flex; flex-direction:column; gap:2px; }
+    .shift-name { font-size:18px; font-weight:800; color:var(--text); }
+    .shift-time { font-size:11px; color:var(--muted); }
+    .shift-goal-note { font-size:10px; color:var(--accent); margin-top:1px; font-style:italic; }
     .progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:5px; }
     .progress-bar-bg { width:100%; height:8px; background:var(--border); border-radius:99px; overflow:hidden; }
     .progress-bar-fill { height:100%; background:var(--accent); border-radius:99px; transition:width 0.6s ease; }
@@ -64,42 +75,51 @@
     .shift-badge.pending { background:var(--border); color:var(--muted); }
 
     /* Circle */
-    .circle-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-    .circle-wrap { position: relative; width: 110px; height: 110px; }
-    .circle-wrap svg { transform: rotate(-90deg); }
-    .circle-bg { fill: none; stroke: var(--border); stroke-width: 9; }
-    .circle-fill { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
-    .circle-morning { stroke: #f5c518; }
-    .circle-night { stroke: var(--accent); }
+    .circle-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
+    .circle-wrap { position:relative; width:110px; height:110px; }
+    .circle-wrap svg { transform:rotate(-90deg); }
+    .circle-bg { fill:none; stroke:var(--border); stroke-width:9; }
+    .circle-fill { fill:none; stroke-width:9; stroke-linecap:round; transition:all 0.8s ease; }
+    .circle-morning { stroke:#f5c518; }
+    .circle-night { stroke:var(--accent); }
     .circle-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-    .circle-total { font-size: 26px; font-weight: 900; color: #fff; line-height: 1; }
-    .circle-sublabel { font-size: 9px; color: var(--muted); margin-top: 2px; }
-    .circle-legend { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-    .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
-    .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .circle-total { font-size:26px; font-weight:900; color:#fff; line-height:1; }
+    .circle-sublabel { font-size:9px; color:var(--muted); margin-top:2px; }
+    .circle-legend { display:flex; flex-direction:column; gap:4px; width:100%; }
+    .legend-row { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
+    .legend-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 
     /* Stats strip */
-    .stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .stat-card { display: flex; flex-direction: column; gap: 4px; }
-    .stat-card .big { font-size: 36px; font-weight: 900; line-height: 1; }
-    .stat-card .big.red { color: var(--accent); }
-    .stat-card .big.green { color: var(--up); }
-    .stat-card .big.gold { color: var(--gold); }
-    .stat-card .sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
-    .stat-card .sub span { color: var(--text); font-weight: 600; }
+    .stats-strip { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    .stat-card { display:flex; flex-direction:column; gap:4px; }
+    .stat-card .big { font-size:36px; font-weight:900; line-height:1; }
+    .stat-card .big.red { color:var(--accent); }
+    .stat-card .big.green { color:var(--up); }
+    .stat-card .big.gold { color:var(--gold); }
+    .stat-card .sub { font-size:12px; color:var(--muted); line-height:1.4; }
+    .stat-card .sub span { color:var(--text); font-weight:600; }
 
     /* Mid row */
-    .mid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .shoutout-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
-    .shoutout-bars { display:flex; flex-direction:column; gap:9px; margin-top:8px; }
-    .shoutout-row { display:flex; align-items:center; gap:10px; }
-    .shoutout-name-col { width:72px; font-size:13px; font-weight:700; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
-    .shoutout-bar-track { flex:1; height:22px; background:var(--border); border-radius:4px; overflow:hidden; }
-    .shoutout-bar-fill { height:100%; background:var(--accent); border-radius:4px; transition:width 0.6s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; min-width:28px; }
-    .shoutout-bar-count { font-size:11px; font-weight:700; color:#fff; }
-    .shoutout-fire { font-size:14px; width:18px; flex-shrink:0; }
+    .mid-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+    /* Shoutout table */
+    .shoutout-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .shoutout-table { width:100%; border-collapse:collapse; }
+    .shoutout-table th { font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-align:left; padding:0 8px 8px; border-bottom:1px solid var(--border); }
+    .shoutout-table th:last-child { text-align:right; }
+    .shoutout-table td { padding:9px 8px; border-bottom:1px solid rgba(255,255,255,0.04); font-size:13px; vertical-align:middle; }
+    .shoutout-table tr:last-child td { border-bottom:none; }
+    .shoutout-table tr:hover td { background:rgba(255,255,255,0.02); }
+    .emp-rank { font-size:11px; color:var(--muted); width:20px; }
+    .emp-name { font-weight:700; }
+    .emp-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:600; padding:2px 7px; border-radius:99px; background:var(--accent-lo); color:var(--accent); }
+    .emp-count { font-size:18px; font-weight:800; color:var(--text); text-align:right; }
+    .emp-fire { font-size:16px; }
+    .emp-last { font-size:11px; color:var(--muted); }
     .merge-btn { font-size:11px; color:var(--muted); background:none; border:1px solid var(--border); border-radius:6px; padding:3px 8px; cursor:pointer; }
     .merge-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* Reviews */
     .reviews-list { display:flex; flex-direction:column; gap:9px; margin-top:4px; }
     .review-item { padding:11px 12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
     .review-header { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -112,6 +132,7 @@
     .empty { text-align:center; padding:36px 0; color:var(--muted); font-size:13px; }
     .empty strong { display:block; font-size:14px; color:var(--text); margin-bottom:5px; }
 
+    /* Modal */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; align-items:center; justify-content:center; }
     .modal-overlay.open { display:flex; }
     .modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; width:400px; max-width:90vw; }
@@ -128,14 +149,19 @@
     .btn-save { background:var(--accent); color:#fff; }
 
     footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); }
-    @media(max-width:960px){ .row1{grid-template-columns:1fr 1fr} .circle-card{display:none} .stats-strip{grid-template-columns:1fr 1fr} .mid-row{grid-template-columns:1fr} main{padding:16px} }
+    @media(max-width:960px){ .row1{grid-template-columns:1fr 1fr} .circle-card{display:none} .mid-row{grid-template-columns:1fr} main{padding:16px} }
     @media(max-width:600px){ .row1{grid-template-columns:1fr} .stats-strip{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
+
 <header>
   <div class="logo">A</div>
-  <div><h1>Avis Rating Dashboard</h1><p>Harry Reid Airport · updated every 30 min</p></div>
+  <div class="header-titles">
+    <div class="header-greeting" id="greeting"></div>
+    <h1>Avis Rating Dashboard</h1>
+    <p>Harry Reid Airport · updated every 30 min</p>
+  </div>
   <div class="header-right">
     <button class="export-btn" onclick="exportExcel()">📊 Export Excel</button>
     <div class="status-pill"><span class="status-dot"></span><span id="last-updated">Loading…</span></div>
@@ -143,6 +169,8 @@
 </header>
 
 <main>
+
+  <!-- Row 1 -->
   <div class="row1">
     <div class="card rating-card">
       <div class="card-label">Current Rating</div>
@@ -151,7 +179,6 @@
       <div class="review-count-small" id="review-count-small">— reviews</div>
       <div class="rating-stats">
         <div class="stat-row"><span class="stat-label">vs last week</span><span class="stat-val flat" id="week-delta">—</span></div>
-        <div class="stat-row"><span class="stat-label">yesterday</span><span class="stat-val" id="yesterday-count" style="color:var(--text)">—</span></div>
       </div>
     </div>
 
@@ -165,7 +192,7 @@
             <div class="shift-goal-note" id="morning-goal-note"></div>
           </div>
         </div>
-        <div class="progress-meta"><span id="morning-progress-label">0 of —</span><span id="morning-pct">0%</span></div>
+        <div class="progress-meta"><span id="morning-progress-label">—</span><span id="morning-pct">0%</span></div>
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="morning-fill" style="width:0%"></div></div>
         <div class="shift-badge pending" id="morning-badge">—</div>
       </div>
@@ -178,7 +205,7 @@
             <div class="shift-goal-note" id="night-goal-note"></div>
           </div>
         </div>
-        <div class="progress-meta"><span id="night-progress-label">0 of —</span><span id="night-pct">0%</span></div>
+        <div class="progress-meta"><span id="night-progress-label">—</span><span id="night-pct">0%</span></div>
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="night-fill" style="width:0%"></div></div>
         <div class="shift-badge pending" id="night-badge">—</div>
       </div>
@@ -189,8 +216,8 @@
       <div class="circle-wrap">
         <svg viewBox="0 0 110 110" width="110" height="110">
           <circle class="circle-bg" cx="55" cy="55" r="46"/>
-          <circle class="circle-fill circle-morning" cx="55" cy="55" r="46" id="circle-morning" stroke-dasharray="289" stroke-dashoffset="289"/>
-          <circle class="circle-fill circle-night" cx="55" cy="55" r="46" id="circle-night" stroke-dasharray="289" stroke-dashoffset="289"/>
+          <circle class="circle-fill circle-morning" cx="55" cy="55" r="46" id="circle-morning" stroke-dasharray="0 289" stroke-dashoffset="0"/>
+          <circle class="circle-fill circle-night" cx="55" cy="55" r="46" id="circle-night" stroke-dasharray="0 289" stroke-dashoffset="0"/>
         </svg>
         <div class="circle-center">
           <div class="circle-total" id="circle-total">0</div>
@@ -204,6 +231,7 @@
     </div>
   </div>
 
+  <!-- Stats strip -->
   <div class="stats-strip">
     <div class="card stat-card">
       <div class="card-label">5★ Reviews Needed for 4.0</div>
@@ -211,17 +239,13 @@
       <div class="sub" id="five-star-sub">calculating…</div>
     </div>
     <div class="card stat-card">
-      <div class="card-label">Rating Change — Last 7 Days</div>
-      <div class="big" id="week-change-big">—</div>
-      <div class="sub" id="week-change-sub">vs 7 days ago</div>
-    </div>
-    <div class="card stat-card">
-      <div class="card-label">Reviews Yesterday</div>
-      <div class="big gold" id="yesterday-big">—</div>
-      <div class="sub" id="yesterday-sub">total new reviews</div>
+      <div class="card-label">Daily Goal (based on July 1 target)</div>
+      <div class="big gold" id="daily-goal-big">—</div>
+      <div class="sub" id="daily-goal-sub">5★ reviews needed per day</div>
     </div>
   </div>
 
+  <!-- Mid row -->
   <div class="mid-row">
     <div class="card">
       <div class="shoutout-header">
@@ -231,19 +255,25 @@
           <button class="merge-btn" onclick="openMergeModal()">Merge names</button>
         </div>
       </div>
-      <div id="shoutout-wrap"><div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div></div>
+      <div id="shoutout-wrap">
+        <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div>
+      </div>
     </div>
     <div class="card">
       <div class="card-label">Recent Ratings</div>
-      <div id="reviews-wrap"><div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div></div>
+      <div id="reviews-wrap">
+        <div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div>
+      </div>
     </div>
   </div>
 
+  <!-- Chart -->
   <div class="card">
     <div class="card-label">Rating History</div>
     <canvas id="chart"></canvas>
-    <div class="empty" id="chart-empty" style="display:none"><strong>No history yet</strong>Run the scraper at least twice to see the trend line.</div>
+    <div class="empty" id="chart-empty" style="display:none"><strong>No history yet</strong>Run the scraper at least twice.</div>
   </div>
+
 </main>
 
 <footer>Data sourced from Google Maps · Avis-Dashboard · auto-updated every 30 min</footer>
@@ -268,239 +298,197 @@ const GOAL_DATE = "2026-07-01";
 function loadMerges(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
 function saveMerges(m){localStorage.setItem(STORAGE_KEY,JSON.stringify(m))}
 
+// Greeting based on LV time
+function setGreeting(){
+  // Approximate LV time from UTC
+  const lvHour = (new Date().getUTCHours() - 7 + 24) % 24;
+  const el = document.getElementById("greeting");
+  if(lvHour >= 6 && lvHour < 12) el.textContent = "Good Morning!! ☀️";
+  else if(lvHour >= 12 && lvHour < 16) el.textContent = "Good Afternoon! 👋";
+  else if(lvHour >= 16) el.textContent = "Good Evening! 🌙";
+  else el.textContent = "";
+}
+
 function daysUntilGoal(){
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  const goal = new Date(GOAL_DATE);
-  const diff = Math.ceil((goal - today) / 86400000);
-  return Math.max(1, diff);
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.max(1, Math.ceil((new Date(GOAL_DATE) - today) / 86400000));
 }
 
-function calcFiveStarNeeded(rating, totalReviews){
-  if(!rating||!totalReviews) return null;
-  if(rating>=4.0) return 0;
-  const currentScore = rating * totalReviews;
-  return Math.ceil((4.0 * totalReviews - currentScore) / (5 - 4.0));
-}
-
-function calcDailyGoal(fiveNeeded){
-  const days = daysUntilGoal();
-  return Math.ceil(fiveNeeded / days);
+function calcFiveStarNeeded(rating, total){
+  if(!rating||!total||rating>=4.0) return 0;
+  return Math.ceil((4.0*total - rating*total)/(5-4.0));
 }
 
 function getWeekLabel(){
-  const d=new Date();
-  const jan1=new Date(d.getFullYear(),0,1);
-  const week=Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
-  return "Week "+week;
+  const d=new Date(), jan1=new Date(d.getFullYear(),0,1);
+  return "Week "+Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
 }
 
-function applyMerges(employees,merges){
+function applyMerges(employees, merges){
   const merged={};
   for(const[key,emp]of Object.entries(employees)){
     const canonical=merges[key]||key;
-    if(!merged[canonical]){merged[canonical]={display_name:emp.display_name,count:0,last_mentioned:emp.last_mentioned||""}}
+    if(!merged[canonical]) merged[canonical]={display_name:emp.display_name,count:0,last_mentioned:emp.last_mentioned||""};
     merged[canonical].count+=emp.count;
-    if((emp.last_mentioned||"")>(merged[canonical].last_mentioned||""))merged[canonical].last_mentioned=emp.last_mentioned;
+    if((emp.last_mentioned||"")>(merged[canonical].last_mentioned||"")) merged[canonical].last_mentioned=emp.last_mentioned;
   }
   return merged;
 }
 
-// Determine shift from publish_time (UTC → LV = UTC-7)
 function getShift(publishTime){
   if(!publishTime) return "Unknown";
-  const d = new Date(publishTime);
-  const lvHour = (d.getUTCHours() - 7 + 24) % 24;
-  if(lvHour >= 6 && lvHour < 16) return "Morning (6am–4pm)";
-  if(lvHour >= 16 && lvHour < 24) return "Night (4pm–midnight)";
+  const lvHour=(new Date(publishTime).getUTCHours()-7+24)%24;
+  if(lvHour>=6&&lvHour<16) return "Morning (6am–4pm)";
+  if(lvHour>=16) return "Night (4pm–midnight)";
   return "Off-shift";
 }
 
-let globalData = null;
-let globalReviews = [];
-let globalEmployees = {};
+let globalData=null, globalReviews=[], globalEmployees={};
 
 async function load(){
   let data;
   try{
     const res=await fetch("data/ratings.json?nocache="+Date.now());
-    if(!res.ok) throw new Error("not found");
+    if(!res.ok) throw new Error();
     data=await res.json();
   }catch(e){
     document.getElementById("last-updated").textContent="Could not load data";
     return;
   }
-
-  globalData = data;
+  globalData=data;
 
   const locations=data.locations||{};
-  const historyByPlace=data.history||{};
-  const reviewsByPlace=data.reviews||{};
-  const employeesByPlace=data.employee_mentions||{};
-
   const placeIds=Object.keys(locations);
   if(!placeIds.length) return;
-
   const placeId=placeIds.find(id=>locations[id].rating!=null)||placeIds[0];
   const loc=locations[placeId];
-  const history=historyByPlace[placeId]||[];
-  const reviews=reviewsByPlace[placeId]||[];
-  const employees=employeesByPlace[placeId]||{};
+  const history=(data.history||{})[placeId]||[];
+  const reviews=(data.reviews||{})[placeId]||[];
+  const employees=(data.employee_mentions||{})[placeId]||{};
 
   globalReviews=reviews;
   globalEmployees=employees;
 
   if(loc.last_updated) document.getElementById("last-updated").textContent="Updated "+loc.last_updated+" LV";
 
-  const current=loc.rating;
-  const totalReviews=loc.review_count||0;
+  const current=loc.rating, totalReviews=loc.review_count||0;
 
+  // Rating card
   if(current!=null){
     document.getElementById("current-rating").textContent=current.toFixed(1);
     renderStars(current,"stars",16);
     document.getElementById("review-count-small").textContent=totalReviews.toLocaleString()+" total reviews";
   }
 
-  // 5-star needed + dynamic daily goal
-  const fiveNeeded = calcFiveStarNeeded(current, totalReviews);
-  const daysLeft = daysUntilGoal();
-  const dailyGoal = fiveNeeded ? calcDailyGoal(fiveNeeded) : 60;
-  const shiftGoal = Math.ceil(dailyGoal / 2); // split evenly between morning and night
-
-  // 5-star card
-  const fiveEl=document.getElementById("five-star-needed");
-  const fiveSubEl=document.getElementById("five-star-sub");
-  if(fiveNeeded===0){
-    fiveEl.textContent="✅ 4.0+"; fiveEl.className="big green";
-    fiveSubEl.textContent="Already at or above 4.0!";
-  } else if(fiveNeeded!=null){
-    fiveEl.textContent=fiveNeeded.toLocaleString(); fiveEl.className="big red";
-    fiveSubEl.innerHTML='to go from <span>'+current.toFixed(1)+'</span> → <span>4.0</span> · <span>'+daysLeft+'</span> days left · need <span>'+dailyGoal+'</span>/day';
-  }
-
   // Week delta
-  let weekDelta=null, prevRating=null, yesterdayReviews=null;
   if(history.length>=2){
     const prev7=history[Math.max(0,history.length-7)];
-    prevRating=prev7?.rating;
-    if(prevRating!=null&&current!=null){
-      weekDelta=+(current-prevRating).toFixed(2);
+    if(prev7?.rating!=null&&current!=null){
+      const diff=+(current-prev7.rating).toFixed(2);
       const wd=document.getElementById("week-delta");
-      if(weekDelta>0){wd.className="stat-val up";wd.textContent="▲ +"+weekDelta;}
-      else if(weekDelta<0){wd.className="stat-val down";wd.textContent="▼ "+weekDelta;}
+      if(diff>0){wd.className="stat-val up";wd.textContent="▲ +"+diff;}
+      else if(diff<0){wd.className="stat-val down";wd.textContent="▼ "+diff;}
       else{wd.className="stat-val flat";wd.textContent="No change";}
-    }
-    const last=history[history.length-1];
-    const prev=history[history.length-2];
-    if(last?.review_count!=null&&prev?.review_count!=null){
-      yesterdayReviews=Math.max(0,last.review_count-prev.review_count);
-      document.getElementById("yesterday-count").textContent=yesterdayReviews+" reviews";
     }
   } else {
     document.getElementById("week-delta").textContent="Tracking started";
   }
 
-  // Week change big
-  const wcBig=document.getElementById("week-change-big");
-  const wcSub=document.getElementById("week-change-sub");
-  if(weekDelta!=null&&prevRating!=null){
-    if(weekDelta>0){wcBig.className="big green";wcBig.textContent="▲ +"+weekDelta;}
-    else if(weekDelta<0){wcBig.className="big red";wcBig.textContent="▼ "+weekDelta;}
-    else{wcBig.className="big";wcBig.style.color="var(--muted)";wcBig.textContent="0.00";}
-    wcSub.innerHTML='was <span>'+prevRating.toFixed(1)+'</span>, now <span>'+current.toFixed(1)+'</span>';
+  // 5-star needed + dynamic goal
+  const fiveNeeded=calcFiveStarNeeded(current,totalReviews);
+  const daysLeft=daysUntilGoal();
+  const dailyGoal=fiveNeeded>0?Math.ceil(fiveNeeded/daysLeft):60;
+  const shiftGoal=Math.ceil(dailyGoal/2);
+
+  const fiveEl=document.getElementById("five-star-needed");
+  const fiveSub=document.getElementById("five-star-sub");
+  if(fiveNeeded===0){
+    fiveEl.textContent="✅ 4.0+"; fiveEl.className="big green";
+    fiveSub.textContent="Already at or above 4.0!";
   } else {
-    wcBig.textContent="—"; wcSub.textContent="Not enough history yet";
+    fiveEl.textContent=fiveNeeded.toLocaleString(); fiveEl.className="big red";
+    fiveSub.innerHTML='to move from <span>'+current.toFixed(1)+'</span> → <span>4.0</span> with '+totalReviews.toLocaleString()+' reviews';
   }
 
-  // Yesterday big
-  const yBig=document.getElementById("yesterday-big");
-  const ySub=document.getElementById("yesterday-sub");
-  if(yesterdayReviews!=null){
-    yBig.textContent=yesterdayReviews;
-    ySub.textContent="new reviews yesterday";
-  } else {
-    yBig.textContent="—"; ySub.textContent="not enough history";
-  }
+  const dgEl=document.getElementById("daily-goal-big");
+  const dgSub=document.getElementById("daily-goal-sub");
+  dgEl.textContent=dailyGoal;
+  dgSub.innerHTML='<span>'+daysLeft+'</span> days left until Jul 1 · <span>'+shiftGoal+'</span> per shift';
 
-  // Shifts with dynamic goals
-  const morning=loc.reviews_morning||0;
-  const night=loc.reviews_night||0;
-
+  // Shifts
+  const morning=loc.reviews_morning||0, night=loc.reviews_night||0;
   const morningShortfall=Math.max(0,shiftGoal-morning);
   const nightGoal=shiftGoal+morningShortfall;
 
   document.getElementById("morning-goal-note").textContent="Goal: "+shiftGoal+" ("+dailyGoal+"/day ÷ 2)";
-  document.getElementById("night-goal-note").textContent=morningShortfall>0?"Includes +"+morningShortfall+" rollover from morning":"";
-
+  document.getElementById("night-goal-note").textContent=morningShortfall>0?"Includes +"+morningShortfall+" rollover":"";
   document.getElementById("morning-count").textContent=morning;
-  const mPct=Math.min(100,Math.round((morning/shiftGoal)*100));
+  const mPct=Math.min(100,Math.round((morning/Math.max(shiftGoal,1))*100));
   document.getElementById("morning-progress-label").textContent=morning+" of "+shiftGoal;
   document.getElementById("morning-pct").textContent=mPct+"%";
-  const mFill=document.getElementById("morning-fill");
-  mFill.style.width=mPct+"%";
+  const mFill=document.getElementById("morning-fill"); mFill.style.width=mPct+"%";
   const mBadge=document.getElementById("morning-badge");
   if(morning>=shiftGoal){mFill.classList.add("goal-met");mBadge.className="shift-badge met";mBadge.textContent="✅ Morning goal reached!";}
   else{mBadge.className="shift-badge pending";mBadge.textContent="🎯 "+(shiftGoal-morning)+" more for morning goal";}
 
   document.getElementById("night-count").textContent=night;
-  const nPct=Math.min(100,Math.round((night/nightGoal)*100));
-  document.getElementById("night-progress-label").textContent=night+" of "+nightGoal+(morningShortfall>0?" (+"+morningShortfall+" rollover)":"");
+  const nPct=Math.min(100,Math.round((night/Math.max(nightGoal,1))*100));
+  document.getElementById("night-progress-label").textContent=night+" of "+nightGoal+(morningShortfall>0?" (+"+morningShortfall+")":"");
   document.getElementById("night-pct").textContent=nPct+"%";
-  const nFill=document.getElementById("night-fill");
-  nFill.style.width=nPct+"%";
+  const nFill=document.getElementById("night-fill"); nFill.style.width=nPct+"%";
   const nBadge=document.getElementById("night-badge");
   if(night>=nightGoal){nFill.classList.add("goal-met");nBadge.className="shift-badge met";nBadge.textContent="✅ Night goal reached!";}
   else{nBadge.className="shift-badge pending";nBadge.textContent="🎯 "+(nightGoal-night)+" more for night goal";}
 
   // Circle
   const total=morning+night;
+  const C=289;
   document.getElementById("circle-total").textContent=total;
   document.getElementById("circle-goal-label").textContent="of "+dailyGoal;
-  const C=289;
-  const mFrac=Math.min(1,morning/dailyGoal);
-  const nFrac=Math.min(1,night/dailyGoal);
+  const mFrac=Math.min(1,morning/Math.max(dailyGoal,1));
+  const nFrac=Math.min(1,night/Math.max(dailyGoal,1));
   const cm=document.getElementById("circle-morning");
   const cn=document.getElementById("circle-night");
-  cm.style.strokeDasharray=(mFrac*C)+" "+C;
-  cm.style.strokeDashoffset="0";
-  cn.style.strokeDasharray=(nFrac*C)+" "+C;
-  cn.style.strokeDashoffset=-(mFrac*C);
+  cm.setAttribute("stroke-dasharray",(mFrac*C)+" "+C);
+  cm.setAttribute("stroke-dashoffset","0");
+  cn.setAttribute("stroke-dasharray",(nFrac*C)+" "+C);
+  cn.setAttribute("stroke-dashoffset",-(mFrac*C));
 
-  // Shoutouts
+  // Shoutouts — table layout
   const merges=loadMerges();
   document.getElementById("week-label").textContent=getWeekLabel();
   const mergedEmp=applyMerges(employees,merges);
   const entries=Object.entries(mergedEmp).sort((a,b)=>b[1].count-a[1].count);
   const shoutWrap=document.getElementById("shoutout-wrap");
   if(entries.length){
-    const maxCount=Math.max(...entries.map(e=>e[1].count),1);
     shoutWrap.innerHTML="";
-    const bars=document.createElement("div");
-    bars.className="shoutout-bars";
-    entries.slice(0,10).forEach(([key,emp])=>{
-      const barPct=Math.max(8,Math.round((emp.count/maxCount)*100));
-      const row=document.createElement("div");
-      row.className="shoutout-row";
-      row.innerHTML=
-        '<div class="shoutout-name-col" title="'+emp.display_name+'">'+emp.display_name+'</div>'+
-        '<div class="shoutout-bar-track"><div class="shoutout-bar-fill" style="width:'+barPct+'%">'+
-        '<span class="shoutout-bar-count">'+emp.count+'</span></div></div>'+
-        '<div class="shoutout-fire">'+(emp.count>=5?"🔥":"")+'</div>';
-      bars.appendChild(row);
+    const table=document.createElement("table");
+    table.className="shoutout-table";
+    table.innerHTML='<thead><tr><th>#</th><th>Name</th><th>Last Mentioned</th><th>Mentions</th></tr></thead>';
+    const tbody=document.createElement("tbody");
+    entries.slice(0,10).forEach(([key,emp],i)=>{
+      const tr=document.createElement("tr");
+      const onFire=emp.count>=5;
+      tr.innerHTML=
+        '<td class="emp-rank">'+(i+1)+'</td>'+
+        '<td><span class="emp-name">'+emp.display_name+'</span>'+(onFire?' <span class="emp-fire">🔥</span>':'')+'</td>'+
+        '<td class="emp-last">'+(emp.last_mentioned||"—")+'</td>'+
+        '<td class="emp-count">'+emp.count+'</td>';
+      tbody.appendChild(tr);
     });
-    shoutWrap.appendChild(bars);
+    table.appendChild(tbody);
+    shoutWrap.appendChild(table);
   } else {
     shoutWrap.innerHTML='<div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div>';
   }
 
-  // Reviews
+  // Reviews — always show whatever is in the data (scraper puts newest first)
   const reviewsWrap=document.getElementById("reviews-wrap");
-  const recentReviews=reviews.slice(0,15);
-  if(recentReviews.length){
+  if(reviews.length){
     reviewsWrap.innerHTML="";
     const list=document.createElement("div");
     list.className="reviews-list";
-    recentReviews.forEach(r=>{
+    reviews.slice(0,15).forEach(r=>{
       const starsStr="★".repeat(r.rating)+"☆".repeat(Math.max(0,5-r.rating));
       const snippet=r.text&&r.text.length>140?r.text.slice(0,140)+"…":(r.text||"No text.");
       const empHtml=r.employee_names&&r.employee_names.length?'<div class="review-emp">👤 '+r.employee_names.join(", ")+'</div>':"";
@@ -519,191 +507,116 @@ async function load(){
 
   // Chart
   const chartHistory=history.filter(h=>h.rating!=null);
-  if(chartHistory.length>=2){
-    drawChart(chartHistory, dailyGoal);
-  } else {
-    document.getElementById("chart").style.display="none";
-    document.getElementById("chart-empty").style.display="block";
-  }
+  if(chartHistory.length>=2) drawChart(chartHistory);
+  else{ document.getElementById("chart").style.display="none"; document.getElementById("chart-empty").style.display="block"; }
 }
 
-// ── Excel Export ──────────────────────────────────────────
-function exportExcel(){
-  if(!globalData){alert("No data loaded yet.");return;}
-
-  const wb = XLSX.utils.book_new();
-
-  // ── Sheet 1: Shoutouts by Employee ──
-  const merges = loadMerges();
-  const empRows = [["Employee","Star Rating","Review Text","Reviewer","Date","Shift","Review ID"]];
-
-  globalReviews.forEach(r=>{
-    if(!r.employee_names||!r.employee_names.length) return;
-    const shift = getShift(r.publish_time||"");
-    r.employee_names.forEach(name=>{
-      const canonical = merges[name.toLowerCase()]||name;
-      empRows.push([
-        canonical,
-        r.rating||"",
-        r.text||"",
-        r.author||"Anonymous",
-        r.date||"",
-        shift,
-        r.id||""
-      ]);
-    });
-  });
-
-  const ws1 = XLSX.utils.aoa_to_sheet(empRows);
-  // Column widths
-  ws1["!cols"]=[{wch:16},{wch:12},{wch:60},{wch:22},{wch:12},{wch:22},{wch:40}];
-  // Style header row bold
-  const headerStyle={font:{bold:true},fill:{fgColor:{rgb:"C8102E"}},fontColor:{rgb:"FFFFFF"}};
-  ["A1","B1","C1","D1","E1","F1","G1"].forEach(cell=>{
-    if(ws1[cell]) ws1[cell].s=headerStyle;
-  });
-  XLSX.utils.book_append_sheet(wb, ws1, "Employee Shoutouts");
-
-  // ── Sheet 2: All Reviews ──
-  const reviewRows=[["Date","Reviewer","Star Rating","Shift","Employees Mentioned","Review Text"]];
-  globalReviews.forEach(r=>{
-    const shift = getShift(r.publish_time||"");
-    reviewRows.push([
-      r.date||"",
-      r.author||"Anonymous",
-      r.rating||"",
-      shift,
-      (r.employee_names||[]).join(", "),
-      r.text||""
-    ]);
-  });
-  const ws2 = XLSX.utils.aoa_to_sheet(reviewRows);
-  ws2["!cols"]=[{wch:12},{wch:22},{wch:12},{wch:22},{wch:30},{wch:80}];
-  XLSX.utils.book_append_sheet(wb, ws2, "All Reviews");
-
-  // ── Sheet 3: Employee Summary ──
-  const allEmployees = applyMerges(globalEmployees, merges);
-  const summaryRows=[["Employee","Total Mentions","Last Mentioned"]];
-  Object.values(allEmployees).sort((a,b)=>b.count-a.count).forEach(emp=>{
-    summaryRows.push([emp.display_name, emp.count, emp.last_mentioned||""]);
-  });
-  const ws3 = XLSX.utils.aoa_to_sheet(summaryRows);
-  ws3["!cols"]=[{wch:20},{wch:16},{wch:16}];
-  XLSX.utils.book_append_sheet(wb, ws3, "Employee Summary");
-
-  // ── Sheet 4: Rating History ──
-  const locations=globalData.locations||{};
-  const placeId=Object.keys(locations)[0];
-  const history=(globalData.history||{})[placeId]||[];
-  const historyRows=[["Date","Rating","Total Reviews","Day-over-Day Change"]];
-  history.forEach((h,i)=>{
-    const prev=history[i-1];
-    const change=prev&&prev.review_count!=null&&h.review_count!=null
-      ? h.review_count-prev.review_count : "";
-    historyRows.push([h.date,h.rating,h.review_count,change]);
-  });
-  const ws4=XLSX.utils.aoa_to_sheet(historyRows);
-  ws4["!cols"]=[{wch:12},{wch:10},{wch:16},{wch:20}];
-  XLSX.utils.book_append_sheet(wb, ws4, "Rating History");
-
-  const today=new Date().toISOString().slice(0,10);
-  XLSX.writeFile(wb, "Avis_Dashboard_"+today+".xlsx");
-}
-
-function renderStars(rating,containerId,size){
-  const container=document.getElementById(containerId);
-  container.innerHTML="";
+function renderStars(rating,id,size){
+  const c=document.getElementById(id); c.innerHTML="";
   for(let i=1;i<=5;i++){
-    const span=document.createElement("span");
-    span.className="star"; span.style.fontSize=(size||16)+"px";
-    if(rating>=i) span.textContent="★";
-    else if(rating>=i-0.5){span.textContent="★";span.style.opacity="0.5";}
-    else span.textContent="☆";
-    span.style.color=rating>=i-0.5?"var(--gold)":"var(--border)";
-    container.appendChild(span);
+    const s=document.createElement("span"); s.className="star"; s.style.fontSize=size+"px";
+    if(rating>=i) s.textContent="★";
+    else if(rating>=i-0.5){s.textContent="★";s.style.opacity="0.5";}
+    else s.textContent="☆";
+    s.style.color=rating>=i-0.5?"var(--gold)":"var(--border)";
+    c.appendChild(s);
   }
 }
 
-function drawChart(history, dailyGoal){
+function drawChart(history){
   const canvas=document.getElementById("chart");
   const dpr=window.devicePixelRatio||1;
-  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
   canvas.width=W*dpr; canvas.height=H*dpr;
-  const ctx=canvas.getContext("2d");
-  ctx.scale(dpr,dpr);
-  const ratings=history.map(h=>h.rating);
-  const dates=history.map(h=>h.date);
+  const ctx=canvas.getContext("2d"); ctx.scale(dpr,dpr);
+  const ratings=history.map(h=>h.rating), dates=history.map(h=>h.date);
   const pad={top:28,right:24,bottom:42,left:44};
   const iW=W-pad.left-pad.right, iH=H-pad.top-pad.bottom;
-  const allDates=[...dates];
-  if(!allDates.includes(GOAL_DATE)) allDates.push(GOAL_DATE);
-  allDates.sort();
-  const allRatings=[...ratings,4.0];
-  const minR=Math.max(0,Math.min(...allRatings)-0.3);
-  const maxR=Math.min(5,Math.max(...allRatings)+0.3);
-  const dateToX=d=>pad.left+(allDates.indexOf(d)/Math.max(allDates.length-1,1))*iW;
+  const allDates=[...dates]; if(!allDates.includes(GOAL_DATE)) allDates.push(GOAL_DATE); allDates.sort();
+  const minR=Math.max(0,Math.min(...ratings,4.0)-0.3), maxR=Math.min(5,Math.max(...ratings,4.0)+0.3);
+  const dX=d=>pad.left+(allDates.indexOf(d)/Math.max(allDates.length-1,1))*iW;
   const yS=v=>pad.top+iH-((v-minR)/(maxR-minR))*iH;
-
   [1,2,3,4,5].forEach(v=>{
     if(v<minR||v>maxR) return;
     const y=yS(v);
-    ctx.strokeStyle="rgba(255,255,255,.05)";ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();
-    ctx.fillStyle="rgba(255,255,255,.3)";ctx.font="10px Inter,system-ui";ctx.textAlign="right";
+    ctx.strokeStyle="rgba(255,255,255,.05)"; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(W-pad.right,y); ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.3)"; ctx.font="10px Inter,system-ui"; ctx.textAlign="right";
     ctx.fillText(v.toFixed(1),pad.left-6,y+4);
   });
-
   const goalY=yS(4.0);
-  ctx.setLineDash([5,4]);ctx.strokeStyle="rgba(62,207,142,0.45)";ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(pad.left,goalY);ctx.lineTo(W-pad.right,goalY);ctx.stroke();
+  ctx.setLineDash([5,4]); ctx.strokeStyle="rgba(62,207,142,0.45)"; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad.left,goalY); ctx.lineTo(W-pad.right,goalY); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle="rgba(62,207,142,0.65)";ctx.font="10px Inter,system-ui";ctx.textAlign="left";
+  ctx.fillStyle="rgba(62,207,142,0.65)"; ctx.font="10px Inter,system-ui"; ctx.textAlign="left";
   ctx.fillText("4.0 target (Jul 1)",pad.left+4,goalY-5);
-
   if(dates.length>0){
-    const lx=dateToX(dates[dates.length-1]), ly=yS(ratings[ratings.length-1]);
-    const gx=dateToX(GOAL_DATE), gy=yS(4.0);
-    ctx.setLineDash([4,4]);ctx.strokeStyle="rgba(62,207,142,0.3)";ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(gx,gy);ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.beginPath();ctx.arc(gx,gy,4,0,Math.PI*2);ctx.fillStyle="var(--up)";ctx.fill();
+    const lx=dX(dates[dates.length-1]),ly=yS(ratings[ratings.length-1]),gx=dX(GOAL_DATE),gy=yS(4.0);
+    ctx.setLineDash([4,4]); ctx.strokeStyle="rgba(62,207,142,0.3)"; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(gx,gy); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(gx,gy,4,0,Math.PI*2); ctx.fillStyle="var(--up)"; ctx.fill();
   }
-
   const grad=ctx.createLinearGradient(0,pad.top,0,H-pad.bottom);
-  grad.addColorStop(0,"rgba(200,16,46,.3)");grad.addColorStop(1,"rgba(200,16,46,0)");
+  grad.addColorStop(0,"rgba(200,16,46,.3)"); grad.addColorStop(1,"rgba(200,16,46,0)");
   ctx.beginPath();
-  history.forEach((h,i)=>i===0?ctx.moveTo(dateToX(h.date),yS(h.rating)):ctx.lineTo(dateToX(h.date),yS(h.rating)));
-  ctx.lineTo(dateToX(dates[dates.length-1]),H-pad.bottom);
-  ctx.lineTo(dateToX(dates[0]),H-pad.bottom);
-  ctx.closePath();ctx.fillStyle=grad;ctx.fill();
-
-  ctx.beginPath();ctx.strokeStyle="var(--accent)";ctx.lineWidth=2.5;ctx.lineJoin="round";
-  history.forEach((h,i)=>i===0?ctx.moveTo(dateToX(h.date),yS(h.rating)):ctx.lineTo(dateToX(h.date),yS(h.rating)));
+  history.forEach((h,i)=>i===0?ctx.moveTo(dX(h.date),yS(h.rating)):ctx.lineTo(dX(h.date),yS(h.rating)));
+  ctx.lineTo(dX(dates[dates.length-1]),H-pad.bottom); ctx.lineTo(dX(dates[0]),H-pad.bottom);
+  ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+  ctx.beginPath(); ctx.strokeStyle="var(--accent)"; ctx.lineWidth=2.5; ctx.lineJoin="round";
+  history.forEach((h,i)=>i===0?ctx.moveTo(dX(h.date),yS(h.rating)):ctx.lineTo(dX(h.date),yS(h.rating)));
   ctx.stroke();
+  if(ratings.length<=60) history.forEach(h=>{
+    ctx.beginPath(); ctx.arc(dX(h.date),yS(h.rating),3,0,Math.PI*2);
+    ctx.fillStyle="#fff"; ctx.fill(); ctx.strokeStyle="var(--accent)"; ctx.lineWidth=1.5; ctx.stroke();
+  });
+  const step=Math.ceil(dates.length/6); ctx.fillStyle="rgba(255,255,255,.3)"; ctx.font="10px Inter,system-ui"; ctx.textAlign="center";
+  dates.forEach((d,i)=>{if(i%step!==0&&i!==dates.length-1)return; ctx.fillText(d,dX(d),H-pad.bottom+16);});
+  ctx.fillStyle="rgba(62,207,142,0.6)"; ctx.fillText("Jul 1",dX(GOAL_DATE),H-pad.bottom+16);
+}
 
-  if(ratings.length<=60){
-    history.forEach(h=>{
-      ctx.beginPath();ctx.arc(dateToX(h.date),yS(h.rating),3,0,Math.PI*2);
-      ctx.fillStyle="#fff";ctx.fill();ctx.strokeStyle="var(--accent)";ctx.lineWidth=1.5;ctx.stroke();
+function exportExcel(){
+  if(!globalData){alert("No data loaded yet.");return;}
+  const wb=XLSX.utils.book_new();
+  const merges=loadMerges();
+  const empRows=[["Employee","Star Rating","Review Text","Reviewer","Date","Shift"]];
+  globalReviews.forEach(r=>{
+    if(!r.employee_names?.length) return;
+    const shift=getShift(r.publish_time||"");
+    r.employee_names.forEach(name=>{
+      empRows.push([merges[name.toLowerCase()]||name, r.rating||"", r.text||"", r.author||"Anonymous", r.date||"", shift]);
     });
-  }
-
-  const step=Math.ceil(dates.length/6);
-  ctx.fillStyle="rgba(255,255,255,.3)";ctx.font="10px Inter,system-ui";ctx.textAlign="center";
-  dates.forEach((d,i)=>{if(i%step!==0&&i!==dates.length-1)return;ctx.fillText(d,dateToX(d),H-pad.bottom+16);});
-  ctx.fillStyle="rgba(62,207,142,0.6)";ctx.fillText("Jul 1",dateToX(GOAL_DATE),H-pad.bottom+16);
+  });
+  const ws1=XLSX.utils.aoa_to_sheet(empRows);
+  ws1["!cols"]=[{wch:16},{wch:12},{wch:70},{wch:22},{wch:12},{wch:22}];
+  XLSX.utils.book_append_sheet(wb,ws1,"Employee Shoutouts");
+  const reviewRows=[["Date","Reviewer","Star Rating","Shift","Employees Mentioned","Review Text"]];
+  globalReviews.forEach(r=>{
+    reviewRows.push([r.date||"",r.author||"Anonymous",r.rating||"",getShift(r.publish_time||""),(r.employee_names||[]).join(", "),r.text||""]);
+  });
+  const ws2=XLSX.utils.aoa_to_sheet(reviewRows);
+  ws2["!cols"]=[{wch:12},{wch:22},{wch:12},{wch:22},{wch:30},{wch:80}];
+  XLSX.utils.book_append_sheet(wb,ws2,"All Reviews");
+  const allEmp=applyMerges(globalEmployees,merges);
+  const sumRows=[["Employee","Total Mentions","Last Mentioned"]];
+  Object.values(allEmp).sort((a,b)=>b.count-a.count).forEach(e=>sumRows.push([e.display_name,e.count,e.last_mentioned||""]));
+  const ws3=XLSX.utils.aoa_to_sheet(sumRows); ws3["!cols"]=[{wch:20},{wch:16},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws3,"Employee Summary");
+  const placeId=Object.keys(globalData.locations||{})[0];
+  const hist=((globalData.history||{})[placeId])||[];
+  const hRows=[["Date","Rating","Total Reviews","New Reviews"]];
+  hist.forEach((h,i)=>{const prev=hist[i-1]; hRows.push([h.date,h.rating,h.review_count,prev?.review_count!=null?h.review_count-prev.review_count:""]);});
+  const ws4=XLSX.utils.aoa_to_sheet(hRows); ws4["!cols"]=[{wch:12},{wch:10},{wch:16},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws4,"Rating History");
+  XLSX.writeFile(wb,"Avis_Dashboard_"+new Date().toISOString().slice(0,10)+".xlsx");
 }
 
 function openMergeModal(){
-  const merges=loadMerges();
-  const mergedEmp=applyMerges(globalEmployees,merges);
-  const chips=document.getElementById("modal-name-chips");
-  chips.innerHTML="";
+  const merges=loadMerges(), mergedEmp=applyMerges(globalEmployees,merges);
+  const chips=document.getElementById("modal-name-chips"); chips.innerHTML="";
   Object.entries(mergedEmp).forEach(([key,emp])=>{
-    const chip=document.createElement("div");
-    chip.className="name-chip";chip.textContent=emp.display_name+" ("+emp.count+")";
-    chip.dataset.key=key;chip.onclick=()=>chip.classList.toggle("selected");
-    chips.appendChild(chip);
+    const chip=document.createElement("div"); chip.className="name-chip";
+    chip.textContent=emp.display_name+" ("+emp.count+")"; chip.dataset.key=key;
+    chip.onclick=()=>chip.classList.toggle("selected"); chips.appendChild(chip);
   });
   document.getElementById("merge-canonical").value="";
   document.getElementById("merge-modal").classList.add("open");
@@ -713,15 +626,16 @@ function saveMerge(){
   const selected=[...document.querySelectorAll(".name-chip.selected")];
   const canonical=document.getElementById("merge-canonical").value.trim();
   if(selected.length<2||!canonical){alert("Select at least 2 names and enter a display name.");return;}
-  const merges=loadMerges();
-  const canonicalKey=canonical.toLowerCase().replace(/\s+/g,"_");
+  const merges=loadMerges(), canonicalKey=canonical.toLowerCase().replace(/\s+/g,"_");
   selected.forEach(chip=>{merges[chip.dataset.key]=canonicalKey;});
   merges["__display__"+canonicalKey]=canonical;
-  saveMerges(merges);closeMergeModal();load();
+  saveMerges(merges); closeMergeModal(); load();
 }
 
+setGreeting();
 load();
 setInterval(load,5*60*1000);
+setInterval(setGreeting,60*1000);
 </script>
 </body>
 </html>

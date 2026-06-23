@@ -20,45 +20,17 @@ def get_lv_time():
     return datetime.now(timezone.utc) + LAS_VEGAS_OFFSET
 
 def fetch_place(place_id):
-    """Fetch place using Places API v1 with reviewsSort in the URL path param."""
-    base_url = "https://places.googleapis.com/v1/places/" + place_id
-    field_mask = "id,displayName,rating,userRatingCount,formattedAddress,reviews"
-
-    all_reviews = []
-    seen_keys = set()
-
-    for sort in ["newest", "relevance"]:
-        url = base_url + "?languageCode=en&reviewsSort=" + sort
-        headers = {
-            "X-Goog-Api-Key": API_KEY,
-            "X-Goog-FieldMask": field_mask,
-        }
-        try:
-            response = requests.get(url, headers=headers, timeout=15)
-            print("Sort=" + sort + " status=" + str(response.status_code))
-            if not response.ok:
-                print("  Error: " + response.text[:200])
-                continue
-            result = response.json()
-            reviews = result.get("reviews", [])
-            print("  Got " + str(len(reviews)) + " reviews")
-            for r in reviews:
-                author = r.get("authorAttribution", {}).get("displayName", "")
-                t = r.get("publishTime", "")
-                key = author + "_" + t
-                if key not in seen_keys:
-                    seen_keys.add(key)
-                    all_reviews.append(r)
-        except Exception as e:
-            print("  Exception for sort=" + sort + ": " + str(e))
-
-    # Use the result from the first successful call for metadata
-    url = base_url + "?languageCode=en"
-    headers = {"X-Goog-Api-Key": API_KEY, "X-Goog-FieldMask": field_mask}
-    meta = requests.get(url, headers=headers, timeout=15).json()
-    meta["reviews"] = all_reviews
-    print("Total unique reviews: " + str(len(all_reviews)))
-    return meta
+    """Fetch place details. Google only returns ~5 reviews, no sort control via API."""
+    url = "https://places.googleapis.com/v1/places/" + place_id
+    headers = {
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,formattedAddress,reviews",
+    }
+    response = requests.get(url, headers=headers, timeout=15)
+    response.raise_for_status()
+    data = response.json()
+    print("Reviews fetched from API: " + str(len(data.get("reviews", []))))
+    return data
 
 def extract_employee_names(review_text):
     if not ANTHROPIC_KEY:
@@ -155,7 +127,7 @@ def main():
 
         print("Rating: " + str(rating) + " (" + str(review_count) + " reviews)")
 
-        # Daily baseline (6am start)
+        # Daily baseline (set once at 6am)
         baseline_key = place_id + "_" + today_key
         if baseline_key not in data["daily_baselines"] and lv_hour >= 6:
             data["daily_baselines"][baseline_key] = review_count
@@ -164,11 +136,11 @@ def main():
         reviews_today = max(0, review_count - baseline)
         print("Reviews today: " + str(reviews_today))
 
-        # Morning baseline (6am-4pm)
+        # Morning baseline (6am)
         morning_key = place_id + "_morning_" + today_key
         if morning_key not in data["daily_baselines"] and lv_hour >= 6:
             data["daily_baselines"][morning_key] = review_count
-        # Night baseline (4pm-midnight)
+        # Night baseline (4pm)
         night_key = place_id + "_night_" + today_key
         if night_key not in data["daily_baselines"] and lv_hour >= 16:
             data["daily_baselines"][night_key] = review_count
@@ -205,7 +177,11 @@ def main():
             data["history"][place_id] = []
         existing_dates = [h["date"] for h in data["history"][place_id]]
         if today_date not in existing_dates:
-            data["history"][place_id].append({"date": today_date, "rating": rating, "review_count": review_count})
+            data["history"][place_id].append({
+                "date": today_date,
+                "rating": rating,
+                "review_count": review_count,
+            })
         else:
             for h in data["history"][place_id]:
                 if h["date"] == today_date:
@@ -238,7 +214,7 @@ def main():
                 names = stored_by_id.get(review_id, {}).get("employee_names", [])
                 print("Already counted: " + author)
             else:
-                print("New review: " + author + " (" + publish_time[:10] + ") " + str(star_rating) + "★")
+                print("New review: " + author + " (" + publish_time[:10] + ") " + str(star_rating) + "star")
                 names = extract_employee_names(text)
                 if names:
                     print("  Employees: " + str(names))
@@ -264,10 +240,10 @@ def main():
                 "employee_names": names if names else [],
             })
 
-        # Sort newest first
+        # Sort newest first by publish_time
         fresh_reviews.sort(key=lambda r: r.get("publish_time", ""), reverse=True)
 
-        # Put fresh reviews first, keep older ones below
+        # Fresh reviews on top, keep older ones below
         fresh_ids = {r["id"] for r in fresh_reviews}
         older = [r for r in data["reviews"][place_id] if r["id"] not in fresh_ids]
         data["reviews"][place_id] = fresh_reviews + older

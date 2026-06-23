@@ -20,7 +20,6 @@ def get_lv_time():
     return datetime.now(timezone.utc) + LAS_VEGAS_OFFSET
 
 def fetch_place(place_id):
-    """Fetch place details. Google only returns ~5 reviews, no sort control via API."""
     url = "https://places.googleapis.com/v1/places/" + place_id
     headers = {
         "X-Goog-Api-Key": API_KEY,
@@ -29,7 +28,7 @@ def fetch_place(place_id):
     response = requests.get(url, headers=headers, timeout=15)
     response.raise_for_status()
     data = response.json()
-    print("Reviews fetched from API: " + str(len(data.get("reviews", []))))
+    print("Reviews fetched: " + str(len(data.get("reviews", []))))
     return data
 
 def extract_employee_names(review_text):
@@ -80,7 +79,9 @@ def load_existing_data():
         "reviews": {},
         "daily_baselines": {},
         "employee_mentions": {},
-        "counted_review_ids": {}
+        "counted_review_ids": {},
+        "daily_stars": {},
+        "weekly_stars": {}
     }
 
 def save_data(data):
@@ -88,12 +89,87 @@ def save_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
+def get_week_key(lv_now):
+    return lv_now.strftime("%Y-W%W")
+
 def get_work_day_key(lv_now):
+    # Work day runs 6am - midnight
     if lv_now.hour < 6:
         day = (lv_now - timedelta(days=1)).strftime("%Y-%m-%d")
     else:
         day = lv_now.strftime("%Y-%m-%d")
     return day
+
+def award_daily_star(data, place_id, today_key, lv_now, lv_hour):
+    """At midnight (hour 0-1), award a star to yesterday's #1 employee."""
+    # Only run in the first 30 min after midnight
+    if lv_hour != 0:
+        return
+
+    yesterday_key = (lv_now - timedelta(days=1)).strftime("%Y-%m-%d")
+    star_award_key = place_id + "_star_awarded_" + yesterday_key
+
+    # Only award once per day
+    if star_award_key in data.get("daily_stars", {}):
+        print("Star already awarded for " + yesterday_key)
+        return
+
+    employees = data.get("employee_mentions", {}).get(place_id, {})
+    if not employees:
+        return
+
+    # Find top employee by count
+    top = max(employees.items(), key=lambda x: x[1].get("count", 0), default=None)
+    if not top:
+        return
+
+    top_key, top_emp = top
+    week_key = get_week_key(lv_now - timedelta(days=1))
+
+    if "weekly_stars" not in data:
+        data["weekly_stars"] = {}
+    if place_id not in data["weekly_stars"]:
+        data["weekly_stars"][place_id] = {}
+    if week_key not in data["weekly_stars"][place_id]:
+        data["weekly_stars"][place_id][week_key] = {}
+
+    # Max 3 stars per employee, max 7 stars per week total
+    week_data = data["weekly_stars"][place_id][week_key]
+    total_stars_this_week = sum(week_data.values())
+
+    if total_stars_this_week >= 7:
+        print("Max 7 stars already awarded this week")
+        data["daily_stars"][star_award_key] = "max_reached"
+        return
+
+    current_stars = week_data.get(top_key, 0)
+    if current_stars >= 3:
+        print(top_emp["display_name"] + " already has max 3 stars this week")
+        data["daily_stars"][star_award_key] = "max_for_employee"
+        return
+
+    week_data[top_key] = current_stars + 1
+    data["daily_stars"][star_award_key] = top_key
+    print("⭐ Star awarded to " + top_emp["display_name"] + " for " + yesterday_key)
+
+def reset_daily_counts(data, place_id, lv_now, lv_hour):
+    """At midnight reset morning/night counts and employee mention counts."""
+    if lv_hour != 0:
+        return
+
+    yesterday_key = (lv_now - timedelta(days=1)).strftime("%Y-%m-%d")
+    reset_key = place_id + "_reset_" + yesterday_key
+
+    if reset_key in data.get("daily_stars", {}):
+        print("Already reset for " + yesterday_key)
+        return
+
+    print("Midnight reset — clearing employee mention counts for new day")
+    if place_id in data.get("employee_mentions", {}):
+        for emp in data["employee_mentions"][place_id].values():
+            emp["count"] = 0
+
+    data["daily_stars"][reset_key] = "reset_done"
 
 def main():
     if not API_KEY:
@@ -107,7 +183,7 @@ def main():
 
     data = load_existing_data()
 
-    for k in ["reviews", "daily_baselines", "employee_mentions", "counted_review_ids"]:
+    for k in ["reviews", "daily_baselines", "employee_mentions", "counted_review_ids", "daily_stars", "weekly_stars"]:
         if k not in data:
             data[k] = {}
     for old_key in ["seen_review_ids", "processed_review_ids"]:
@@ -119,6 +195,10 @@ def main():
         place_id = location["place_id"]
         print("Fetching: " + name)
 
+        # Award star and reset at midnight BEFORE fetching new data
+        award_daily_star(data, place_id, today_key, lv_now, lv_hour)
+        reset_daily_counts(data, place_id, lv_now, lv_hour)
+
         place = fetch_place(place_id)
         rating = place.get("rating")
         review_count = place.get("userRatingCount")
@@ -127,38 +207,39 @@ def main():
 
         print("Rating: " + str(rating) + " (" + str(review_count) + " reviews)")
 
-        # Daily baseline (set once at 6am)
+        # Daily baseline — set once at 6am
         baseline_key = place_id + "_" + today_key
         if baseline_key not in data["daily_baselines"] and lv_hour >= 6:
             data["daily_baselines"][baseline_key] = review_count
             print("Set daily baseline: " + str(review_count))
         baseline = data["daily_baselines"].get(baseline_key, review_count)
         reviews_today = max(0, review_count - baseline)
-        print("Reviews today: " + str(reviews_today))
 
-        # Morning baseline (6am)
+        # Morning baseline set at 6am, never changes during the day
         morning_key = place_id + "_morning_" + today_key
         if morning_key not in data["daily_baselines"] and lv_hour >= 6:
             data["daily_baselines"][morning_key] = review_count
-        # Night baseline (4pm)
+            print("Set morning baseline: " + str(review_count))
+
+        # Night baseline set at 4pm
         night_key = place_id + "_night_" + today_key
         if night_key not in data["daily_baselines"] and lv_hour >= 16:
             data["daily_baselines"][night_key] = review_count
+            print("Set night baseline: " + str(review_count))
 
         morning_baseline = data["daily_baselines"].get(morning_key, review_count)
-        night_baseline = data["daily_baselines"].get(night_key, review_count)
+        night_baseline = data["daily_baselines"].get(night_key, None)
 
-        if lv_hour >= 6 and lv_hour < 16:
-            reviews_morning = max(0, review_count - morning_baseline)
-            reviews_night = 0
-        elif lv_hour >= 16:
+        # Morning count: reviews since 6am baseline up to now (or up to night baseline if set)
+        if night_baseline is not None:
             reviews_morning = max(0, night_baseline - morning_baseline)
             reviews_night = max(0, review_count - night_baseline)
         else:
-            reviews_morning = 0
+            # Before 4pm — morning is accumulating, night not started
+            reviews_morning = max(0, review_count - morning_baseline)
             reviews_night = 0
 
-        print("Morning: " + str(reviews_morning) + " | Night: " + str(reviews_night))
+        print("Morning: " + str(reviews_morning) + " | Night: " + str(reviews_night) + " | Today: " + str(reviews_today))
 
         data["locations"][place_id] = {
             "name": name,
@@ -177,11 +258,7 @@ def main():
             data["history"][place_id] = []
         existing_dates = [h["date"] for h in data["history"][place_id]]
         if today_date not in existing_dates:
-            data["history"][place_id].append({
-                "date": today_date,
-                "rating": rating,
-                "review_count": review_count,
-            })
+            data["history"][place_id].append({"date": today_date, "rating": rating, "review_count": review_count})
         else:
             for h in data["history"][place_id]:
                 if h["date"] == today_date:
@@ -214,7 +291,7 @@ def main():
                 names = stored_by_id.get(review_id, {}).get("employee_names", [])
                 print("Already counted: " + author)
             else:
-                print("New review: " + author + " (" + publish_time[:10] + ") " + str(star_rating) + "star")
+                print("New review: " + author + " " + str(star_rating) + "★")
                 names = extract_employee_names(text)
                 if names:
                     print("  Employees: " + str(names))
@@ -240,10 +317,7 @@ def main():
                 "employee_names": names if names else [],
             })
 
-        # Sort newest first by publish_time
         fresh_reviews.sort(key=lambda r: r.get("publish_time", ""), reverse=True)
-
-        # Fresh reviews on top, keep older ones below
         fresh_ids = {r["id"] for r in fresh_reviews}
         older = [r for r in data["reviews"][place_id] if r["id"] not in fresh_ids]
         data["reviews"][place_id] = fresh_reviews + older

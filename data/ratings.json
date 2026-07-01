@@ -5,11 +5,11 @@
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 3.9,
       "review_count": 9670,
-      "reviews_today": 59,
-      "reviews_morning": 47,
-      "reviews_night": 12,
-      "last_updated": "2026-07-01 05:45",
-      "today_key": "2026-06-30"
+      "reviews_today": 0,
+      "reviews_morning": 0,
+      "reviews_night": 0,
+      "last_updated": "2026-07-01 06:00",
+      "today_key": "2026-07-01"
     }
   },
   "history": {
@@ -167,7 +167,9 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-06-29": 9627,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-06-30": 9611,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-06-30": 9611,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-06-30": 9658
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-06-30": 9658,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-07-01": 9670,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-07-01": 9670
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
@@ -205,11 +207,11 @@
   },
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
-      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-      "Melanie Lee_2026-05-22T22:38:10.960293936Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z"
+      "Melanie Lee_2026-05-22T22:38:10.960293936Z",
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z"
     ]
   },
   "daily_stars": {

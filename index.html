@@ -179,7 +179,6 @@ Daily goal:
 </div>
 </div>
 
-<div class="mid-row">
 <div class="card">
 <div class="shoutout-header">
 <div class="card-label" style="margin-bottom:0">Employee Shoutouts — Today</div>
@@ -189,16 +188,6 @@ Daily goal:
 <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div>
 </div>
 <div class="merge-note">To merge a nickname/misspelling permanently, edit <code>data/merges.json</code> in the repo.</div>
-</div>
-
-<div class="card">
-<div class="reviews-header">
-<div class="card-label" style="margin-bottom:0">Recent Ratings</div>
-</div>
-<div id="reviews-wrap">
-<div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div>
-</div>
-</div>
 </div>
 
 <div class="card settings-strip">
@@ -436,32 +425,7 @@ console.error("Shoutout render error:",err);
 document.getElementById("shoutout-wrap").innerHTML='<div class="empty"><strong>Shoutouts unavailable</strong>Could not render this section.</div>';
 }
 
-// Reviews
-try{
-const reviewsWrap=document.getElementById("reviews-wrap");
-if(reviews.length){
-reviewsWrap.innerHTML="";
-const list=document.createElement("div"); list.className="reviews-list";
-reviews.slice(0,15).forEach(r=>{
-const starsStr="★".repeat(r.rating)+"☆".repeat(Math.max(0,5-r.rating));
-const snippet=r.text&&r.text.length>140?r.text.slice(0,140)+"…":(r.text||"No text.");
-const empHtml=r.employee_names?.length?'<div class="review-emp">👤 '+r.employee_names.join(", ")+'</div>':"";
-const item=document.createElement("div"); item.className="review-item";
-item.innerHTML=
-'<div class="review-header"><span class="review-author">'+(r.author||"Anonymous")+'</span>'+
-'<span class="review-stars">'+starsStr+'</span></div>'+
-'<div class="review-text">'+snippet+'</div>'+empHtml+
-'<div class="review-time">'+formatLVTime(r.publish_time)+'</div>';
-list.appendChild(item);
-});
-reviewsWrap.appendChild(list);
-} else {
-reviewsWrap.innerHTML='<div class="empty"><strong>No ratings yet</strong>Reviews will appear here after the scraper runs.</div>';
-}
-}catch(err){
-console.error("Reviews render error:",err);
-document.getElementById("reviews-wrap").innerHTML='<div class="empty"><strong>Reviews unavailable</strong>Could not render this section.</div>';
-}
+// Recent Ratings panel removed — `reviews` data is still used above for fire-streak detection.
 }
 
 function formatLVTime(iso){

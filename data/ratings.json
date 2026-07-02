@@ -5,11 +5,11 @@
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 3.9,
       "review_count": 9707,
-      "reviews_today": 37,
-      "reviews_morning": 24,
-      "reviews_night": 13,
-      "last_updated": "2026-07-02 05:45",
-      "today_key": "2026-07-01"
+      "reviews_today": 0,
+      "reviews_morning": 0,
+      "reviews_night": 0,
+      "last_updated": "2026-07-02 06:00",
+      "today_key": "2026-07-02"
     }
   },
   "history": {
@@ -175,49 +175,51 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-06-30": 9658,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-07-01": 9670,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-07-01": 9670,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-07-01": 9694
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_night_2026-07-01": 9694,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-07-02": 9707,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_morning_2026-07-02": 9707
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
       "shirley": {
         "display_name": "Shirley",
-        "count": 2,
+        "count": 0,
         "last_mentioned": "2026-07-01"
       },
       "portia": {
         "display_name": "Portia",
-        "count": 1,
+        "count": 0,
         "last_mentioned": "2026-07-01"
       },
       "john": {
         "display_name": "John",
-        "count": 1,
+        "count": 0,
         "last_mentioned": "2026-07-01"
       },
       "miles": {
         "display_name": "Miles",
-        "count": 1,
+        "count": 0,
         "last_mentioned": "2026-07-01"
       },
       "cece": {
         "display_name": "Cece",
-        "count": 1,
+        "count": 0,
         "last_mentioned": "2026-07-01"
       },
       "kendrick": {
         "display_name": "Kendrick",
-        "count": 1,
+        "count": 0,
         "last_mentioned": "2026-07-01"
       }
     }
   },
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
-      "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z",
       "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
+      "C. Lasser_2026-03-06T02:31:59.216060550Z",
       "Melanie Lee_2026-05-22T22:38:10.960293936Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z"
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z"
     ]
   },
   "daily_stars": {
@@ -238,7 +240,8 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_star_2026-06-29": "shirley",
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_reset_2026-06-29": "done",
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_star_2026-06-30": "shirley",
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_reset_2026-06-30": "done"
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_reset_2026-06-30": "done",
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_star_2026-07-01": "shirley"
   },
   "weekly_stars": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
@@ -246,12 +249,16 @@
         "shirley": 3
       },
       "2026-W26": {
-        "shirley": 2
+        "shirley": 3
       }
     }
   },
   "captured_counts": {
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {}
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {
+      "2026-07-01": 0
+    }
   },
-  "cutover_done": {}
+  "cutover_done": {
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-01": true
+  }
 }

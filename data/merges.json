@@ -1,0 +1,7 @@
+{
+  "_comment": "Map misspellings/nicknames to a canonical key, then set the display name with __display__<key>. Edit this file directly on GitHub to add merges — used by both the scraper (Excel log) and the dashboard.",
+  "shirl": "shirley_g",
+  "shirley": "shirley_g",
+  "shirlee": "shirley_g",
+  "__display__shirley_g": "Shirley G."
+}

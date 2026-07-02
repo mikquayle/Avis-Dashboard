@@ -8,7 +8,7 @@
       "reviews_today": 49,
       "reviews_morning": 24,
       "reviews_night": 25,
-      "last_updated": "2026-07-01 23:45",
+      "last_updated": "2026-07-02 00:00",
       "today_key": "2026-07-01"
     }
   },
@@ -68,6 +68,11 @@
         "date": "2026-07-01",
         "rating": 3.9,
         "review_count": 9719
+      },
+      {
+        "date": "2026-07-02",
+        "rating": 3.9,
+        "review_count": 9719
       }
     ]
   },
@@ -79,7 +84,7 @@
         "rating": 5,
         "text": "Outstanding Customer Service from Kendrick at Avis Las Vegas Airport\n\nI recently rented a vehicle from Avis at the Las Vegas Airport, and I wanted to recognize Kendrick for his exceptional customer service. From the moment I arrived, he was professional, friendly, and extremely helpful.\n\nKendrick made the rental process quick and easy, answered all of my questions, and ensured I had everything I needed before leaving. His positive attitude and attention to detail made the experience stress-free and enjoyable.\n\nIn today's world, it is not always easy to find customer service at this level, but Kendrick truly went above and beyond. He represents Avis very well and deserves recognition for his excellent work.\n\nThank you, Kendrick, for making my rental experience such a positive one. I highly recommend Avis at Las Vegas Airport because of employees like you.",
         "publish_time": "2026-06-22T14:25:33.444554137Z",
-        "date": "2026-07-01",
+        "date": "2026-07-02",
         "employee_names": [
           "Kendrick"
         ]
@@ -90,7 +95,7 @@
         "rating": 5,
         "text": "Thanks so much Shirley Guzman you\u2019re the best !!!   I am delighted to meet you and will definitely come back.  Thanks for the warm welcome and the touch of kindness. Thank you Avis for the excellent customer service.  Everyone check out Avis here at Las Vegas Nevada airport!!!  Thank you Portia John And Miles for the excellent customer service you guys are amazing \ud83d\ude1d",
         "publish_time": "2026-06-12T05:26:37.248168493Z",
-        "date": "2026-07-01",
+        "date": "2026-07-02",
         "employee_names": [
           "Shirley",
           "Portia",
@@ -104,7 +109,7 @@
         "rating": 5,
         "text": "A heartfelt thank you to Shirley at Avis for delivering one of the best customer service experiences I\u2019ve had. She was incredibly professional, patient, and genuinely committed to helping us. Despite a busy environment, she handled everything with a smile, ensured all our questions were answered, and made the entire rental process seamless.\n\nWhat stood out most was her willingness to go the extra mile and her warm, welcoming attitude. Employees like Shirley are the reason customers keep coming back. Avis is fortunate to have such a dedicated team member representing their brand.\n\nThank you, Shirley, for making our journey start on such a positive note!",
         "publish_time": "2026-06-02T22:03:42.452261195Z",
-        "date": "2026-07-01",
+        "date": "2026-07-02",
         "employee_names": [
           "Shirley"
         ]
@@ -115,7 +120,7 @@
         "rating": 5,
         "text": "She caught that my phone was forgotten in the van! Thank goodness. Thank you Cece!\n\nUpdate: Cece was awesome, our experience with Avis, however, was a different story... Our van for EDC weekend died Friday morning. They sent someone to try to jump it and nothing. They didn't send a replacement van and the next day we had to go to Avis at the airport (Uber $) to get another van. It was rough. My friend ordered the van so I am not sure how it was rectified billing-wise, but it was our first EDC and to not have a safe, dependable ride there or back on day one was devastating. We missed opening ceremony and got a lift from strangers for $$$. I couldn't understand why getting a van to us was not possible and that we had to travel back to airport to get a replacement. This is a huge weekend and there needs to be better vehicle maintenance and resolution proceedings to prepare.",
         "publish_time": "2026-05-22T22:38:10.960293936Z",
-        "date": "2026-07-01",
+        "date": "2026-07-02",
         "employee_names": [
           "Cece"
         ]
@@ -126,7 +131,7 @@
         "rating": 1,
         "text": "This Avis location is horrible. They never have my name on the board upon arrival, always have to go to the service counter, eating into my reservation time.\nThey always have excuses as to why the vehicle I reserved online is not available in person.\nThey attempt to up charge you stating \u201coh we don\u2019t have your vehicle since stock is limited, but if you pay more we can get you a better vehicle.\u201d\nThe vehicle\u2019s themselves have been filthy with a tremendous amount of dings and scratches on the exterior and the interiors are grimy. The windows have to be examined closely for chips and cracks, or they will blame you for the damage.\nEnsure your vehicle has a full tank before you leave, or have it properly documented or taken care of before you leave.\nYou always have to inspect and document your vehicle here, tire treads, windshield for chips, tank for gas, dings and scratches (especially on the roof) for your records.\nOf all the Avis locations, this one sucks just a bit more than all the rest.",
         "publish_time": "2026-03-06T02:31:59.216060550Z",
-        "date": "2026-07-01",
+        "date": "2026-07-02",
         "employee_names": []
       },
       {
@@ -209,10 +214,10 @@
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
       "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z",
       "Melanie Lee_2026-05-22T22:38:10.960293936Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z"
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z"
     ]
   },
   "daily_stars": {

@@ -8,7 +8,7 @@
       "reviews_today": 49,
       "reviews_morning": 24,
       "reviews_night": 25,
-      "last_updated": "2026-07-02 01:15",
+      "last_updated": "2026-07-02 01:30",
       "today_key": "2026-07-01"
     }
   },
@@ -214,10 +214,10 @@
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
       "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
-      "Melanie Lee_2026-05-22T22:38:10.960293936Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z"
+      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Melanie Lee_2026-05-22T22:38:10.960293936Z"
     ]
   },
   "daily_stars": {

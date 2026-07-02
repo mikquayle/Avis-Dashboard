@@ -116,6 +116,7 @@ main { flex:1; padding: 24px 32px; max-width: 1300px; width: 100%; margin: 0 aut
 .review-author { font-size:13px; font-weight:600; flex:1; }
 .review-stars { color:var(--gold); font-size:12px; }
 .review-text { font-size:12px; color:var(--text); line-height:1.5; }
+.review-time { margin-top:5px; font-size:10px; color:var(--muted); }
 .review-emp { margin-top:4px; font-size:11px; color:var(--accent); }
 
 /* Settings strip (bottom) */
@@ -175,19 +176,6 @@ Daily goal:
 <input type="number" id="goal-input" min="1" />
 </div>
 </div>
-</div>
-</div>
-
-<div class="stats-strip">
-<div class="card stat-card">
-<div class="card-label">5★ Reviews Needed for 4.0</div>
-<div class="big red" id="five-star-needed">—</div>
-<div class="sub" id="five-star-sub">calculating…</div>
-</div>
-<div class="card stat-card">
-<div class="card-label">True New Reviews Today (live)</div>
-<div class="big green" id="true-today">—</div>
-<div class="sub" id="true-today-sub">vs. this morning's baseline</div>
 </div>
 </div>
 
@@ -328,21 +316,21 @@ document.getElementById("review-count-small").textContent=totalReviews.toLocaleS
 
 const dw=document.getElementById("delta-wrap"),dp=document.getElementById("delta-pill");
 if(history.length>=2){
-const prev7=history[Math.max(0,history.length-7)];
-if(prev7?.rating!=null&&current!=null){
-const diff=+(current-prev7.rating).toFixed(2);
-if(diff>0){dw.style.display="block";dp.className="delta-pill up";dp.textContent="▲ +"+diff+" vs last week";}
-else if(diff<0){dw.style.display="block";dp.className="delta-pill down";dp.textContent="▼ "+diff+" vs last week";}
-else dw.style.display="none";
+const prev=history[0];
+if(prev?.rating!=null&&current!=null&&prev.rating>0){
+const diff=+(current-prev.rating).toFixed(2);
+const pct=Math.abs(((diff/prev.rating)*100)).toFixed(1);
+dw.style.display="block";
+if(diff>0){dp.className="delta-pill up";dp.textContent="▲ +"+pct+"% since "+prev.date;}
+else if(diff<0){dp.className="delta-pill down";dp.textContent="▼ "+pct+"% since "+prev.date;}
+else {dp.className="delta-pill up";dp.textContent="— no change since "+prev.date;}
 }
+} else {
+dw.style.display="none";
 }
 
-const fiveNeeded=calcFiveStarNeeded(current,totalReviews);
-const fiveEl=document.getElementById("five-star-needed"),fiveSub=document.getElementById("five-star-sub");
-if(fiveNeeded===0){fiveEl.textContent="✅ 4.0+";fiveEl.className="big green";fiveSub.textContent="Already at or above 4.0!";}
-else{fiveEl.textContent=fiveNeeded.toLocaleString();fiveEl.className="big red";fiveSub.innerHTML='to move from <span>'+current.toFixed(1)+'</span> → <span>4.0</span> with '+totalReviews.toLocaleString()+' total reviews';}
 
-document.getElementById("true-today").textContent = (loc.reviews_today ?? 0);
+const fiveNeeded=calcFiveStarNeeded(current,totalReviews); // used only for internal reference now
 
 // Daily goal (editable, persisted per-browser)
 const dailyGoal=getDailyGoal();
@@ -462,7 +450,8 @@ const item=document.createElement("div"); item.className="review-item";
 item.innerHTML=
 '<div class="review-header"><span class="review-author">'+(r.author||"Anonymous")+'</span>'+
 '<span class="review-stars">'+starsStr+'</span></div>'+
-'<div class="review-text">'+snippet+'</div>'+empHtml;
+'<div class="review-text">'+snippet+'</div>'+empHtml+
+'<div class="review-time">'+formatLVTime(r.publish_time)+'</div>';
 list.appendChild(item);
 });
 reviewsWrap.appendChild(list);
@@ -475,6 +464,13 @@ document.getElementById("reviews-wrap").innerHTML='<div class="empty"><strong>Re
 }
 }
 
+function formatLVTime(iso){
+if(!iso) return "";
+try{
+const d=new Date(iso);
+return d.toLocaleString("en-US",{timeZone:"America/Los_Angeles",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" LV";
+}catch(e){ return ""; }
+}
 function renderStars(rating,id,size){
 const c=document.getElementById(id); c.innerHTML="";
 for(let i=1;i<=5;i++){

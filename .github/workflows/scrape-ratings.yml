@@ -2,16 +2,14 @@ name: Scrape Google Rating
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -22,7 +20,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install -r requirements.txt
 
       - name: Run scraper
         env:
@@ -30,10 +28,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scraper.py
 
-      - name: Commit updated ratings
+      - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ratings.json
+          git add data/ratings.json data/logs/
           git diff --cached --quiet || git commit -m "Update ratings $(date -u '+%Y-%m-%d %H:%M')"
           git push

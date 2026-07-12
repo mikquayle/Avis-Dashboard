@@ -212,7 +212,7 @@ const AVATAR_COLORS = [
 ];
 
 function loadLocalMerges(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
-function getLVHour(){ return (new Date().getUTCHours()-7+24)%24; }
+function getLVHour(){ return parseInt(new Date().toLocaleString("en-US",{hour:"2-digit",hour12:false,timeZone:"America/Los_Angeles"}),10)%24; }
 function setGreeting(){
 const h=getLVHour(), el=document.getElementById("greeting");
 if(h>=6&&h<12) el.textContent="Good Morning!! ☀️";

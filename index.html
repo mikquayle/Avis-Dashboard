@@ -370,7 +370,7 @@ podiumOrder.forEach((entry)=>{
 const[key,emp]=entry;
 const stars=starCounts[merges[key]||key]||starCounts[key]||0;
 const onFire=checkFire(key);
-const initial=emp.display_name.charAt(0).toUpperCase();
+const dn=emp.display_name||emp.name||key; const initial=(dn||"?").charAt(0).toUpperCase();
 const colorIdx=entries.findIndex(e=>e[0]===key)%AVATAR_COLORS.length;
 const color=AVATAR_COLORS[colorIdx];
 const posLabel=entry.pos===1?"1st":entry.pos===2?"2nd":"3rd";
@@ -399,7 +399,7 @@ rest.forEach(([key,emp],i)=>{
 const rank=i+4;
 const stars=starCounts[merges[key]||key]||starCounts[key]||0;
 const onFire=checkFire(key);
-const initial=emp.display_name.charAt(0).toUpperCase();
+const dn=emp.display_name||emp.name||key; const initial=(dn||"?").charAt(0).toUpperCase();
 const colorIdx=entries.findIndex(e=>e[0]===key)%AVATAR_COLORS.length;
 const color=AVATAR_COLORS[colorIdx];
 let starsHtml="";

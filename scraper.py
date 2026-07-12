@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from openpyxl import Workbook, load_workbook
 
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
@@ -17,12 +18,12 @@ LOCATIONS = [
 DATA_FILE = "data/ratings.json"
 MERGES_FILE = "data/merges.json"
 LOG_FILE = "data/logs/Avis_Dashboard_Log.xlsx"
-LAS_VEGAS_OFFSET = timedelta(hours=-7)
+LAS_VEGAS = ZoneInfo("America/Los_Angeles")
 
 # ---------- time helpers ----------
 
 def get_lv_time():
-    return datetime.now(timezone.utc) + LAS_VEGAS_OFFSET
+    return datetime.now(LAS_VEGAS)
 
 def get_work_day_key(lv_now):
     # Work day = 6:00 AM to 6:00 AM the next day
@@ -33,7 +34,7 @@ def get_work_day_key(lv_now):
 def get_work_day_key_from_iso(iso_str):
     try:
         dt = datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
-        lv = dt.astimezone(timezone.utc) + LAS_VEGAS_OFFSET
+        lv = dt.astimezone(LAS_VEGAS)
     except Exception:
         lv = get_lv_time()
     return get_work_day_key(lv)

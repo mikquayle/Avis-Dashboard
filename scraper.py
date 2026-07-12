@@ -3,7 +3,6 @@ import json
 import requests
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
-from openpyxl import Workbook, load_workbook
 
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY")

@@ -4,11 +4,11 @@
       "name": "Avis Car Rental - Harry Reid Airport",
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 4,
-      "review_count": 10557,
-      "reviews_today": 12,
-      "reviews_morning": 12,
+      "review_count": 10558,
+      "reviews_today": 13,
+      "reviews_morning": 13,
       "reviews_night": 0,
-      "last_updated": "2026-07-21 10:15",
+      "last_updated": "2026-07-21 10:30",
       "today_key": "2026-07-21"
     }
   },
@@ -167,7 +167,7 @@
       {
         "date": "2026-07-21",
         "rating": 4,
-        "review_count": 10557
+        "review_count": 10558
       }
     ]
   },
@@ -337,10 +337,10 @@
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
       "Vince R_2026-06-22T14:25:33.444554137Z",
-      "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
       "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-      "Melanie Lee_2026-05-22T22:38:10.960293936Z"
+      "Melanie Lee_2026-05-22T22:38:10.960293936Z",
+      "C. Lasser_2026-03-06T02:31:59.216060550Z",
+      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z"
     ]
   },
   "daily_stars": {

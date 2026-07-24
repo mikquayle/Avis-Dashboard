@@ -404,12 +404,14 @@ def main():
                 # Older reviews counted before this field existed fall back
                 # to an estimate from their original post time.
                 counted_work_day = prev.get("counted_work_day") or get_work_day_key_from_iso(publish_time)
+                counted_at = prev.get("counted_at")
                 review_date = prev.get("date", today_date)
                 print("Already counted: " + author)
             else:
                 print("NEW: " + author + " " + str(star_rating) + "★ (" + publish_time[:10] + ")")
                 names = extract_employee_names(text)
                 counted_work_day = today_key
+                counted_at = lv_now.isoformat()
                 review_date = today_date
 
                 data["captured_counts"][place_id][today_key] = \
@@ -423,7 +425,7 @@ def main():
                 "id": review_id, "author": author, "rating": star_rating,
                 "text": text, "publish_time": publish_time,
                 "date": review_date, "employee_names": names if names else [],
-                "counted_work_day": counted_work_day,
+                "counted_work_day": counted_work_day, "counted_at": counted_at,
             })
 
         fresh_reviews.sort(key=lambda r: r.get("publish_time", ""), reverse=True)
@@ -441,6 +443,7 @@ def main():
                 "publish_time": r["publish_time"],
                 "date": r["date"],
                 "employee_names": r.get("employee_names", []),
+                "counted_at": r.get("counted_at"),
             }
             for r in data["reviews"][place_id][:10]
         ]

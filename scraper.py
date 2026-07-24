@@ -1,5 +1,6 @@
 import os
 import json
+import math
 import requests
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
@@ -50,6 +51,80 @@ def get_week_key(dt):
 def week_key_from_work_day(work_day_str):
     dt = datetime.strptime(work_day_str, "%Y-%m-%d")
     return get_week_key(dt)
+
+# ---------- time-of-day review buckets ----------
+
+BOUNDARY_HOURS = [6, 10, 14, 16, 20]
+
+def bucket_counts_for_location(data, place_id, today_key, lv_hour, review_count):
+    """
+    Splits today's review count into 5 time-of-day windows (6-10, 10-14,
+    14-16, 16-20, 20-6) by snapshotting the running review total each time
+    the clock crosses one of the boundary hours. Each window's count is the
+    difference between its start and end snapshot (or "so far" if the
+    window hasn't closed yet).
+    """
+    baselines = data["daily_baselines"]
+    snap = {}
+    for bh in BOUNDARY_HOURS:
+        key = place_id + "_tb" + str(bh) + "_" + today_key
+        if key not in baselines and lv_hour >= bh:
+            baselines[key] = review_count
+        snap[bh] = baselines.get(key)
+
+    def span(start_h, end_h):
+        start_val = snap.get(start_h)
+        if start_val is None:
+            return 0
+        if end_h is not None and snap.get(end_h) is not None:
+            return max(0, snap[end_h] - start_val)
+        return max(0, review_count - start_val)
+
+    return {
+        "6-10": span(6, 10),
+        "10-14": span(10, 14),
+        "14-16": span(14, 16),
+        "16-20": span(16, 20),
+        "20-6": span(20, None),
+    }
+
+# ---------- next rating-tier progress ----------
+
+def rating_progress(data, place_id, rating, review_count):
+    """
+    Estimates how many 5-star reviews are needed to push the rounded rating
+    up to the next tenth (e.g. 4.0 -> 4.1), and tracks progress toward that
+    since the current tier was first reached. Progress resets automatically
+    the moment the rounded rating advances to a new tier.
+    """
+    if rating is None or review_count is None:
+        return None
+
+    tier = round(rating, 1)
+    next_goal = round(tier + 0.1, 1)
+
+    if next_goal >= 5.0:
+        needed_now = 0
+    else:
+        needed_now = max(0, math.ceil(review_count * (next_goal - rating) / (5 - next_goal)))
+
+    tracking = data.setdefault("rating_goal_tracking", {}).setdefault(place_id, {})
+    if tracking.get("tier") != tier:
+        tracking["tier"] = tier
+        tracking["next_goal"] = next_goal
+        tracking["baseline_needed"] = needed_now if needed_now > 0 else 1
+
+    baseline_needed = tracking.get("baseline_needed") or (needed_now if needed_now > 0 else 1)
+    progress_pct = 0
+    if baseline_needed > 0:
+        progress_pct = max(0, min(100, round((1 - (needed_now / baseline_needed)) * 100)))
+
+    return {
+        "current_tier": tier,
+        "next_goal": next_goal,
+        "five_star_reviews_needed": needed_now,
+        "progress_pct": progress_pct,
+    }
 
 def rebuild_mentions(data, place_id, merges, today_key):
     """
@@ -340,33 +415,22 @@ def main():
             data["daily_baselines"][baseline_key] = review_count
             print("Set daily baseline: " + str(review_count))
 
-        morning_key = place_id + "_morning_" + today_key
-        if morning_key not in data["daily_baselines"] and lv_hour >= 6:
-            data["daily_baselines"][morning_key] = review_count
-
-        night_key = place_id + "_night_" + today_key
-        if night_key not in data["daily_baselines"] and lv_hour >= 16:
-            data["daily_baselines"][night_key] = review_count
-            print("Set night baseline: " + str(review_count))
-
         baseline = data["daily_baselines"].get(baseline_key, review_count)
-        morning_baseline = data["daily_baselines"].get(morning_key, review_count)
-        night_baseline = data["daily_baselines"].get(night_key)
-
         reviews_today = max(0, review_count - baseline)
-        if night_baseline is not None:
-            reviews_morning = max(0, night_baseline - morning_baseline)
-            reviews_night = max(0, review_count - night_baseline)
-        else:
-            reviews_morning = max(0, review_count - morning_baseline)
-            reviews_night = 0
 
-        print("Morning: " + str(reviews_morning) + " Night: " + str(reviews_night) + " Today: " + str(reviews_today))
+        review_buckets = bucket_counts_for_location(data, place_id, today_key, lv_hour, review_count)
+        print("Today: " + str(reviews_today) + " | Buckets: " + json.dumps(review_buckets))
+
+        progress = rating_progress(data, place_id, rating, review_count)
+        if progress:
+            print("Next goal: " + str(progress["next_goal"]) +
+                  " (" + str(progress["five_star_reviews_needed"]) + " 5-star reviews needed, " +
+                  str(progress["progress_pct"]) + "% there)")
 
         data["locations"][place_id] = {
             "name": name, "address": address, "rating": rating,
             "review_count": review_count, "reviews_today": reviews_today,
-            "reviews_morning": reviews_morning, "reviews_night": reviews_night,
+            "review_buckets": review_buckets, "rating_progress": progress,
             "last_updated": now_str, "today_key": today_key,
         }
 

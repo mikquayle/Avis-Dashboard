@@ -16,9 +16,8 @@
 body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; flex-direction: column; }
 header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; padding: 18px 32px; border-bottom: 1px solid var(--border); }
 .header-left { display: flex; align-items: center; gap: 12px; }
-.logo { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; flex-shrink: 0; }
-.header-titles h1 { font-size: 15px; font-weight: 600; }
-.header-titles p { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.avis-logo { background: var(--accent); color: #fff; font-weight: 800; font-style: italic; font-size: 16px; letter-spacing: .01em; padding: 7px 16px; border-radius: 6px; text-transform: lowercase; flex-shrink: 0; }
+.header-titles p { font-size: 11px; color: var(--muted); }
 .header-greeting { text-align: center; font-size: 22px; font-weight: 800; background: linear-gradient(135deg,#fff 30%,var(--up)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 .export-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #1a6b3a; border: 1px solid #2a8a4e; padding: 5px 14px; border-radius: 99px; cursor: pointer; white-space: nowrap; text-decoration:none; }
@@ -41,21 +40,25 @@ main { flex:1; padding: 24px 32px; max-width: 1300px; width: 100%; margin: 0 aut
 .delta-pill { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:99px; margin-top:8px; }
 .delta-pill.up { background:rgba(62,207,142,.15); color:var(--up); }
 .delta-pill.down { background:rgba(248,113,113,.15); color:var(--down); }
+.goal-progress-wrap { width:100%; margin-top:16px; position:relative; z-index:1; }
+.goal-progress-label { font-size:11px; color:var(--muted); margin-bottom:6px; text-align:center; }
+.goal-progress-track { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; }
+.goal-progress-fill { height:100%; background:linear-gradient(90deg,#f5c518,#3ecf8e); border-radius:99px; transition:width .6s ease; }
 
 .daily-card { display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap; }
 .circle-wrap { position:relative; width:150px; height:150px; flex-shrink:0; }
 .circle-wrap svg { transform:rotate(-90deg); }
 .circle-bg { fill:none; stroke:var(--border); stroke-width:12; }
-.circle-fill { fill:none; stroke-width:12; stroke-linecap:round; transition:all 0.8s ease; }
-.circle-morning { stroke:#f5c518; }
-.circle-night { stroke:var(--accent); }
+.circle-fill { fill:none; stroke-width:12; stroke-linecap:butt; transition:all 0.8s ease; }
 .circle-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .circle-total { font-size:34px; font-weight:900; color:#fff; line-height:1; }
 .circle-sublabel { font-size:10px; color:var(--muted); margin-top:3px; }
-.daily-meta { display:flex; flex-direction:column; gap:10px; min-width:180px; }
-.legend-row { display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text); }
+.daily-meta { display:flex; flex-direction:column; gap:6px; min-width:190px; }
+.legend-row { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text); padding:2px 4px; border-radius:6px; }
+.legend-row.best { background:rgba(255,255,255,0.05); }
 .legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
 .legend-count { margin-left:auto; font-weight:700; }
+.legend-best-tag { font-size:9px; color:var(--up); font-weight:700; margin-left:4px; }
 .goal-editor { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); margin-top:6px; padding-top:10px; border-top:1px solid var(--border); }
 .goal-editor input { width:56px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:4px 8px; font-size:13px; font-weight:700; }
 .goal-editor input:focus { outline:none; border-color:var(--accent); }
@@ -133,9 +136,8 @@ footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); bo
 <body>
 <header>
 <div class="header-left">
-<div class="logo">A</div>
+<div class="avis-logo" aria-label="Avis">avis</div>
 <div class="header-titles">
-<h1>Avis Rating Dashboard</h1>
 <p>Harry Reid Airport · updated every 5 min</p>
 </div>
 </div>
@@ -154,14 +156,21 @@ footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); bo
 <div class="stars" id="stars"></div>
 <div class="review-count-small" id="review-count-small">— reviews</div>
 <div id="delta-wrap" style="display:none"><div class="delta-pill" id="delta-pill"></div></div>
+<div class="goal-progress-wrap" id="goal-progress-wrap" style="display:none">
+<div class="goal-progress-label" id="goal-progress-label"></div>
+<div class="goal-progress-track"><div class="goal-progress-fill" id="goal-progress-fill" style="width:0%"></div></div>
+</div>
 </div>
 
 <div class="card daily-card">
 <div class="circle-wrap">
 <svg viewBox="0 0 150 150" width="150" height="150">
 <circle class="circle-bg" cx="75" cy="75" r="63"/>
-<circle class="circle-fill circle-morning" cx="75" cy="75" r="63" id="circle-morning" stroke-dasharray="0 396" stroke-dashoffset="0"/>
-<circle class="circle-fill circle-night" cx="75" cy="75" r="63" id="circle-night" stroke-dasharray="0 396" stroke-dashoffset="0"/>
+<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-0" stroke-dasharray="0 396" stroke-dashoffset="0"/>
+<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-1" stroke-dasharray="0 396" stroke-dashoffset="0"/>
+<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-2" stroke-dasharray="0 396" stroke-dashoffset="0"/>
+<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-3" stroke-dasharray="0 396" stroke-dashoffset="0"/>
+<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-4" stroke-dasharray="0 396" stroke-dashoffset="0"/>
 </svg>
 <div class="circle-center">
 <div class="circle-total" id="circle-total">0</div>
@@ -169,8 +178,7 @@ footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); bo
 </div>
 </div>
 <div class="daily-meta">
-<div class="legend-row"><div class="legend-dot" style="background:#f5c518"></div>Morning crew<div class="legend-count" id="morning-count">—</div></div>
-<div class="legend-row"><div class="legend-dot" style="background:#c8102e"></div>Night crew<div class="legend-count" id="night-count">—</div></div>
+<div id="bucket-legend"></div>
 <div class="goal-editor">
 Daily goal:
 <input type="number" id="goal-input" min="1" />
@@ -212,12 +220,22 @@ Daily goal:
 <script>
 const STORAGE_KEY = "avis_merges";
 const GOAL_STORAGE_KEY = "avis_daily_goal";
-const GOAL_DATE = "2026-07-01";
 
 const AVATAR_COLORS = [
 {bg:"#FFF5CC",color:"#6B4500"},{bg:"#E6F1FB",color:"#0C447C"},{bg:"#E1F5EE",color:"#085041"},
 {bg:"#FBEAF0",color:"#72243E"},{bg:"#EEEDFE",color:"#3C3489"},{bg:"#FAECE7",color:"#712B13"},
 {bg:"#FAEEDA",color:"#633806"},{bg:"#EAF3DE",color:"#27500A"},{bg:"#FCEBEB",color:"#791F1F"},{bg:"#E1F5EE",color:"#04342C"},
+];
+
+// Time-of-day windows for the daily progress ring, in the same order the
+// backend reports them. Colors run warm (morning) to cool (overnight) so
+// the busiest window is easy to spot at a glance.
+const BUCKET_DEFS=[
+{key:"6-10",label:"6am–10am",color:"#f5c518"},
+{key:"10-14",label:"10am–2pm",color:"#3ecf8e"},
+{key:"14-16",label:"2pm–4pm",color:"#f59e0b"},
+{key:"16-20",label:"4pm–8pm",color:"#c8102e"},
+{key:"20-6",label:"8pm–6am",color:"#7c6cf5"},
 ];
 
 function loadLocalMerges(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
@@ -245,10 +263,6 @@ return String(str)
 .replace(/'/g,"&#39;");
 }
 
-function calcFiveStarNeeded(rating,total){
-if(!rating||!total||rating>=4.0) return 0;
-return Math.ceil((4.0*total-rating*total)/(5-4.0));
-}
 function getWeekLabel(){
 const d=new Date(),jan1=new Date(d.getFullYear(),0,1);
 return "Week "+Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
@@ -271,6 +285,28 @@ merged[canonical].count+=emp.count;
 if((emp.last_mentioned||"")>(merged[canonical].last_mentioned||"")) merged[canonical].last_mentioned=emp.last_mentioned;
 }
 return merged;
+}
+
+// Finds the history entry closest to exactly 7 days before the most recent
+// entry, so the "vs last week" comparison always tracks a rolling week
+// rather than a fixed date. Returns null if there isn't at least roughly a
+// week of history yet, so the dashboard adapts as more data accumulates.
+function findWeekAgoEntry(history){
+if(!history || history.length<2) return null;
+const sorted=[...history].sort((a,b)=>a.date<b.date?-1:1);
+const latest=sorted[sorted.length-1];
+const latestTime=new Date(latest.date+"T00:00:00").getTime();
+const targetTime=latestTime-7*86400000;
+let best=null,bestDiff=Infinity;
+sorted.forEach(h=>{
+if(h.date===latest.date) return;
+const t=new Date(h.date+"T00:00:00").getTime();
+const diff=Math.abs(t-targetTime);
+if(diff<bestDiff){bestDiff=diff;best=h;}
+});
+const twoDays=2*86400000;
+if(!best || bestDiff>twoDays) return null;
+return best;
 }
 
 let globalData=null,globalReviews=[],globalEmployees={},repoMerges={};
@@ -322,37 +358,71 @@ renderStars(current,"stars",15);
 document.getElementById("review-count-small").textContent=totalReviews.toLocaleString()+" total reviews";
 }
 
+// Rating change vs. a rolling week ago (not a fixed date), so this stays
+// accurate indefinitely without any manual updates.
 const dw=document.getElementById("delta-wrap"),dp=document.getElementById("delta-pill");
-if(history.length>=2){
-const prev=history[0];
-if(prev?.rating!=null&&current!=null&&prev.rating>0){
-const diff=+(current-prev.rating).toFixed(2);
-const pct=Math.abs(((diff/prev.rating)*100)).toFixed(1);
+const weekAgo=findWeekAgoEntry(history);
+if(weekAgo && weekAgo.rating!=null && current!=null && weekAgo.rating>0){
+const diff=+(current-weekAgo.rating).toFixed(2);
+const pct=Math.abs(((diff/weekAgo.rating)*100)).toFixed(1);
 dw.style.display="block";
-if(diff>0){dp.className="delta-pill up";dp.textContent="▲ +"+pct+"% since "+prev.date;}
-else if(diff<0){dp.className="delta-pill down";dp.textContent="▼ "+pct+"% since "+prev.date;}
-else {dp.className="delta-pill up";dp.textContent="— no change since "+prev.date;}
-}
+if(diff>0){dp.className="delta-pill up";dp.textContent="▲ +"+pct+"% vs last week";}
+else if(diff<0){dp.className="delta-pill down";dp.textContent="▼ "+pct+"% vs last week";}
+else {dp.className="delta-pill up";dp.textContent="— no change vs last week";}
 } else {
 dw.style.display="none";
 }
 
-
-const fiveNeeded=calcFiveStarNeeded(current,totalReviews); // used only for internal reference now
+// Progress toward the next rating tier (e.g. 4.0 -> 4.1), computed by the
+// scraper and reset automatically whenever the tier actually advances.
+const rp=loc.rating_progress;
+const gpWrap=document.getElementById("goal-progress-wrap");
+if(rp && rp.next_goal!=null){
+gpWrap.style.display="block";
+const label=rp.five_star_reviews_needed>0
+? rp.five_star_reviews_needed+" more 5★ reviews to reach "+rp.next_goal.toFixed(1)
+: "Reached "+rp.next_goal.toFixed(1)+"! Recalculating next goal…";
+document.getElementById("goal-progress-label").textContent=label;
+document.getElementById("goal-progress-fill").style.width=(rp.progress_pct||0)+"%";
+} else {
+gpWrap.style.display="none";
+}
 
 // Daily goal (editable, persisted per-browser)
 const dailyGoal=getDailyGoal();
 document.getElementById("goal-input").value=dailyGoal;
 document.getElementById("goal-display").textContent=dailyGoal;
 
-const morning=loc.reviews_morning||0,night=loc.reviews_night||0,total=morning+night,C=396;
-document.getElementById("circle-total").textContent=total;
-document.getElementById("morning-count").textContent=morning;
-document.getElementById("night-count").textContent=night;
-const mFrac=Math.min(1,morning/Math.max(dailyGoal,1)),nFrac=Math.min(1,night/Math.max(dailyGoal,1));
-const cm=document.getElementById("circle-morning"),cn=document.getElementById("circle-night");
-cm.setAttribute("stroke-dasharray",(mFrac*C)+" "+C); cm.setAttribute("stroke-dashoffset","0");
-cn.setAttribute("stroke-dasharray",(nFrac*C)+" "+C); cn.setAttribute("stroke-dashoffset",-(mFrac*C));
+// Time-of-day review ring: 5 stacked arcs, one per window, colored
+// differently so the busiest window of the day is obvious at a glance.
+const buckets=loc.review_buckets||{};
+const bucketVals=BUCKET_DEFS.map(d=>({...d,count:buckets[d.key]||0}));
+const totalBucketed=bucketVals.reduce((s,b)=>s+b.count,0);
+document.getElementById("circle-total").textContent=totalBucketed;
+const C=396;
+let offset=0;
+const maxCount=Math.max(0,...bucketVals.map(b=>b.count));
+bucketVals.forEach((b,i)=>{
+const el=document.getElementById("circle-seg-"+i);
+const frac=Math.min(1, b.count/Math.max(dailyGoal,1));
+el.setAttribute("stroke-dasharray",(frac*C)+" "+C);
+el.setAttribute("stroke-dashoffset", -offset);
+el.style.stroke=b.color;
+offset+=frac*C;
+});
+const legendEl=document.getElementById("bucket-legend");
+legendEl.innerHTML="";
+bucketVals.forEach(b=>{
+const isBest=maxCount>0 && b.count===maxCount;
+const row=document.createElement("div");
+row.className="legend-row"+(isBest?" best":"");
+row.innerHTML=
+'<div class="legend-dot" style="background:'+b.color+'"></div>'+
+escapeHtml(b.label)+
+(isBest?'<span class="legend-best-tag">BEST</span>':'')+
+'<div class="legend-count">'+b.count+'</div>';
+legendEl.appendChild(row);
+});
 
 // Shoutouts
 try{

@@ -190,6 +190,15 @@ Daily goal:
 <div class="merge-note">To merge a nickname/misspelling permanently, edit <code>data/merges.json</code> in the repo.</div>
 </div>
 
+<div class="card">
+<div class="reviews-header">
+<div class="card-label" style="margin-bottom:0">Recent Reviews</div>
+</div>
+<div class="reviews-list" id="reviews-list">
+<div class="empty"><strong>No reviews yet</strong>Run the scraper to pull recent reviews.</div>
+</div>
+</div>
+
 <div class="card settings-strip">
 <div class="card-label" style="margin:0;flex-basis:100%">Shoutout Settings</div>
 <div class="setting-chip">🎁 Gift card threshold shown here is set in the Excel log's Settings tab</div>
@@ -225,6 +234,16 @@ const stored = localStorage.getItem(GOAL_STORAGE_KEY);
 return stored ? parseInt(stored,10) : 50;
 }
 function setDailyGoal(v){ localStorage.setItem(GOAL_STORAGE_KEY, v); }
+
+function escapeHtml(str){
+if(str==null) return "";
+return String(str)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#39;");
+}
 
 function calcFiveStarNeeded(rating,total){
 if(!rating||!total||rating>=4.0) return 0;
@@ -345,12 +364,17 @@ const entries=Object.entries(mergedEmp).sort((a,b)=>b[1].count-a[1].count);
 const shoutWrap=document.getElementById("shoutout-wrap");
 const starCounts=weeklyStars[getPythonWeekKey()]||{};
 function checkFire(empKey){
+// Uses counted_at (when the scraper actually detected the review) so
+// this reflects real-time activity. Falls back to publish_time only
+// for legacy reviews recorded before counted_at existed.
 const now=Date.now(); const fourHours=4*60*60*1000; let count=0;
 reviews.forEach(r=>{
-if(!r.publish_time||!r.employee_names) return;
+if(!r.employee_names) return;
+const ts=r.counted_at||r.publish_time;
+if(!ts) return;
 const empNames=r.employee_names.map(n=>merges[n.toLowerCase()]||n.toLowerCase());
 if(!empNames.includes(empKey)&&!empNames.includes(empKey.replace(/_/g," "))) return;
-const age=now-new Date(r.publish_time).getTime();
+const age=now-new Date(ts).getTime();
 if(age<fourHours) count++;
 });
 return count>=3;
@@ -382,9 +406,9 @@ const slot=document.createElement("div");
 slot.className="podium-slot "+entry.cls;
 slot.innerHTML=
 '<div class="avatar-wrap">'+starHtml+
-'<div class="podium-avatar" style="background:'+color.bg+';color:'+color.color+(entry.pos===1?';border:2px solid #F0B800':entry.pos===2?';border:2px solid #9AA4B2':';border:2px solid #B86B22')+'">'+initial+'</div>'+
+'<div class="podium-avatar" style="background:'+color.bg+';color:'+color.color+(entry.pos===1?';border:2px solid #F0B800':entry.pos===2?';border:2px solid #9AA4B2':';border:2px solid #B86B22')+'">'+escapeHtml(initial)+'</div>'+
 '</div>'+
-'<div class="podium-name">'+emp.display_name+(onFire?' 🔥':'')+'</div>'+
+'<div class="podium-name">'+escapeHtml(emp.display_name)+(onFire?' 🔥':'')+'</div>'+
 '<div class="podium-count">'+emp.count+'</div>'+
 '<div class="podium-count-label">mentions</div>'+
 '<div class="podium-block">'+posLabel+'</div>';
@@ -407,8 +431,8 @@ for(let s=0;s<Math.min(stars,3);s++) starsHtml+="⭐";
 const row=document.createElement("div"); row.className="rest-row";
 row.innerHTML=
 '<span class="rest-rank">'+rank+'</span>'+
-'<div class="rest-avatar" style="background:'+color.bg+';color:'+color.color+'">'+initial+'</div>'+
-'<span class="rest-name">'+emp.display_name+(onFire?' 🔥':'')+'</span>'+
+'<div class="rest-avatar" style="background:'+color.bg+';color:'+color.color+'">'+escapeHtml(initial)+'</div>'+
+'<span class="rest-name">'+escapeHtml(emp.display_name)+(onFire?' 🔥':'')+'</span>'+
 '<div class="rest-right">'+
 (starsHtml?'<span class="rest-stars">'+starsHtml+'</span>':'')+
 '<span class="rest-count">'+emp.count+'</span>'+
@@ -425,7 +449,39 @@ console.error("Shoutout render error:",err);
 document.getElementById("shoutout-wrap").innerHTML='<div class="empty"><strong>Shoutouts unavailable</strong>Could not render this section.</div>';
 }
 
-// Recent Ratings panel removed — `reviews` data is still used above for fire-streak detection.
+// Recent reviews
+try{
+const listEl=document.getElementById("reviews-list");
+const recent=reviews.slice(0,8);
+if(recent.length){
+listEl.innerHTML="";
+recent.forEach(r=>{
+const roundedRating=Math.max(0,Math.min(5,Math.round(r.rating||0)));
+const stars="★".repeat(roundedRating)+"☆".repeat(5-roundedRating);
+const rawText=r.text||"";
+const trimmedText=rawText.length>220?rawText.slice(0,220)+"…":rawText;
+const empLine=(r.employee_names&&r.employee_names.length)
+?'<div class="review-emp">Mentioned: '+escapeHtml(r.employee_names.join(", "))+'</div>'
+:"";
+const item=document.createElement("div");
+item.className="review-item";
+item.innerHTML=
+'<div class="review-header">'+
+'<span class="review-author">'+escapeHtml(r.author||"Anonymous")+'</span>'+
+'<span class="review-stars">'+stars+'</span>'+
+'</div>'+
+'<div class="review-text">'+escapeHtml(trimmedText)+'</div>'+
+'<div class="review-time">'+escapeHtml(formatLVTime(r.publish_time))+'</div>'+
+empLine;
+listEl.appendChild(item);
+});
+} else {
+listEl.innerHTML='<div class="empty"><strong>No reviews yet</strong>Run the scraper to pull recent reviews.</div>';
+}
+}catch(err){
+console.error("Recent reviews render error:",err);
+document.getElementById("reviews-list").innerHTML='<div class="empty"><strong>Reviews unavailable</strong>Could not render this section.</div>';
+}
 }
 
 function formatLVTime(iso){

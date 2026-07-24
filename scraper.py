@@ -3,6 +3,7 @@ import json
 import requests
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
+from openpyxl import Workbook, load_workbook
 
 API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY")
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY")
@@ -19,6 +20,8 @@ MERGES_FILE = "data/merges.json"
 LOG_FILE = "data/logs/Avis_Dashboard_Log.xlsx"
 LAS_VEGAS = ZoneInfo("America/Los_Angeles")
 
+SHOUTOUT_MIN_RATING = 4  # only 4 and 5 star reviews count toward employee shoutouts
+
 # ---------- time helpers ----------
 
 def get_lv_time():
@@ -31,6 +34,9 @@ def get_work_day_key(lv_now):
     return lv_now.strftime("%Y-%m-%d")
 
 def get_work_day_key_from_iso(iso_str):
+    # Best-effort fallback, used only to migrate reviews counted before this
+    # field existed. Newly counted reviews always use the work day the
+    # scraper actually caught them on, not this.
     try:
         dt = datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
         lv = dt.astimezone(LAS_VEGAS)
@@ -41,23 +47,29 @@ def get_work_day_key_from_iso(iso_str):
 def get_week_key(dt):
     return dt.strftime("%Y-W%W")
 
-def review_week_key(publish_iso):
-    dt = datetime.fromisoformat(publish_iso.replace("Z", "+00:00")).astimezone(LAS_VEGAS)
-    shifted = dt - timedelta(hours=6)
-    return get_week_key(shifted)
+def week_key_from_work_day(work_day_str):
+    dt = datetime.strptime(work_day_str, "%Y-%m-%d")
+    return get_week_key(dt)
 
-def current_week_key(lv_now):
-    return get_week_key(lv_now - timedelta(hours=6))
-
-def rebuild_mentions(data, place_id, merges, lv_now):
+def rebuild_mentions(data, place_id, merges, today_key):
+    """
+    Recomputes employee shoutout totals from scratch every run, based on the
+    work day each review was actually counted on (not the day the reviewer
+    originally posted it on Google). Only 4+ star reviews count.
+    Returns (today's week key, today's mention counts).
+    """
     reviews = data.get("reviews", {}).get(place_id, [])
-    history = {}
+    weekly_history = {}
+    today_counts = {}
+
     for r in reviews:
-        pub = r.get("publish_time")
+        work_day = r.get("counted_work_day")
+        rating = r.get("rating", 0)
         names = r.get("employee_names") or []
-        if not pub or not names:
+        if not work_day or not names or rating < SHOUTOUT_MIN_RATING:
             continue
-        wk = review_week_key(pub)
+
+        wk = week_key_from_work_day(work_day)
         seen = set()
         for raw in names:
             if not raw or not raw.strip():
@@ -66,17 +78,20 @@ def rebuild_mentions(data, place_id, merges, lv_now):
             if emp_key in seen:
                 continue
             seen.add(emp_key)
-            bucket = history.setdefault(wk, {})
+
+            bucket = weekly_history.setdefault(wk, {})
             entry = bucket.setdefault(emp_key, {"display_name": display, "count": 0})
             entry["count"] += 1
-    data.setdefault("weekly_mentions_history", {})[place_id] = history
-    cwk = current_week_key(lv_now)
-    current = history.get(cwk, {})
-    data.setdefault("employee_mentions", {})[place_id] = {
-        k: {"display_name": v["display_name"], "count": v["count"], "last_mentioned": cwk}
-        for k, v in current.items()
-    }
-    return cwk
+
+            if work_day == today_key:
+                t_entry = today_counts.setdefault(
+                    emp_key, {"display_name": display, "count": 0, "last_mentioned": today_key}
+                )
+                t_entry["count"] += 1
+
+    data.setdefault("weekly_mentions_history", {})[place_id] = weekly_history
+    data.setdefault("employee_mentions", {})[place_id] = today_counts
+    return week_key_from_work_day(today_key), today_counts
 
 # ---------- Google Places ----------
 
@@ -277,8 +292,8 @@ def do_cutover(data, place_id, lv_now, review_count_now, rating_now):
     award_daily_star(data, place_id, closed_date, week_key)
     log_day_close(closed_date, week_key, rating_now, review_count_now, true_new, captured_count, employee_day_counts)
 
-    # Employee mention counts are now derived per-week from stored reviews
-    # (see rebuild_mentions), so no manual reset is needed here.
+    # Employee mention counts are rebuilt from scratch every run (see
+    # rebuild_mentions), so no manual reset is needed here.
     data.setdefault("captured_counts", {}).setdefault(place_id, {})[closed_date] = 0
 
     data["cutover_done"][cutover_key] = True
@@ -298,7 +313,8 @@ def main():
 
     data = load_existing_data()
     for k in ["locations", "history", "reviews", "daily_baselines", "employee_mentions",
-              "counted_review_ids", "daily_stars", "weekly_stars", "captured_counts", "cutover_done"]:
+              "counted_review_ids", "daily_stars", "weekly_stars", "captured_counts",
+              "cutover_done", "recent_reviews"]:
         if k not in data:
             data[k] = {}
 
@@ -383,15 +399,21 @@ def main():
             star_rating = review.get("rating", 0)
 
             if review_id in counted_ids:
-                names = stored_by_id.get(review_id, {}).get("employee_names", [])
+                prev = stored_by_id.get(review_id, {})
+                names = prev.get("employee_names", [])
+                # Older reviews counted before this field existed fall back
+                # to an estimate from their original post time.
+                counted_work_day = prev.get("counted_work_day") or get_work_day_key_from_iso(publish_time)
+                review_date = prev.get("date", today_date)
                 print("Already counted: " + author)
             else:
                 print("NEW: " + author + " " + str(star_rating) + "★ (" + publish_time[:10] + ")")
                 names = extract_employee_names(text)
+                counted_work_day = today_key
+                review_date = today_date
 
-                review_work_day = get_work_day_key_from_iso(publish_time) if publish_time else today_key
-                data["captured_counts"][place_id][review_work_day] = \
-                    data["captured_counts"][place_id].get(review_work_day, 0) + 1
+                data["captured_counts"][place_id][today_key] = \
+                    data["captured_counts"][place_id].get(today_key, 0) + 1
 
                 if names:
                     print("  Employees: " + str(names))
@@ -400,7 +422,8 @@ def main():
             fresh_reviews.append({
                 "id": review_id, "author": author, "rating": star_rating,
                 "text": text, "publish_time": publish_time,
-                "date": today_date, "employee_names": names if names else [],
+                "date": review_date, "employee_names": names if names else [],
+                "counted_work_day": counted_work_day,
             })
 
         fresh_reviews.sort(key=lambda r: r.get("publish_time", ""), reverse=True)
@@ -410,10 +433,21 @@ def main():
         data["reviews"][place_id] = data["reviews"][place_id][:100]
         data["counted_review_ids"][place_id] = list(counted_ids)
 
-        cwk = rebuild_mentions(data, place_id, merges, lv_now)
-        current = data["employee_mentions"][place_id]
-        print("Weekly leaderboard (" + cwk + "): " +
-              (", ".join(sorted(current.keys())) if current else "(none this week)"))
+        data["recent_reviews"][place_id] = [
+            {
+                "author": r["author"],
+                "rating": r["rating"],
+                "text": r["text"],
+                "publish_time": r["publish_time"],
+                "date": r["date"],
+                "employee_names": r.get("employee_names", []),
+            }
+            for r in data["reviews"][place_id][:10]
+        ]
+
+        today_week, current = rebuild_mentions(data, place_id, merges, today_key)
+        print("Shoutouts today (4+ star, " + today_key + "): " +
+              (", ".join(sorted(current.keys())) if current else "(none yet today)"))
 
         print("Total reviews stored: " + str(len(data["reviews"][place_id])))
         print("Total counted IDs: " + str(len(counted_ids)))

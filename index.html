@@ -16,7 +16,7 @@
 body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; flex-direction: column; }
 header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; padding: 18px 32px; border-bottom: 1px solid var(--border); }
 .header-left { display: flex; align-items: center; gap: 12px; }
-.avis-logo { background: var(--accent); color: #fff; font-weight: 800; font-style: italic; font-size: 16px; letter-spacing: .01em; padding: 7px 16px; border-radius: 6px; text-transform: lowercase; flex-shrink: 0; }
+.avis-logo { background: var(--accent); color: #fff; font-weight: 800; font-style: italic; font-size: 16px; letter-spacing: .01em; padding: 7px 16px; border-radius: 6px; flex-shrink: 0; }
 .header-titles p { font-size: 11px; color: var(--muted); }
 .header-greeting { text-align: center; font-size: 22px; font-weight: 800; background: linear-gradient(135deg,#fff 30%,var(--up)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
@@ -45,21 +45,13 @@ main { flex:1; padding: 24px 32px; max-width: 1300px; width: 100%; margin: 0 aut
 .goal-progress-track { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; }
 .goal-progress-fill { height:100%; background:linear-gradient(90deg,#f5c518,#3ecf8e); border-radius:99px; transition:width .6s ease; }
 
-.daily-card { display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap; }
-.circle-wrap { position:relative; width:150px; height:150px; flex-shrink:0; }
-.circle-wrap svg { transform:rotate(-90deg); }
-.circle-bg { fill:none; stroke:var(--border); stroke-width:12; }
-.circle-fill { fill:none; stroke-width:12; stroke-linecap:butt; transition:all 0.8s ease; }
+.daily-card { display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; }
+.circle-wrap { position:relative; width:220px; height:220px; flex-shrink:0; }
 .circle-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.circle-total { font-size:34px; font-weight:900; color:#fff; line-height:1; }
+.circle-total { font-size:30px; font-weight:900; color:#fff; line-height:1; }
 .circle-sublabel { font-size:10px; color:var(--muted); margin-top:3px; }
-.daily-meta { display:flex; flex-direction:column; gap:6px; min-width:190px; }
-.legend-row { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text); padding:2px 4px; border-radius:6px; }
-.legend-row.best { background:rgba(255,255,255,0.05); }
-.legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-.legend-count { margin-left:auto; font-weight:700; }
-.legend-best-tag { font-size:9px; color:var(--up); font-weight:700; margin-left:4px; }
-.goal-editor { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); margin-top:6px; padding-top:10px; border-top:1px solid var(--border); }
+.tick-label { font-size:9px; fill:var(--muted); font-family:var(--font); }
+.goal-editor { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
 .goal-editor input { width:56px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:4px 8px; font-size:13px; font-weight:700; }
 .goal-editor input:focus { outline:none; border-color:var(--accent); }
 
@@ -120,6 +112,7 @@ main { flex:1; padding: 24px 32px; max-width: 1300px; width: 100%; margin: 0 aut
 .review-stars { color:var(--gold); font-size:12px; }
 .review-text { font-size:12px; color:var(--text); line-height:1.5; }
 .review-time { margin-top:5px; font-size:10px; color:var(--muted); }
+.review-time .stale { color:#c8a45c; }
 .review-emp { margin-top:4px; font-size:11px; color:var(--accent); }
 
 /* Settings strip (bottom) */
@@ -136,7 +129,7 @@ footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); bo
 <body>
 <header>
 <div class="header-left">
-<div class="avis-logo" aria-label="Avis">avis</div>
+<div class="avis-logo" aria-label="Avis">Avis</div>
 <div class="header-titles">
 <p>Harry Reid Airport · updated every 5 min</p>
 </div>
@@ -164,25 +157,15 @@ footer { text-align:center; padding:18px; font-size:11px; color:var(--muted); bo
 
 <div class="card daily-card">
 <div class="circle-wrap">
-<svg viewBox="0 0 150 150" width="150" height="150">
-<circle class="circle-bg" cx="75" cy="75" r="63"/>
-<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-0" stroke-dasharray="0 396" stroke-dashoffset="0"/>
-<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-1" stroke-dasharray="0 396" stroke-dashoffset="0"/>
-<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-2" stroke-dasharray="0 396" stroke-dashoffset="0"/>
-<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-3" stroke-dasharray="0 396" stroke-dashoffset="0"/>
-<circle class="circle-fill" cx="75" cy="75" r="63" id="circle-seg-4" stroke-dasharray="0 396" stroke-dashoffset="0"/>
-</svg>
+<svg viewBox="0 0 220 220" width="220" height="220" id="clock-svg"></svg>
 <div class="circle-center">
 <div class="circle-total" id="circle-total">0</div>
 <div class="circle-sublabel">of <span id="goal-display">—</span> today</div>
 </div>
 </div>
-<div class="daily-meta">
-<div id="bucket-legend"></div>
-<div class="goal-editor">
+<div class="goal-editor" style="border-top:none; margin-top:0; padding-top:0;">
 Daily goal:
 <input type="number" id="goal-input" min="1" />
-</div>
 </div>
 </div>
 </div>
@@ -190,7 +173,6 @@ Daily goal:
 <div class="card">
 <div class="shoutout-header">
 <div class="card-label" style="margin-bottom:0">Employee Shoutouts — Today</div>
-<span class="week-tag-sm" id="week-label"></span>
 </div>
 <div id="shoutout-wrap">
 <div class="empty"><strong>No mentions yet</strong>Run the scraper to detect employee names.</div>
@@ -227,16 +209,33 @@ const AVATAR_COLORS = [
 {bg:"#FAEEDA",color:"#633806"},{bg:"#EAF3DE",color:"#27500A"},{bg:"#FCEBEB",color:"#791F1F"},{bg:"#E1F5EE",color:"#04342C"},
 ];
 
-// Time-of-day windows for the daily progress ring, in the same order the
-// backend reports them. Colors run warm (morning) to cool (overnight) so
-// the busiest window is easy to spot at a glance.
+// Time-of-day windows for the daily ring, in the same order the backend
+// reports them. Colors run warm (morning) to cool (overnight).
 const BUCKET_DEFS=[
-{key:"6-10",label:"6am–10am",color:"#f5c518"},
-{key:"10-14",label:"10am–2pm",color:"#3ecf8e"},
-{key:"14-16",label:"2pm–4pm",color:"#f59e0b"},
-{key:"16-20",label:"4pm–8pm",color:"#c8102e"},
-{key:"20-6",label:"8pm–6am",color:"#7c6cf5"},
+{key:"6-10",startH:6,endH:10,color:"#f5c518"},
+{key:"10-14",startH:10,endH:14,color:"#3ecf8e"},
+{key:"14-16",startH:14,endH:16,color:"#f59e0b"},
+{key:"16-20",startH:16,endH:20,color:"#c8102e"},
+{key:"20-6",startH:20,endH:30,color:"#7c6cf5"},
 ];
+function militaryTime(h){ const hh=Math.floor(h)%24; return String(hh).padStart(2,"0")+":00"; }
+
+// Radial 24-hour clock: each wedge's ANGLE is fixed to its real hour span
+// (so ticks at 6/10/14/16/20 line up exactly with wedge edges), and each
+// wedge's RADIAL LENGTH shows review volume, so the busiest window
+// visibly reaches furthest from center.
+const CLOCK_CX=110, CLOCK_CY=110, CLOCK_R_INNER=46, CLOCK_R_OUTER_MAX=92, CLOCK_TICK_R=98, CLOCK_LABEL_R=112;
+function clockAngleForHour(h){ return (h-6)/24*360; }
+function clockPolar(r,angleDeg){
+const rad=(angleDeg-90)*Math.PI/180;
+return [CLOCK_CX+r*Math.cos(rad), CLOCK_CY+r*Math.sin(rad)];
+}
+function clockWedgePath(a0,a1,rOuter){
+const large=(a1-a0)>180?1:0;
+const [x1,y1]=clockPolar(rOuter,a0), [x2,y2]=clockPolar(rOuter,a1);
+const [x3,y3]=clockPolar(CLOCK_R_INNER,a1), [x4,y4]=clockPolar(CLOCK_R_INNER,a0);
+return `M${x1},${y1} A${rOuter},${rOuter} 0 ${large} 1 ${x2},${y2} L${x3},${y3} A${CLOCK_R_INNER},${CLOCK_R_INNER} 0 ${large} 0 ${x4},${y4} Z`;
+}
 
 function loadLocalMerges(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
 function getLVHour(){ return parseInt(new Date().toLocaleString("en-US",{hour:"2-digit",hour12:false,timeZone:"America/Los_Angeles"}),10)%24; }
@@ -393,40 +392,31 @@ const dailyGoal=getDailyGoal();
 document.getElementById("goal-input").value=dailyGoal;
 document.getElementById("goal-display").textContent=dailyGoal;
 
-// Time-of-day review ring: 5 stacked arcs, one per window, colored
-// differently so the busiest window of the day is obvious at a glance.
+// Time-of-day review ring: fixed-angle wedges by real hour (so ticks
+// line up), radial length shows volume so the busiest window stands out.
 const buckets=loc.review_buckets||{};
 const bucketVals=BUCKET_DEFS.map(d=>({...d,count:buckets[d.key]||0}));
 const totalBucketed=bucketVals.reduce((s,b)=>s+b.count,0);
 document.getElementById("circle-total").textContent=totalBucketed;
-const C=396;
-let offset=0;
-const maxCount=Math.max(0,...bucketVals.map(b=>b.count));
-bucketVals.forEach((b,i)=>{
-const el=document.getElementById("circle-seg-"+i);
-const frac=Math.min(1, b.count/Math.max(dailyGoal,1));
-el.setAttribute("stroke-dasharray",(frac*C)+" "+C);
-el.setAttribute("stroke-dashoffset", -offset);
-el.style.stroke=b.color;
-offset+=frac*C;
-});
-const legendEl=document.getElementById("bucket-legend");
-legendEl.innerHTML="";
+const maxBucketCount=Math.max(1,...bucketVals.map(b=>b.count));
+const clockSvg=document.getElementById("clock-svg");
+let clockContent="";
 bucketVals.forEach(b=>{
-const isBest=maxCount>0 && b.count===maxCount;
-const row=document.createElement("div");
-row.className="legend-row"+(isBest?" best":"");
-row.innerHTML=
-'<div class="legend-dot" style="background:'+b.color+'"></div>'+
-escapeHtml(b.label)+
-(isBest?'<span class="legend-best-tag">BEST</span>':'')+
-'<div class="legend-count">'+b.count+'</div>';
-legendEl.appendChild(row);
+const a0=clockAngleForHour(b.startH), a1=clockAngleForHour(b.endH);
+const rOuter=CLOCK_R_INNER+(CLOCK_R_OUTER_MAX-CLOCK_R_INNER)*(b.count/maxBucketCount);
+clockContent+=`<path d="${clockWedgePath(a0,a1,rOuter)}" fill="${b.color}"></path>`;
 });
+[6,10,14,16,20].forEach(h=>{
+const a=clockAngleForHour(h);
+const [tx1,ty1]=clockPolar(CLOCK_R_OUTER_MAX+2,a), [tx2,ty2]=clockPolar(CLOCK_TICK_R,a);
+const [lx,ly]=clockPolar(CLOCK_LABEL_R,a);
+clockContent+=`<line x1="${tx1}" y1="${ty1}" x2="${tx2}" y2="${ty2}" stroke="#444" stroke-width="1"></line>`;
+clockContent+=`<text x="${lx}" y="${ly}" class="tick-label" text-anchor="middle" dominant-baseline="middle">${escapeHtml(militaryTime(h))}</text>`;
+});
+clockSvg.innerHTML=clockContent;
 
 // Shoutouts
 try{
-document.getElementById("week-label").textContent=getWeekLabel();
 const localMerges=loadLocalMerges();
 const merges={...repoMerges, ...localMerges};
 const mergedEmp=applyMerges(employees,merges);
@@ -519,10 +509,14 @@ console.error("Shoutout render error:",err);
 document.getElementById("shoutout-wrap").innerHTML='<div class="empty"><strong>Shoutouts unavailable</strong>Could not render this section.</div>';
 }
 
-// Recent reviews
+// Recent reviews: sorted by when the SCRAPER found them (counted_at), not
+// by the review's original Google post date, since Google's API returns
+// its 5 "most relevant" reviews rather than the most recent ones.
 try{
 const listEl=document.getElementById("reviews-list");
-const recent=reviews.slice(0,8);
+const recent=[...reviews]
+.sort((a,b)=>(b.counted_at||b.publish_time||"").localeCompare(a.counted_at||a.publish_time||""))
+.slice(0,8);
 if(recent.length){
 listEl.innerHTML="";
 recent.forEach(r=>{
@@ -533,6 +527,11 @@ const trimmedText=rawText.length>220?rawText.slice(0,220)+"…":rawText;
 const empLine=(r.employee_names&&r.employee_names.length)
 ?'<div class="review-emp">Mentioned: '+escapeHtml(r.employee_names.join(", "))+'</div>'
 :"";
+const foundTs=r.counted_at||r.publish_time;
+const sameDay=r.counted_at && r.publish_time && r.counted_at.slice(0,10)===r.publish_time.slice(0,10);
+const timeLine=(r.counted_at && !sameDay)
+? 'Found '+escapeHtml(formatLVTime(foundTs))+' <span class="stale">(posted '+escapeHtml(formatLVTime(r.publish_time))+')</span>'
+: 'Found '+escapeHtml(formatLVTime(foundTs));
 const item=document.createElement("div");
 item.className="review-item";
 item.innerHTML=
@@ -541,7 +540,7 @@ item.innerHTML=
 '<span class="review-stars">'+stars+'</span>'+
 '</div>'+
 '<div class="review-text">'+escapeHtml(trimmedText)+'</div>'+
-'<div class="review-time">'+escapeHtml(formatLVTime(r.publish_time))+'</div>'+
+'<div class="review-time">'+timeLine+'</div>'+
 empLine;
 listEl.appendChild(item);
 });

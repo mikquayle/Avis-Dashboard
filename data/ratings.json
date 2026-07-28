@@ -5,13 +5,13 @@
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 4,
       "review_count": 10816,
-      "reviews_today": 40,
+      "reviews_today": 0,
       "review_buckets": {
-        "6-10": 23,
-        "10-14": 8,
-        "14-16": 2,
-        "16-20": 4,
-        "20-6": 3
+        "6-10": 0,
+        "10-14": 0,
+        "14-16": 0,
+        "16-20": 0,
+        "20-6": 0
       },
       "rating_progress": {
         "current_tier": 4,
@@ -19,8 +19,8 @@
         "five_star_reviews_needed": 1202,
         "progress_pct": 0
       },
-      "last_updated": "2026-07-28 04:26",
-      "today_key": "2026-07-27"
+      "last_updated": "2026-07-28 06:11",
+      "today_key": "2026-07-28"
     }
   },
   "history": {
@@ -417,19 +417,21 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb10_2026-07-27": 10799,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb14_2026-07-27": 10807,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb16_2026-07-27": 10809,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb20_2026-07-27": 10813
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb20_2026-07-27": 10813,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-07-28": 10816,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb6_2026-07-28": 10816
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {}
   },
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
       "Melanie Lee_2026-05-22T22:38:10.960293936Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z"
+      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
+      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z"
     ]
   },
   "daily_stars": {
@@ -478,7 +480,8 @@
       "2026-07-11": 0,
       "2025-12-20": 1,
       "2026-07-25": 0,
-      "2026-07-26": 0
+      "2026-07-26": 0,
+      "2026-07-27": 0
     }
   },
   "cutover_done": {
@@ -494,7 +497,8 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-10": true,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-11": true,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-25": true,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-26": true
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-26": true,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_cutover_2026-07-27": true
   },
   "weekly_mentions_history": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {

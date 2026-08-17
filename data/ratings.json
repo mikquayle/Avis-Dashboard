@@ -19,7 +19,7 @@
         "five_star_reviews_needed": 1418,
         "progress_pct": 0
       },
-      "last_updated": "2026-08-16 20:31",
+      "last_updated": "2026-08-16 21:21",
       "today_key": "2026-08-16"
     }
   },
@@ -328,17 +328,20 @@
         "counted_at": "2026-08-10T01:00:00.583348-07:00"
       },
       {
-        "id": "CLE E_2026-07-02T22:09:31.211198972Z",
-        "author": "CLE E",
+        "id": "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
+        "author": "Mary Ann L Baylosis",
         "rating": 5,
-        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
-        "publish_time": "2026-07-02T22:09:31.211198972Z",
-        "date": "2026-08-16",
+        "text": "Thanks so much Shirley Guzman you\u2019re the best !!!   I am delighted to meet you and will definitely come back.  Thanks for the warm welcome and the touch of kindness. Thank you Avis for the excellent customer service.  Everyone check out Avis here at Las Vegas Nevada airport!!!  Thank you Portia John And Miles for the excellent customer service you guys are amazing \ud83d\ude1d",
+        "publish_time": "2026-06-12T05:26:37.248168493Z",
+        "date": "2026-07-24",
         "employee_names": [
-          "Lyla"
+          "Shirley",
+          "Portia",
+          "John",
+          "Miles"
         ],
-        "counted_work_day": "2026-08-16",
-        "counted_at": "2026-08-16T11:13:06.024382-07:00"
+        "counted_work_day": "2026-06-11",
+        "counted_at": null
       },
       {
         "id": "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
@@ -367,6 +370,30 @@
         "counted_at": null
       },
       {
+        "id": "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
+        "author": "Joshua Lidberg",
+        "rating": 5,
+        "text": "Not sure why the reviews are so bad at this location. Flew in late at night, had a reservation. The check in at the counter was approximately 2 minutes, and the Tesla that I reserved was ready to go and charged over 80%. Charging is super fast on them as well. Don\u2019t know why so many people are scared of EVs; I don\u2019t own an electric vehicle myself, but charging this during my trip was a breeze. Smooth rental, no problems. Pick up is very convenient",
+        "publish_time": "2025-12-20T15:41:00.612269803Z",
+        "date": "2026-07-24",
+        "employee_names": [],
+        "counted_work_day": "2025-12-20",
+        "counted_at": null
+      },
+      {
+        "id": "CLE E_2026-07-02T22:09:31.211198972Z",
+        "author": "CLE E",
+        "rating": 5,
+        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
+        "publish_time": "2026-07-02T22:09:31.211198972Z",
+        "date": "2026-08-16",
+        "employee_names": [
+          "Lyla"
+        ],
+        "counted_work_day": "2026-08-16",
+        "counted_at": "2026-08-16T11:13:06.024382-07:00"
+      },
+      {
         "id": "Jeremy Gail_2026-05-19T21:14:41.371776003Z",
         "author": "Jeremy Gail",
         "rating": 5,
@@ -378,33 +405,6 @@
         ],
         "counted_work_day": "2026-08-16",
         "counted_at": "2026-08-16T11:13:06.024382-07:00"
-      },
-      {
-        "id": "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-        "author": "Mary Ann L Baylosis",
-        "rating": 5,
-        "text": "Thanks so much Shirley Guzman you\u2019re the best !!!   I am delighted to meet you and will definitely come back.  Thanks for the warm welcome and the touch of kindness. Thank you Avis for the excellent customer service.  Everyone check out Avis here at Las Vegas Nevada airport!!!  Thank you Portia John And Miles for the excellent customer service you guys are amazing \ud83d\ude1d",
-        "publish_time": "2026-06-12T05:26:37.248168493Z",
-        "date": "2026-07-24",
-        "employee_names": [
-          "Shirley",
-          "Portia",
-          "John",
-          "Miles"
-        ],
-        "counted_work_day": "2026-06-11",
-        "counted_at": null
-      },
-      {
-        "id": "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
-        "author": "Joshua Lidberg",
-        "rating": 5,
-        "text": "Not sure why the reviews are so bad at this location. Flew in late at night, had a reservation. The check in at the counter was approximately 2 minutes, and the Tesla that I reserved was ready to go and charged over 80%. Charging is super fast on them as well. Don\u2019t know why so many people are scared of EVs; I don\u2019t own an electric vehicle myself, but charging this during my trip was a breeze. Smooth rental, no problems. Pick up is very convenient",
-        "publish_time": "2025-12-20T15:41:00.612269803Z",
-        "date": "2026-07-24",
-        "employee_names": [],
-        "counted_work_day": "2025-12-20",
-        "counted_at": null
       },
       {
         "id": "C. Lasser_2026-03-06T02:31:59.216060550Z",
@@ -689,15 +689,15 @@
   },
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
-      "CLE E_2026-07-02T22:09:31.211198972Z",
-      "C. Lasser_2026-03-06T02:31:59.216060550Z",
       "Melanie Lee_2026-05-22T22:38:10.960293936Z",
-      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
       "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
-      "Mike J_2026-07-11T19:13:59.003085648Z",
+      "CLE E_2026-07-02T22:09:31.211198972Z",
+      "Jeremy Gail_2026-05-19T21:14:41.371776003Z",
       "Vince R_2026-06-22T14:25:33.444554137Z",
       "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-      "Jeremy Gail_2026-05-19T21:14:41.371776003Z"
+      "Mike J_2026-07-11T19:13:59.003085648Z",
+      "C. Lasser_2026-03-06T02:31:59.216060550Z",
+      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z"
     ]
   },
   "daily_stars": {
@@ -796,28 +796,6 @@
           "count": 1
         }
       },
-      "2026-W32": {
-        "lyla": {
-          "display_name": "Lyla",
-          "count": 1
-        },
-        "cece": {
-          "display_name": "Cece",
-          "count": 1
-        }
-      },
-      "2026-W22": {
-        "shirley_g": {
-          "display_name": "Shirley G.",
-          "count": 1
-        }
-      },
-      "2026-W20": {
-        "cece": {
-          "display_name": "Cece",
-          "count": 1
-        }
-      },
       "2026-W23": {
         "shirley_g": {
           "display_name": "Shirley G.",
@@ -833,6 +811,28 @@
         },
         "miles": {
           "display_name": "Miles",
+          "count": 1
+        }
+      },
+      "2026-W22": {
+        "shirley_g": {
+          "display_name": "Shirley G.",
+          "count": 1
+        }
+      },
+      "2026-W20": {
+        "cece": {
+          "display_name": "Cece",
+          "count": 1
+        }
+      },
+      "2026-W32": {
+        "lyla": {
+          "display_name": "Lyla",
+          "count": 1
+        },
+        "cece": {
+          "display_name": "Cece",
           "count": 1
         }
       }
@@ -852,15 +852,18 @@
         "counted_at": "2026-08-10T01:00:00.583348-07:00"
       },
       {
-        "author": "CLE E",
+        "author": "Mary Ann L Baylosis",
         "rating": 5,
-        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
-        "publish_time": "2026-07-02T22:09:31.211198972Z",
-        "date": "2026-08-16",
+        "text": "Thanks so much Shirley Guzman you\u2019re the best !!!   I am delighted to meet you and will definitely come back.  Thanks for the warm welcome and the touch of kindness. Thank you Avis for the excellent customer service.  Everyone check out Avis here at Las Vegas Nevada airport!!!  Thank you Portia John And Miles for the excellent customer service you guys are amazing \ud83d\ude1d",
+        "publish_time": "2026-06-12T05:26:37.248168493Z",
+        "date": "2026-07-24",
         "employee_names": [
-          "Lyla"
+          "Shirley",
+          "Portia",
+          "John",
+          "Miles"
         ],
-        "counted_at": "2026-08-16T11:13:06.024382-07:00"
+        "counted_at": null
       },
       {
         "author": "Garvit Tiwari",
@@ -885,6 +888,26 @@
         "counted_at": null
       },
       {
+        "author": "Joshua Lidberg",
+        "rating": 5,
+        "text": "Not sure why the reviews are so bad at this location. Flew in late at night, had a reservation. The check in at the counter was approximately 2 minutes, and the Tesla that I reserved was ready to go and charged over 80%. Charging is super fast on them as well. Don\u2019t know why so many people are scared of EVs; I don\u2019t own an electric vehicle myself, but charging this during my trip was a breeze. Smooth rental, no problems. Pick up is very convenient",
+        "publish_time": "2025-12-20T15:41:00.612269803Z",
+        "date": "2026-07-24",
+        "employee_names": [],
+        "counted_at": null
+      },
+      {
+        "author": "CLE E",
+        "rating": 5,
+        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
+        "publish_time": "2026-07-02T22:09:31.211198972Z",
+        "date": "2026-08-16",
+        "employee_names": [
+          "Lyla"
+        ],
+        "counted_at": "2026-08-16T11:13:06.024382-07:00"
+      },
+      {
         "author": "Jeremy Gail",
         "rating": 5,
         "text": "Cece at Avis Preferred was absolutely incredible. She went above and beyond to make sure we had the right vehicle, took the time to help us check everything, and made the swap process feel effortless. What stood out most was her patience, kindness, and genuine care in making sure we were happy before leaving.\n\nI also remember Cece helping us in the past, and every time I visit this Avis location, she has consistently been professional, warm, and extremely helpful. She represents Avis in the best possible way and truly makes the customer experience feel personal. Employees like Cece are the reason customers come back. She deserves real recognition for the way she takes care of people.\n\nThank you, Cece. You made our experience smooth, easy, and enjoyable. Five stars all the way.",
@@ -894,29 +917,6 @@
           "Cece"
         ],
         "counted_at": "2026-08-16T11:13:06.024382-07:00"
-      },
-      {
-        "author": "Mary Ann L Baylosis",
-        "rating": 5,
-        "text": "Thanks so much Shirley Guzman you\u2019re the best !!!   I am delighted to meet you and will definitely come back.  Thanks for the warm welcome and the touch of kindness. Thank you Avis for the excellent customer service.  Everyone check out Avis here at Las Vegas Nevada airport!!!  Thank you Portia John And Miles for the excellent customer service you guys are amazing \ud83d\ude1d",
-        "publish_time": "2026-06-12T05:26:37.248168493Z",
-        "date": "2026-07-24",
-        "employee_names": [
-          "Shirley",
-          "Portia",
-          "John",
-          "Miles"
-        ],
-        "counted_at": null
-      },
-      {
-        "author": "Joshua Lidberg",
-        "rating": 5,
-        "text": "Not sure why the reviews are so bad at this location. Flew in late at night, had a reservation. The check in at the counter was approximately 2 minutes, and the Tesla that I reserved was ready to go and charged over 80%. Charging is super fast on them as well. Don\u2019t know why so many people are scared of EVs; I don\u2019t own an electric vehicle myself, but charging this during my trip was a breeze. Smooth rental, no problems. Pick up is very convenient",
-        "publish_time": "2025-12-20T15:41:00.612269803Z",
-        "date": "2026-07-24",
-        "employee_names": [],
-        "counted_at": null
       },
       {
         "author": "C. Lasser",

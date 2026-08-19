@@ -4,22 +4,22 @@
       "name": "Avis Car Rental - Harry Reid Airport",
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 4.1,
-      "review_count": 11463,
-      "reviews_today": 52,
+      "review_count": 11465,
+      "reviews_today": 54,
       "review_buckets": {
         "6-10": 15,
         "10-14": 21,
         "14-16": 9,
-        "16-20": 7,
+        "16-20": 9,
         "20-6": 0
       },
       "rating_progress": {
         "current_tier": 4.1,
         "next_goal": 4.2,
-        "five_star_reviews_needed": 1433,
+        "five_star_reviews_needed": 1434,
         "progress_pct": 0
       },
-      "last_updated": "2026-08-18 19:44",
+      "last_updated": "2026-08-18 20:33",
       "today_key": "2026-08-18"
     }
   },
@@ -318,7 +318,7 @@
       {
         "date": "2026-08-18",
         "rating": 4.1,
-        "review_count": 11463
+        "review_count": 11465
       }
     ]
   },
@@ -692,21 +692,22 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb6_2026-08-18": 11411,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb10_2026-08-18": 11426,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb14_2026-08-18": 11447,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb16_2026-08-18": 11456
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb16_2026-08-18": 11456,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb20_2026-08-18": 11465
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {}
   },
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
+      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
+      "Jeremy Gail_2026-05-19T21:14:41.371776003Z",
       "CLE E_2026-07-02T22:09:31.211198972Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
       "Mike J_2026-07-11T19:13:59.003085648Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
-      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z",
-      "Jeremy Gail_2026-05-19T21:14:41.371776003Z",
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
       "Melanie Lee_2026-05-22T22:38:10.960293936Z"
     ]
   },

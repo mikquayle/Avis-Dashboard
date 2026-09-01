@@ -4,11 +4,11 @@
       "name": "Avis Car Rental - Harry Reid Airport",
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 4.1,
-      "review_count": 12010,
-      "reviews_today": 9,
+      "review_count": 12024,
+      "reviews_today": 23,
       "review_buckets": {
         "6-10": 9,
-        "10-14": 0,
+        "10-14": 14,
         "14-16": 0,
         "16-20": 0,
         "20-6": 0
@@ -16,10 +16,10 @@
       "rating_progress": {
         "current_tier": 4.1,
         "next_goal": 4.2,
-        "five_star_reviews_needed": 1502,
+        "five_star_reviews_needed": 1504,
         "progress_pct": 0
       },
-      "last_updated": "2026-09-01 12:51",
+      "last_updated": "2026-09-01 15:14",
       "today_key": "2026-09-01"
     }
   },
@@ -388,7 +388,7 @@
       {
         "date": "2026-09-01",
         "rating": 4.1,
-        "review_count": 12010
+        "review_count": 12024
       }
     ]
   },
@@ -841,22 +841,23 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb16_2026-08-31": 11994,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-09-01": 12001,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb6_2026-09-01": 12001,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb10_2026-09-01": 12010
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb10_2026-09-01": 12010,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb14_2026-09-01": 12024
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {}
   },
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
-      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z",
-      "Jeremy Gail_2026-05-19T21:14:41.371776003Z",
-      "Melanie Lee_2026-05-22T22:38:10.960293936Z",
       "CLE E_2026-07-02T22:09:31.211198972Z",
-      "Mike J_2026-07-11T19:13:59.003085648Z",
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
+      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
       "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z"
+      "Melanie Lee_2026-05-22T22:38:10.960293936Z",
+      "Mike J_2026-07-11T19:13:59.003085648Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Jeremy Gail_2026-05-19T21:14:41.371776003Z"
     ]
   },
   "daily_stars": {

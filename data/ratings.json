@@ -4,10 +4,10 @@
       "name": "Avis Car Rental - Harry Reid Airport",
       "address": "McCarran Rent-A-Car Center, 7135 Gilespie St, Las Vegas, NV 89119, USA",
       "rating": 4.2,
-      "review_count": 12567,
-      "reviews_today": 0,
+      "review_count": 12568,
+      "reviews_today": 1,
       "review_buckets": {
-        "6-10": 0,
+        "6-10": 1,
         "10-14": 0,
         "14-16": 0,
         "16-20": 0,
@@ -19,7 +19,7 @@
         "five_star_reviews_needed": 1796,
         "progress_pct": 0
       },
-      "last_updated": "2026-09-16 07:26",
+      "last_updated": "2026-09-16 11:20",
       "today_key": "2026-09-16"
     }
   },
@@ -463,7 +463,7 @@
       {
         "date": "2026-09-16",
         "rating": 4.2,
-        "review_count": 12567
+        "review_count": 12568
       }
     ]
   },
@@ -483,19 +483,6 @@
         "counted_at": "2026-08-10T01:00:00.583348-07:00"
       },
       {
-        "id": "CLE E_2026-07-02T22:09:31.211198972Z",
-        "author": "CLE E",
-        "rating": 5,
-        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
-        "publish_time": "2026-07-02T22:09:31.211198972Z",
-        "date": "2026-08-16",
-        "employee_names": [
-          "Lyla"
-        ],
-        "counted_work_day": "2026-08-16",
-        "counted_at": "2026-08-16T11:13:06.024382-07:00"
-      },
-      {
         "id": "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
         "author": "Garvit Tiwari",
         "rating": 5,
@@ -507,6 +494,19 @@
         ],
         "counted_work_day": "2026-06-02",
         "counted_at": null
+      },
+      {
+        "id": "Ciadiq Lieu_2026-05-31T12:00:57.063275916Z",
+        "author": "Ciadiq Lieu",
+        "rating": 5,
+        "text": "I picked up the rental car at this location in the morning of May 7th, Tuesday.\nTo be honest, I was a little nervous before I went to this location to pick up the car, because as a foreign tourist I was unfamiliar with the procedure on-site(I made the reservation online) and because I had read a few bad reviews on Google map about this location.\n\nHowever, my personal experience was perfect.\n1.There was no queue in front of the counter. When I arrived at 9 AM, it was my turn to complete the procedures immediately. And the procedure was fast and easy, without unnecessary promotion.\n2. Agent Tyler was very helpful and friendly.\nWith great patience, he explained to me the procedure of renting the car, answered my questions of the car, and dispelled my concerns that I might be overcharged.\n3. After the smooth procedure, I picked up the minivan Chrysler Pacifica that I reserved online.\n4. Despite of some scratches already on the surface of the car, the car was in good condition and was clean inside. After picking up the car, during my trip, I drove it for more than 1000 miles in USA, including the historical Route 66 in the desert and the Pacific Coast Highway of California, travelling together with my parents. It was really an amazing and unforgetable trip for us.\n5. As my plan, I returned the car at the Avis shop near the Union Square, San Francisco in the afternoon of May 16th. The procedure there was also smooth. No extra or unreasonable fee was charged.\nAvis did charge me the toll fee(of passing through the Golden Gate Bridge) and the fee of using the E-toll device, two weeks after I returned the car. But the toll fee and the device fee are as expected and are understandable.\n\nOverall, it was a 5-star experience. I would definitely rent from Avis again.\nAnd special thanks to Mr.Tyler for making our family trip so wonderful!",
+        "publish_time": "2026-05-31T12:00:57.063275916Z",
+        "date": "2026-09-15",
+        "employee_names": [
+          "Tyler"
+        ],
+        "counted_work_day": "2026-09-15",
+        "counted_at": "2026-09-15T15:09:12.383116-07:00"
       },
       {
         "id": "Melanie Lee_2026-05-22T22:38:10.960293936Z",
@@ -535,17 +535,17 @@
         "counted_at": "2026-08-16T11:13:06.024382-07:00"
       },
       {
-        "id": "Ciadiq Lieu_2026-05-31T12:00:57.063275916Z",
-        "author": "Ciadiq Lieu",
+        "id": "CLE E_2026-07-02T22:09:31.211198972Z",
+        "author": "CLE E",
         "rating": 5,
-        "text": "I picked up the rental car at this location in the morning of May 7th, Tuesday.\nTo be honest, I was a little nervous before I went to this location to pick up the car, because as a foreign tourist I was unfamiliar with the procedure on-site(I made the reservation online) and because I had read a few bad reviews on Google map about this location.\n\nHowever, my personal experience was perfect.\n1.There was no queue in front of the counter. When I arrived at 9 AM, it was my turn to complete the procedures immediately. And the procedure was fast and easy, without unnecessary promotion.\n2. Agent Tyler was very helpful and friendly.\nWith great patience, he explained to me the procedure of renting the car, answered my questions of the car, and dispelled my concerns that I might be overcharged.\n3. After the smooth procedure, I picked up the minivan Chrysler Pacifica that I reserved online.\n4. Despite of some scratches already on the surface of the car, the car was in good condition and was clean inside. After picking up the car, during my trip, I drove it for more than 1000 miles in USA, including the historical Route 66 in the desert and the Pacific Coast Highway of California, travelling together with my parents. It was really an amazing and unforgetable trip for us.\n5. As my plan, I returned the car at the Avis shop near the Union Square, San Francisco in the afternoon of May 16th. The procedure there was also smooth. No extra or unreasonable fee was charged.\nAvis did charge me the toll fee(of passing through the Golden Gate Bridge) and the fee of using the E-toll device, two weeks after I returned the car. But the toll fee and the device fee are as expected and are understandable.\n\nOverall, it was a 5-star experience. I would definitely rent from Avis again.\nAnd special thanks to Mr.Tyler for making our family trip so wonderful!",
-        "publish_time": "2026-05-31T12:00:57.063275916Z",
-        "date": "2026-09-15",
+        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
+        "publish_time": "2026-07-02T22:09:31.211198972Z",
+        "date": "2026-08-16",
         "employee_names": [
-          "Tyler"
+          "Lyla"
         ],
-        "counted_work_day": "2026-09-15",
-        "counted_at": "2026-09-15T15:09:12.383116-07:00"
+        "counted_work_day": "2026-08-16",
+        "counted_at": "2026-08-16T11:13:06.024382-07:00"
       },
       {
         "id": "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
@@ -1016,7 +1016,8 @@
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb16_2026-09-15": 12563,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb20_2026-09-15": 12566,
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI_2026-09-16": 12567,
-    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb6_2026-09-16": 12567
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb6_2026-09-16": 12567,
+    "ChIJL7BqEp3FyIARP_QZDyQ5HJI_tb10_2026-09-16": 12568
   },
   "employee_mentions": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": {}
@@ -1024,14 +1025,14 @@
   "counted_review_ids": {
     "ChIJL7BqEp3FyIARP_QZDyQ5HJI": [
       "Melanie Lee_2026-05-22T22:38:10.960293936Z",
-      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
-      "Mike J_2026-07-11T19:13:59.003085648Z",
       "CLE E_2026-07-02T22:09:31.211198972Z",
-      "Vince R_2026-06-22T14:25:33.444554137Z",
       "Ciadiq Lieu_2026-05-31T12:00:57.063275916Z",
-      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
-      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
       "C. Lasser_2026-03-06T02:31:59.216060550Z",
+      "Joshua Lidberg_2025-12-20T15:41:00.612269803Z",
+      "Vince R_2026-06-22T14:25:33.444554137Z",
+      "Mike J_2026-07-11T19:13:59.003085648Z",
+      "Garvit Tiwari_2026-06-02T22:03:42.452261195Z",
+      "Mary Ann L Baylosis_2026-06-12T05:26:37.248168493Z",
       "Jeremy Gail_2026-05-19T21:14:41.371776003Z"
     ]
   },
@@ -1165,19 +1166,15 @@
           "count": 1
         }
       },
-      "2026-W32": {
-        "lyla": {
-          "display_name": "Lyla",
-          "count": 1
-        },
-        "cece": {
-          "display_name": "Cece",
-          "count": 1
-        }
-      },
       "2026-W22": {
         "shirley_g": {
           "display_name": "Shirley G.",
+          "count": 1
+        }
+      },
+      "2026-W37": {
+        "tyler": {
+          "display_name": "Tyler",
           "count": 1
         }
       },
@@ -1187,9 +1184,13 @@
           "count": 1
         }
       },
-      "2026-W37": {
-        "tyler": {
-          "display_name": "Tyler",
+      "2026-W32": {
+        "cece": {
+          "display_name": "Cece",
+          "count": 1
+        },
+        "lyla": {
+          "display_name": "Lyla",
           "count": 1
         }
       },
@@ -1227,17 +1228,6 @@
         "counted_at": "2026-08-10T01:00:00.583348-07:00"
       },
       {
-        "author": "CLE E",
-        "rating": 5,
-        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
-        "publish_time": "2026-07-02T22:09:31.211198972Z",
-        "date": "2026-08-16",
-        "employee_names": [
-          "Lyla"
-        ],
-        "counted_at": "2026-08-16T11:13:06.024382-07:00"
-      },
-      {
         "author": "Garvit Tiwari",
         "rating": 5,
         "text": "A heartfelt thank you to Shirley at Avis for delivering one of the best customer service experiences I\u2019ve had. She was incredibly professional, patient, and genuinely committed to helping us. Despite a busy environment, she handled everything with a smile, ensured all our questions were answered, and made the entire rental process seamless.\n\nWhat stood out most was her willingness to go the extra mile and her warm, welcoming attitude. Employees like Shirley are the reason customers keep coming back. Avis is fortunate to have such a dedicated team member representing their brand.\n\nThank you, Shirley, for making our journey start on such a positive note!",
@@ -1247,6 +1237,17 @@
           "Shirley"
         ],
         "counted_at": null
+      },
+      {
+        "author": "Ciadiq Lieu",
+        "rating": 5,
+        "text": "I picked up the rental car at this location in the morning of May 7th, Tuesday.\nTo be honest, I was a little nervous before I went to this location to pick up the car, because as a foreign tourist I was unfamiliar with the procedure on-site(I made the reservation online) and because I had read a few bad reviews on Google map about this location.\n\nHowever, my personal experience was perfect.\n1.There was no queue in front of the counter. When I arrived at 9 AM, it was my turn to complete the procedures immediately. And the procedure was fast and easy, without unnecessary promotion.\n2. Agent Tyler was very helpful and friendly.\nWith great patience, he explained to me the procedure of renting the car, answered my questions of the car, and dispelled my concerns that I might be overcharged.\n3. After the smooth procedure, I picked up the minivan Chrysler Pacifica that I reserved online.\n4. Despite of some scratches already on the surface of the car, the car was in good condition and was clean inside. After picking up the car, during my trip, I drove it for more than 1000 miles in USA, including the historical Route 66 in the desert and the Pacific Coast Highway of California, travelling together with my parents. It was really an amazing and unforgetable trip for us.\n5. As my plan, I returned the car at the Avis shop near the Union Square, San Francisco in the afternoon of May 16th. The procedure there was also smooth. No extra or unreasonable fee was charged.\nAvis did charge me the toll fee(of passing through the Golden Gate Bridge) and the fee of using the E-toll device, two weeks after I returned the car. But the toll fee and the device fee are as expected and are understandable.\n\nOverall, it was a 5-star experience. I would definitely rent from Avis again.\nAnd special thanks to Mr.Tyler for making our family trip so wonderful!",
+        "publish_time": "2026-05-31T12:00:57.063275916Z",
+        "date": "2026-09-15",
+        "employee_names": [
+          "Tyler"
+        ],
+        "counted_at": "2026-09-15T15:09:12.383116-07:00"
       },
       {
         "author": "Melanie Lee",
@@ -1271,15 +1272,15 @@
         "counted_at": "2026-08-16T11:13:06.024382-07:00"
       },
       {
-        "author": "Ciadiq Lieu",
+        "author": "CLE E",
         "rating": 5,
-        "text": "I picked up the rental car at this location in the morning of May 7th, Tuesday.\nTo be honest, I was a little nervous before I went to this location to pick up the car, because as a foreign tourist I was unfamiliar with the procedure on-site(I made the reservation online) and because I had read a few bad reviews on Google map about this location.\n\nHowever, my personal experience was perfect.\n1.There was no queue in front of the counter. When I arrived at 9 AM, it was my turn to complete the procedures immediately. And the procedure was fast and easy, without unnecessary promotion.\n2. Agent Tyler was very helpful and friendly.\nWith great patience, he explained to me the procedure of renting the car, answered my questions of the car, and dispelled my concerns that I might be overcharged.\n3. After the smooth procedure, I picked up the minivan Chrysler Pacifica that I reserved online.\n4. Despite of some scratches already on the surface of the car, the car was in good condition and was clean inside. After picking up the car, during my trip, I drove it for more than 1000 miles in USA, including the historical Route 66 in the desert and the Pacific Coast Highway of California, travelling together with my parents. It was really an amazing and unforgetable trip for us.\n5. As my plan, I returned the car at the Avis shop near the Union Square, San Francisco in the afternoon of May 16th. The procedure there was also smooth. No extra or unreasonable fee was charged.\nAvis did charge me the toll fee(of passing through the Golden Gate Bridge) and the fee of using the E-toll device, two weeks after I returned the car. But the toll fee and the device fee are as expected and are understandable.\n\nOverall, it was a 5-star experience. I would definitely rent from Avis again.\nAnd special thanks to Mr.Tyler for making our family trip so wonderful!",
-        "publish_time": "2026-05-31T12:00:57.063275916Z",
-        "date": "2026-09-15",
+        "text": "Unlimited stars for Avis Car Rental Harry Reid, formerly Mccaran Airport! Lyla, thank you for ALWAYS going above and beyond when assisting us with our car rentals. You make us feel like VIP's each and every time!  You make the entire rental process smooth and effortless from start to finish.  Your hard work and your caring demeanor sets you apart from all the rest.  Your amazing leadership has made the entire team at this location top notch. Thank you all for your time and outstanding work ethic!",
+        "publish_time": "2026-07-02T22:09:31.211198972Z",
+        "date": "2026-08-16",
         "employee_names": [
-          "Tyler"
+          "Lyla"
         ],
-        "counted_at": "2026-09-15T15:09:12.383116-07:00"
+        "counted_at": "2026-08-16T11:13:06.024382-07:00"
       },
       {
         "author": "Mary Ann L Baylosis",
